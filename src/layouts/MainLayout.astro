@@ -1,0 +1,82 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import TextAnimations from '../components/common/TextAnimations.astro';
+import BaseLayout from './BaseLayout.astro';
+import type { Locale } from '../i18n/config';
+import { useTranslations } from '../i18n/translations';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const canonical = new URL(`/${locale}/`, Astro.site ?? Astro.url);
+---
+
+<BaseLayout
+	locale={locale}
+	title={t.meta.title}
+	description={t.meta.description}
+	canonical={canonical}
+	includeAlternates
+>
+	<a class="skip-link" href="#contenido" data-scroll-target="contenido" data-scroll-focus>
+		{locale === 'es' ? 'Saltar al contenido' : 'Skip to content'}
+	</a>
+	<Header locale={locale} />
+	<main id="contenido" tabindex="-1">
+		<slot />
+	</main>
+	<Footer locale={locale} />
+	<TextAnimations />
+	<script>
+		const cleanCurrentUrl = () => {
+			try {
+				history.replaceState(
+					null,
+					'',
+					`${window.location.pathname}${window.location.search}`,
+				);
+			} catch {
+				// Scrolling must still work when the hosting environment restricts History API changes.
+			}
+		};
+
+		const scrollToTarget = (targetId: string, shouldFocus = false) => {
+			const target = document.getElementById(targetId);
+
+			if (!target) return false;
+
+			target.scrollIntoView({
+				behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+				block: 'start',
+			});
+
+			if (shouldFocus) {
+				target.focus({ preventScroll: true });
+			}
+
+			cleanCurrentUrl();
+			return true;
+		};
+
+		document.querySelectorAll<HTMLElement>('[data-scroll-target]').forEach((control) => {
+			control.addEventListener('click', (event) => {
+				const targetId = control.dataset.scrollTarget;
+
+				if (!targetId || !document.getElementById(targetId)) return;
+
+				event.preventDefault();
+				scrollToTarget(targetId, control.hasAttribute('data-scroll-focus'));
+				control.closest('details')?.removeAttribute('open');
+			});
+		});
+
+		if (window.location.hash) {
+			const targetId = decodeURIComponent(window.location.hash.slice(1));
+			requestAnimationFrame(() => scrollToTarget(targetId));
+		}
+	</script>
+</BaseLayout>

@@ -1,0 +1,69 @@
+---
+import Badge from '../common/Badge.astro';
+import type { Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n/translations';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale).projects;
+---
+
+<article class="grid border border-line bg-surface lg:grid-cols-[1fr_0.8fr]">
+	<div class="p-6 sm:p-10 lg:p-12">
+		<div class="mb-8 flex flex-wrap items-center gap-3">
+			<Badge>Laravel</Badge>
+			<Badge>PHP</Badge>
+			<Badge>MySQL</Badge>
+			<span class="ml-auto font-mono text-[0.65rem] uppercase tracking-[0.12em] text-muted">{t.status}</span>
+		</div>
+		<h3 class="max-w-xl font-display text-3xl font-semibold tracking-[-0.035em] sm:text-5xl" data-animate-text="words">
+			{t.name}
+		</h3>
+		<p class="mt-6 max-w-xl text-lg leading-8 text-muted" data-animate-text="whole" data-animate-delay="120">{t.objective}</p>
+
+		<dl class="mt-10 grid gap-8 sm:grid-cols-2">
+			<div>
+				<dt class="mb-2 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-accent">{t.labels.context}</dt>
+				<dd class="text-sm leading-6 text-muted">{t.context}</dd>
+			</div>
+			<div>
+				<dt class="mb-2 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-accent">{t.labels.solution}</dt>
+				<dd class="text-sm leading-6 text-muted">{t.solution}</dd>
+			</div>
+			<div>
+				<dt class="mb-2 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-accent">{t.labels.role}</dt>
+				<dd class="text-sm leading-6 text-muted">{t.role}</dd>
+			</div>
+			<div>
+				<dt class="mb-2 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-accent">{t.labels.decision}</dt>
+				<dd class="text-sm leading-6 text-muted">{t.decision}</dd>
+			</div>
+		</dl>
+	</div>
+
+	<div class="relative min-h-80 overflow-hidden border-t border-line bg-canvas p-6 lg:min-h-full lg:border-l lg:border-t-0">
+		<div class="relative flex h-full min-h-72 flex-col border border-line bg-surface/90 p-5">
+			<div class="flex items-center justify-between font-mono text-[0.6rem] uppercase tracking-[0.12em] text-muted">
+				<span>{t.architecture.title}</span>
+				<span>{t.architecture.version}</span>
+			</div>
+			<div class="grid flex-1 content-center gap-3">
+				{t.architecture.layers.map((layer, index) => (
+					<div
+						class:list={[
+							'border p-3 font-mono text-xs',
+							index % 2 === 0
+								? 'w-4/5 border-line bg-canvas text-ink'
+								: 'ml-auto w-4/5 border-accent/60 bg-accent/5 text-accent',
+						]}
+					>
+						{layer}
+					</div>
+				))}
+			</div>
+		</div>
+	</div>
+</article>

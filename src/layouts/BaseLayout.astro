@@ -1,0 +1,93 @@
+---
+import type { Locale } from '../i18n/config';
+import '../styles/global.css';
+
+interface Props {
+	locale: Locale;
+	title: string;
+	description?: string;
+	robots?: string;
+	canonical?: URL;
+	includeAlternates?: boolean;
+}
+
+const {
+	locale,
+	title,
+	description,
+	robots,
+	canonical,
+	includeAlternates = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang={locale} data-theme="dark">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="theme-color" content="#09090b" />
+		{description && <meta name="description" content={description} />}
+		{robots && <meta name="robots" content={robots} />}
+
+		<script is:inline>
+			(() => {
+				let theme;
+
+				try {
+					theme = localStorage.getItem('theme');
+				} catch {
+					theme = null;
+				}
+
+				if (theme !== 'light' && theme !== 'dark') {
+					theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+				}
+
+				document.documentElement.dataset.theme = theme;
+				document.documentElement.style.colorScheme = theme;
+
+				const canAnimateText =
+					'animate' in Element.prototype &&
+					'requestAnimationFrame' in window &&
+					!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+				if (canAnimateText) {
+					document.documentElement.dataset.textAnimations = 'enabled';
+				}
+			})();
+		</script>
+
+		{description && <meta property="og:type" content="website" />}
+		{description && <meta property="og:title" content={title} />}
+		{description && <meta property="og:description" content={description} />}
+		{description && <meta property="og:locale" content={locale === 'es' ? 'es_PE' : 'en_US'} />}
+
+		{canonical && <link rel="canonical" href={canonical} />}
+		{canonical && includeAlternates && <link rel="alternate" hreflang="es" href={new URL('/es/', canonical)} />}
+		{canonical && includeAlternates && <link rel="alternate" hreflang="en" href={new URL('/en/', canonical)} />}
+		{canonical && includeAlternates && <link rel="alternate" hreflang="x-default" href={new URL('/es/', canonical)} />}
+
+		<link rel="icon" type="image/svg+xml" href="/logo.svg" />
+		<link
+			rel="preload"
+			href="/fonts/inter-latin.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<link
+			rel="preload"
+			href="/fonts/space-grotesk-latin.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<title>{title}</title>
+		<slot name="head" />
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>

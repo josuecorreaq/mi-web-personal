@@ -1,11 +1,49 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const canonical = new URL('/es/', Astro.site ?? Astro.url);
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="robots" content="noindex, follow" />
+		<link rel="canonical" href={canonical} />
+		<link rel="alternate" hreflang="es" href={new URL('/es/', canonical)} />
+		<link rel="alternate" hreflang="en" href={new URL('/en/', canonical)} />
+		<link rel="alternate" hreflang="x-default" href={canonical} />
+		<link rel="icon" type="image/svg+xml" href="/logo.svg" />
+		<title>Josué Correa | Backend Developer</title>
+		<script is:inline>
+			(() => {
+				const supportedLanguages = ['es', 'en'];
+				let savedLanguage = null;
+
+				try {
+					savedLanguage = localStorage.getItem('language');
+				} catch {
+					// Continue with browser preference when storage is unavailable.
+				}
+
+				const preferredLanguage = navigator.languages?.[0] ?? navigator.language ?? '';
+				const browserLanguage = preferredLanguage.toLowerCase().split('-')[0];
+				const language = supportedLanguages.includes(savedLanguage)
+					? savedLanguage
+					: supportedLanguages.includes(browserLanguage)
+						? browserLanguage
+						: 'es';
+
+				window.location.replace(`/${language}/`);
+			})();
+		</script>
+	</head>
+	<body>
+		<main>
+			<p>Selecciona un idioma:</p>
+			<nav aria-label="Seleccionar idioma">
+				<a href="/es/" lang="es">Español</a>
+				<a href="/en/" lang="en">English</a>
+			</nav>
+		</main>
+	</body>
+</html>

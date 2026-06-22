@@ -1,0 +1,84 @@
+---
+import ErrorPage from '../components/errors/ErrorPage.astro';
+import Footer from '../components/layout/Footer.astro';
+import Header from '../components/layout/Header.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { useTranslations } from '../i18n/translations';
+
+const spanish = useTranslations('es').errors.notFound;
+const english = useTranslations('en').errors.notFound;
+---
+
+<BaseLayout locale="es" title={spanish.metaTitle} robots="noindex, follow">
+	<Fragment slot="head">
+		<script is:inline>
+			(() => {
+				const root = document.documentElement;
+				let savedLanguage = null;
+
+				try {
+					savedLanguage = localStorage.getItem('language');
+				} catch {
+					// Use the URL or browser preference when storage is unavailable.
+				}
+
+				const pathLanguage = window.location.pathname.split('/').filter(Boolean)[0];
+				const browserLanguage = (navigator.languages?.[0] ?? navigator.language ?? '').toLowerCase().split('-')[0];
+				const locale =
+					pathLanguage === 'en' || pathLanguage === 'es'
+						? pathLanguage
+						: savedLanguage === 'en' || savedLanguage === 'es'
+							? savedLanguage
+							: browserLanguage === 'en'
+								? 'en'
+								: 'es';
+
+				root.dataset.errorLocale = locale;
+				root.lang = locale;
+			})();
+		</script>
+	</Fragment>
+
+	<div class="error-shell" data-error-content="es" lang="es">
+		<Header locale="es" isLanding={false} />
+		<ErrorPage
+			locale="es"
+			status="404"
+			title={spanish.title}
+			description={spanish.description}
+			actionLabel={spanish.action}
+			homePath="/es/"
+		/>
+		<Footer locale="es" />
+	</div>
+
+	<div class="error-shell" data-error-content="en" lang="en">
+		<Header locale="en" isLanding={false} />
+		<ErrorPage
+			locale="en"
+			status="404"
+			title={english.title}
+			description={english.description}
+			actionLabel={english.action}
+			homePath="/en/"
+		/>
+		<Footer locale="en" />
+	</div>
+
+	<script is:inline define:vars={{ spanishTitle: spanish.metaTitle, englishTitle: english.metaTitle }}>
+		document.title = document.documentElement.dataset.errorLocale === 'en' ? englishTitle : spanishTitle;
+	</script>
+
+	<style>
+		.error-shell {
+			display: none;
+			min-height: 100svh;
+			flex-direction: column;
+		}
+
+		:global(html[data-error-locale='es']) .error-shell[data-error-content='es'],
+		:global(html[data-error-locale='en']) .error-shell[data-error-content='en'] {
+			display: flex;
+		}
+	</style>
+</BaseLayout>

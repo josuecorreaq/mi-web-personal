@@ -1,0 +1,22 @@
+---
+import ProjectCard from '../projects/ProjectCard.astro';
+import type { Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n/translations';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<section id="proyectos" class="border-y border-line bg-canvas">
+	<div class="page-shell section-shell">
+		<p class="section-kicker" data-animate-text="whole">{t.projects.kicker}</p>
+		<h2 class="section-title" data-animate-text="words" data-animate-delay="80">{t.projects.title}</h2>
+		<div class="mt-14">
+			<ProjectCard locale={locale} />
+		</div>
+	</div>
+</section>

@@ -1,0 +1,33 @@
+---
+import type { Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n/translations';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<section id="sobre-mi" class="border-y border-line bg-surface/55">
+	<div class="page-shell section-shell grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
+		<div>
+			<p class="section-kicker" data-animate-text="whole">{t.about.kicker}</p>
+			<h2 class="section-title" data-animate-text="words" data-animate-delay="80">{t.about.title}</h2>
+		</div>
+		<div>
+			<p class="section-copy max-w-2xl" data-animate-text="whole" data-animate-delay="140">{t.about.copy}</p>
+			<ul class="mt-10 grid gap-px border border-line bg-line sm:grid-cols-3">
+				{t.about.values.map((value, index) => (
+					<li class="bg-canvas p-5">
+						<span class="mb-8 block font-mono text-[0.65rem] text-accent">0{index + 1}</span>
+						<span class="font-display text-lg font-medium" data-animate-text="whole" data-animate-delay={180 + index * 90}>
+							{value}
+						</span>
+					</li>
+				))}
+			</ul>
+		</div>
+	</div>
+</section>

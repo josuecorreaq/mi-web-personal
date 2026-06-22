@@ -1,0 +1,52 @@
+---
+import type { Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n/translations';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<section id="contacto" class="page-shell section-shell">
+	<div class="relative overflow-hidden border border-line bg-surface p-6 sm:p-10 lg:grid lg:grid-cols-[1fr_0.7fr] lg:gap-20 lg:p-14">
+		<div>
+			<p class="section-kicker" data-animate-text="whole">{t.contact.kicker}</p>
+			<h2 class="section-title" data-animate-text="words" data-animate-delay="80">{t.contact.title}</h2>
+			<p class="section-copy mt-7 max-w-2xl" data-animate-text="whole" data-animate-delay="160">{t.contact.copy}</p>
+		</div>
+		<div class="mt-10 grid content-center gap-3 lg:mt-0">
+			<a
+				href="mailto:contacto@josuecorreaq.com"
+				class="group border border-line bg-canvas p-4 transition-colors hover:border-accent"
+			>
+				<span class="mb-2 flex items-center justify-between font-mono text-[0.65rem] uppercase tracking-[0.1em] text-muted">
+					{t.contact.email}
+					<span class="text-accent" aria-hidden="true">↗</span>
+				</span>
+				<span class="break-all font-mono text-sm text-ink group-hover:text-accent">
+					contacto@josuecorreaq.com
+				</span>
+				<span class="sr-only"> — {t.contact.open}</span>
+			</a>
+			<a
+				href="https://www.linkedin.com/in/josuecorreaqu"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="group border border-line bg-canvas p-4 transition-colors hover:border-accent"
+			>
+				<span class="mb-2 flex items-center justify-between font-mono text-[0.65rem] uppercase tracking-[0.1em] text-muted">
+					{t.contact.linkedin}
+					<span class="text-accent" aria-hidden="true">↗</span>
+				</span>
+				<span class="font-mono text-sm text-ink group-hover:text-accent">
+					linkedin.com/in/josuecorreaqu
+				</span>
+				<span class="sr-only"> — {t.contact.open}</span>
+			</a>
+		</div>
+		<div class="absolute right-0 top-0 h-px w-1/3 bg-accent" aria-hidden="true"></div>
+	</div>
+</section>

@@ -1,0 +1,23 @@
+---
+interface Props {
+	href: string;
+	scrollTarget?: string;
+	variant?: 'primary' | 'secondary';
+}
+
+const { href, scrollTarget, variant = 'primary' } = Astro.props;
+---
+
+<a
+	href={href}
+	data-scroll-target={scrollTarget}
+	class:list={[
+		'inline-flex min-h-12 items-center justify-center gap-2 border px-5 py-3 font-mono text-sm font-bold transition-colors',
+		variant === 'primary'
+			? 'border-accent bg-accent text-canvas hover:border-accent-hover hover:bg-accent-hover'
+			: 'border-line bg-transparent text-ink hover:border-muted hover:bg-surface',
+	]}
+>
+	<slot />
+	<span aria-hidden="true">↗</span>
+</a>

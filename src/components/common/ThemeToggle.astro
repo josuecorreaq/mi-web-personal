@@ -1,0 +1,78 @@
+---
+import type { Locale } from '../../i18n/config';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const labels =
+	locale === 'es'
+		? { light: 'Cambiar a tema claro', dark: 'Cambiar a tema oscuro' }
+		: { light: 'Switch to light theme', dark: 'Switch to dark theme' };
+---
+
+<button
+	type="button"
+	class="theme-toggle"
+	data-theme-toggle
+	aria-label={labels.light}
+	data-label-light={labels.light}
+	data-label-dark={labels.dark}
+	title={labels.light}
+>
+	<svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+		<circle cx="12" cy="12" r="3.5"></circle>
+		<path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path>
+	</svg>
+	<svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+		<path d="M20.3 15.4A8.5 8.5 0 0 1 8.6 3.7 8.5 8.5 0 1 0 20.3 15.4Z"></path>
+	</svg>
+</button>
+
+<script>
+	const root = document.documentElement;
+	const toggles = document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]');
+
+	const setTheme = (theme: 'light' | 'dark') => {
+		root.dataset.theme = theme;
+		root.style.colorScheme = theme;
+		const switchesToLight = theme === 'dark';
+
+		toggles.forEach((toggle) => {
+			const label = switchesToLight ? toggle.dataset.labelLight : toggle.dataset.labelDark;
+
+			if (label) {
+				toggle.setAttribute('aria-label', label);
+				toggle.title = label;
+			}
+		});
+
+		document
+			.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+			?.setAttribute('content', theme === 'dark' ? '#09090b' : '#f4f4f0');
+
+		try {
+			localStorage.setItem('theme', theme);
+		} catch {
+			// Theme still works when storage is blocked.
+		}
+	};
+
+	toggles.forEach((toggle) => {
+		toggle.addEventListener('click', () => {
+			const nextTheme = root.dataset.theme === 'light' ? 'dark' : 'light';
+			const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+			if (!document.startViewTransition || reduceMotion) {
+				setTheme(nextTheme);
+				return;
+			}
+
+			document.startViewTransition(() => setTheme(nextTheme));
+		});
+	});
+
+	const currentTheme = root.dataset.theme === 'light' ? 'light' : 'dark';
+	setTheme(currentTheme);
+</script>

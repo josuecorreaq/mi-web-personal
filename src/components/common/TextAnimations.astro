@@ -1,0 +1,232 @@
+<script>
+	type AnimationKind = 'characters' | 'words' | 'whole';
+
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+	const splitText = (element: HTMLElement, kind: Exclude<AnimationKind, 'whole'>) => {
+		const text = element.textContent?.trim() ?? '';
+
+		if (!text) return [];
+
+		const accessibleText = document.createElement('span');
+		accessibleText.className = 'text-animation-accessible';
+		accessibleText.textContent = text;
+		element.replaceChildren(accessibleText);
+
+		let animatedIndex = 0;
+		const units: HTMLElement[] = [];
+
+		text.split(/(\s+)/).forEach((token) => {
+			if (/^\s+$/.test(token)) {
+				element.append(document.createTextNode(token));
+				return;
+			}
+
+			if (kind === 'characters') {
+				const word = document.createElement('span');
+				word.className = 'text-animation-word';
+				const characters =
+					'Segmenter' in Intl
+						? Array.from(
+								new Intl.Segmenter(document.documentElement.lang, {
+									granularity: 'grapheme',
+								}).segment(token),
+								({ segment }) => segment,
+							)
+						: Array.from(token);
+
+				characters.forEach((character) => {
+					const unit = document.createElement('span');
+					unit.className = 'text-animation-unit';
+					unit.setAttribute('aria-hidden', 'true');
+					unit.textContent = character;
+					unit.dataset.animationIndex = String(animatedIndex++);
+					word.append(unit);
+					units.push(unit);
+				});
+
+				element.append(word);
+				return;
+			}
+
+			const unit = document.createElement('span');
+			unit.className = 'text-animation-unit';
+			unit.setAttribute('aria-hidden', 'true');
+			unit.textContent = token;
+			unit.dataset.animationIndex = String(animatedIndex++);
+			element.append(unit);
+			units.push(unit);
+		});
+
+		return units;
+	};
+
+	const animateElement = (element: HTMLElement) => {
+		if (element.dataset.textAnimationState === 'complete') return;
+
+		const kind = (element.dataset.animateText ?? 'whole') as AnimationKind;
+		const baseDelay = Number(element.dataset.animateDelay ?? 0);
+		const units = kind === 'whole' ? [element] : splitText(element, kind);
+		const willChange =
+			kind === 'characters' ? 'transform, opacity, filter' : 'transform, opacity';
+
+		// Promote layers only while WAAPI owns the animation.
+		units.forEach((unit) => {
+			unit.style.willChange = willChange;
+		});
+
+		let animations: Animation[];
+
+		try {
+			animations = units.map((unit, index) => {
+				if (kind === 'characters') {
+					return unit.animate(
+						[
+							{ opacity: 0, transform: 'translateY(16px)', filter: 'blur(12px)' },
+							{ opacity: 1, transform: 'translateY(0)', filter: 'blur(0)' },
+						],
+						{
+							duration: 900,
+							delay: baseDelay + index * 25,
+							easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+							fill: 'both',
+						},
+					);
+				}
+
+				if (kind === 'words') {
+					return unit.animate(
+						[
+							{ opacity: 0, transform: 'translateY(8px)' },
+							{ opacity: 1, transform: 'translateY(0)' },
+						],
+						{
+							duration: 700,
+							delay: baseDelay + index * 70,
+							easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+							fill: 'both',
+						},
+					);
+				}
+
+				return unit.animate(
+					[
+						{ opacity: 0, transform: 'scale(0.96)' },
+						{ opacity: 1, transform: 'scale(1)' },
+					],
+					{
+						duration: 600,
+						delay: baseDelay,
+						easing: 'cubic-bezier(0.32, 0.72, 0, 1)',
+						fill: 'both',
+					},
+				);
+			});
+		} catch (error) {
+			units.forEach((unit) => unit.style.removeProperty('will-change'));
+			throw error;
+		}
+
+		// Reveal only after the initial WAAPI keyframes are attached.
+		element.dataset.textAnimationState = 'running';
+
+		Promise.allSettled(animations.map((animation) => animation.finished)).then(() => {
+			animations.forEach((animation) => animation.cancel());
+			units.forEach((unit) => unit.style.removeProperty('will-change'));
+			element.dataset.textAnimationState = 'complete';
+		});
+	};
+
+	const initializeTextAnimations = () => {
+		if (reduceMotion.matches) return;
+
+		const elements = Array.from(
+			document.querySelectorAll<HTMLElement>('[data-animate-text]'),
+		);
+
+		elements.forEach((element) => {
+			element.dataset.textAnimationState = 'pending';
+		});
+
+		const pendingElements = new Set(elements);
+		let animationFrame = 0;
+
+		const stopWatching = () => {
+			window.removeEventListener('scroll', scheduleCheck);
+			window.removeEventListener('resize', scheduleCheck);
+		};
+
+		const checkVisibility = () => {
+			animationFrame = 0;
+			const activationLine = window.innerHeight * 0.92;
+			const elementsToAnimate: HTMLElement[] = [];
+
+			// Read all geometry before splitText/WAAPI mutate the DOM.
+			pendingElements.forEach((element) => {
+				const bounds = element.getBoundingClientRect();
+				const isApproachingViewport =
+					bounds.top <= activationLine && bounds.bottom >= 0;
+
+				if (!isApproachingViewport) return;
+
+				pendingElements.delete(element);
+				elementsToAnimate.push(element);
+			});
+
+			elementsToAnimate.forEach(animateElement);
+
+			if (pendingElements.size === 0) stopWatching();
+		};
+
+		const scheduleCheck = () => {
+			if (animationFrame) return;
+			animationFrame = window.requestAnimationFrame(checkVisibility);
+		};
+
+		window.addEventListener('scroll', scheduleCheck, { passive: true });
+		window.addEventListener('resize', scheduleCheck, { passive: true });
+		scheduleCheck();
+	};
+
+	try {
+		initializeTextAnimations();
+	} catch {
+		// Never leave readable content hidden if animation initialization fails.
+		delete document.documentElement.dataset.textAnimations;
+	}
+</script>
+
+<style is:global>
+	html[data-text-animations='enabled']
+		[data-animate-text][data-text-animation-state='pending'],
+	html[data-text-animations='enabled']
+		[data-animate-text]:not([data-text-animation-state]) {
+		opacity: 0;
+	}
+
+	.text-animation-unit {
+		display: inline-block;
+	}
+
+	.text-animation-accessible {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	.text-animation-word {
+		display: inline-block;
+		white-space: nowrap;
+	}
+
+	[data-animate-text='words'] .text-animation-unit {
+		white-space: nowrap;
+	}
+
+</style>

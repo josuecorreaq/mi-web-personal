@@ -1,0 +1,47 @@
+---
+import type { Locale } from '../../i18n/config';
+
+interface Props {
+	locale: Locale;
+	status: string;
+	title: string;
+	description: string;
+	actionLabel: string;
+	homePath: string;
+}
+
+const { locale, status, title, description, actionLabel, homePath } = Astro.props;
+---
+
+<main
+	lang={locale}
+	class="page-shell grid min-h-[calc(100svh-8rem)] flex-1 items-center gap-10 overflow-hidden py-10 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.6fr)] lg:gap-16 lg:py-12"
+>
+	<section class="max-w-2xl">
+		<p class="mb-5 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-accent">
+			Error {status}
+		</p>
+
+		<h1 class="font-display text-[clamp(2.5rem,6vw,5.2rem)] font-semibold leading-[0.94] tracking-[-0.06em] text-balance">
+			{title}
+		</h1>
+
+		<p class="mt-6 max-w-xl text-base leading-8 text-muted sm:text-lg">
+			{description}
+		</p>
+
+		<a
+			href={homePath}
+			class="mt-8 inline-flex min-h-12 items-center justify-center gap-3 border border-accent bg-accent px-5 py-3 font-mono text-sm font-bold text-canvas transition-colors hover:border-accent-hover hover:bg-accent-hover"
+		>
+			{actionLabel}
+			<span aria-hidden="true">→</span>
+		</a>
+	</section>
+
+	<div class="mx-auto max-w-full text-center" aria-hidden="true">
+		<div class="font-mono text-[clamp(4rem,12vw,8rem)] font-extrabold leading-none tracking-[-0.12em] text-accent">
+			<span class="text-muted">{'{'}</span>jc<span class="text-muted">{'}'}</span>
+		</div>
+	</div>
+</main>

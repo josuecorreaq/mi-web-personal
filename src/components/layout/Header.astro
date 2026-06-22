@@ -1,0 +1,102 @@
+---
+import type { Locale } from '../../i18n/config';
+import { getAlternatePath } from '../../i18n/config';
+import { useTranslations } from '../../i18n/translations';
+import ThemeToggle from '../common/ThemeToggle.astro';
+
+interface Props {
+	locale: Locale;
+	isLanding?: boolean;
+}
+
+const { locale, isLanding = true } = Astro.props;
+const t = useTranslations(locale);
+const basePath = `/${locale}/`;
+const sectionHref = (targetId: string) =>
+	isLanding ? `#${targetId}` : `${basePath}#${targetId}`;
+const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
+---
+
+<header class="sticky top-0 z-50 border-b border-line/70 bg-canvas/90 backdrop-blur-xl">
+	<div class="page-shell flex min-h-18 items-center justify-between gap-6">
+		<a
+			href={isLanding ? '#inicio' : basePath}
+			data-scroll-target={scrollTarget('inicio')}
+			class="font-mono text-xl font-extrabold tracking-[-0.08em] text-accent"
+			aria-label={t.nav.homeLabel}
+		>
+			<span class="text-muted">{'{'}</span>jc<span class="text-muted">{'}'}</span>
+		</a>
+
+		<nav class="hidden items-center gap-7 md:flex" aria-label={t.nav.mainLabel}>
+			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('sobre-mi')} data-scroll-target={scrollTarget('sobre-mi')}>
+				<span class="nav-link-label">{t.nav.about}</span>
+			</a>
+			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('stack')} data-scroll-target={scrollTarget('stack')}>
+				<span class="nav-link-label">{t.nav.stack}</span>
+			</a>
+			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('proyectos')} data-scroll-target={scrollTarget('proyectos')}>
+				<span class="nav-link-label">{t.nav.projects}</span>
+			</a>
+			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('contacto')} data-scroll-target={scrollTarget('contacto')}>
+				<span class="nav-link-label">{t.nav.contact}</span>
+			</a>
+		</nav>
+
+		<div class="flex items-center gap-2">
+			<a
+				href={getAlternatePath(locale)}
+				data-language={locale === 'es' ? 'en' : 'es'}
+				class="inline-flex min-h-10 items-center border border-line px-3 py-2 font-mono text-xs font-bold text-ink transition-colors hover:border-accent hover:text-accent active:scale-[0.96]"
+				lang={locale === 'es' ? 'en' : 'es'}
+				hreflang={locale === 'es' ? 'en' : 'es'}
+			>
+				{locale === 'es' ? 'EN' : 'ES'}
+				<span class="text-muted"> / {locale.toUpperCase()}</span>
+			</a>
+
+			<ThemeToggle locale={locale} />
+
+			<details class="relative md:hidden">
+				<summary class="cursor-pointer list-none border border-line px-3 py-2 font-mono text-xs font-bold text-ink marker:content-none">
+					{t.nav.menu}
+				</summary>
+				<nav
+					class="absolute right-0 top-[calc(100%+0.75rem)] grid min-w-44 border border-line bg-surface p-2 shadow-2xl"
+					aria-label={t.nav.menu}
+				>
+					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('sobre-mi')} data-scroll-target={scrollTarget('sobre-mi')}>
+						<span class="nav-link-label">{t.nav.about}</span>
+					</a>
+					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('stack')} data-scroll-target={scrollTarget('stack')}>
+						<span class="nav-link-label">{t.nav.stack}</span>
+					</a>
+					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('proyectos')} data-scroll-target={scrollTarget('proyectos')}>
+						<span class="nav-link-label">{t.nav.projects}</span>
+					</a>
+					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('contacto')} data-scroll-target={scrollTarget('contacto')}>
+						<span class="nav-link-label">{t.nav.contact}</span>
+					</a>
+				</nav>
+			</details>
+		</div>
+	</div>
+</header>
+
+<script>
+	const languageLinks = document.querySelectorAll<HTMLAnchorElement>('[data-language]');
+
+	languageLinks.forEach((languageLink) => {
+		languageLink.addEventListener('click', () => {
+			const language = languageLink.dataset.language;
+
+			if (!language) return;
+
+			try {
+				localStorage.setItem('language', language);
+			} catch {
+				// Navigation still works when storage is unavailable.
+			}
+		});
+	});
+</script>
