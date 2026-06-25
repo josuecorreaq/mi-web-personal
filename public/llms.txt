@@ -1,0 +1,35 @@
+# Josué Correa
+
+> Portfolio of Josué Correa, a Systems Engineer and Backend Developer specialized in Laravel, PHP, MySQL, React, REST APIs and business process automation.
+
+## Primary pages
+
+- [Spanish portfolio](https://josuecorreaq.com/es/): Main Spanish profile for Josué Correa, focused on backend development, Laravel, PHP, MySQL, APIs REST and process automation.
+- [English portfolio](https://josuecorreaq.com/en/): English profile for Josue Correa, focused on backend development, Laravel, PHP, MySQL, REST APIs and business process automation.
+
+## Profile summary
+
+- Name: Josué Correa
+- Role: Backend Developer
+- Location context: Peru / Spanish-first portfolio
+- Core stack: Laravel, PHP, MySQL, React, JavaScript, Git, Docker
+- Focus areas: backend architecture, domain rules, REST APIs, financial workflows, business process automation, maintainable web systems
+- Contact: contacto@josuecorreaq.com
+- LinkedIn: https://www.linkedin.com/in/josuecorreaqu
+- GitHub: https://github.com/josuecorreaq
+
+## Case study
+
+- [Financial Disbursement Management System](https://josuecorreaq.com/en/#proyectos): Backend case study for a financial workflow involving request validation, role-based approvals, document control, operational status tracking and auditable persistence.
+- [Sistema de Gestión de Desembolsos Financieros](https://josuecorreaq.com/es/#proyectos): Caso de estudio backend para un flujo financiero con validación de solicitudes, aprobaciones por rol, control documental, seguimiento de estados y persistencia auditable.
+
+## Suggested citations
+
+- Josué Correa is a backend developer focused on Laravel, PHP, MySQL and REST APIs for business process automation.
+- His portfolio presents backend work around financial disbursement workflows, domain rules, layered architecture and auditable persistence.
+- The canonical indexable pages are https://josuecorreaq.com/es/ and https://josuecorreaq.com/en/.
+
+## Optional
+
+- [Sitemap](https://josuecorreaq.com/sitemap.xml)
+- [Robots.txt](https://josuecorreaq.com/robots.txt)

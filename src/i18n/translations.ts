@@ -33,8 +33,22 @@ const translations = {
 			kicker: 'Sobre mí',
 			title: 'Código que sostiene procesos reales',
 			copy:
-				'Soy Ingeniero de Sistemas con experiencia desarrollando aplicaciones web de extremo a extremo. Trabajo principalmente con Laravel, React y MySQL, transformando procesos complejos en soluciones claras, seguras y mantenibles. Priorizo una arquitectura sólida, reglas de negocio bien definidas y una experiencia de usuario consistente.',
-			values: ['Arquitectura clara', 'Seguridad por diseño', 'Mantenimiento sostenible'],
+				'Ingeniero de Sistemas con experiencia en Laravel, React y MySQL. Desarrollo aplicaciones web y sistemas internos que ayudan a organizar procesos, automatizar tareas y mejorar la gestión de información. Combino criterio técnico, seguridad y estructura mantenible para construir soluciones claras, confiables y preparadas para crecer.',
+			profileAlt: 'Josué Correa, desarrollador backend especializado en Laravel, PHP y MySQL',
+			values: [
+				{
+					title: 'Arquitectura clara',
+					description: 'Estructura bien definida desde el inicio.',
+				},
+				{
+					title: 'Seguridad por diseño',
+					description: 'Validaciones y protección integradas.',
+				},
+				{
+					title: 'Mantenimiento sostenible',
+					description: 'Código legible y escalable a largo plazo.',
+				},
+			],
 		},
 		stack: {
 			kicker: 'Tecnologías y herramientas',
@@ -49,6 +63,8 @@ const translations = {
 			role: 'Desarrollador Backend',
 			objective: 'Automatizar y controlar el proceso de desembolso y seguimiento de clientes.',
 			decision: 'Implementación de una arquitectura en capas, desacoplando la lógica de negocio de la infraestructura y el framework para mejorar mantenibilidad, escalabilidad y capacidad de pruebas.',
+			evidence:
+				'El caso de estudio resume un sistema backend orientado a procesos financieros donde Laravel, PHP y MySQL sostienen validaciones, reglas de negocio, estados operativos y auditoría de datos. La solución organiza el flujo en capas para que cada etapa del desembolso pueda validarse, persistirse y revisarse con menor acoplamiento entre interfaz, dominio e infraestructura.',
 			status: 'Caso de estudio',
 			architecture: {
 				title: 'Mapa de arquitectura',
@@ -66,6 +82,7 @@ const translations = {
 				solution: 'Solución',
 				role: 'Rol',
 				decision: 'Decisión técnica',
+				evidence: 'Evidencia técnica',
 			},
 		},
 		contact: {
@@ -75,6 +92,7 @@ const translations = {
 				'¿Tienes un proyecto, propuesta o necesitas apoyo técnico? Puedes escribirme y revisamos cómo puedo ayudarte.',
 			email: 'Email',
 			linkedin: 'LinkedIn',
+			github: 'GitHub',
 			open: 'Abrir',
 		},
 		errors: {
@@ -119,8 +137,22 @@ const translations = {
 			kicker: 'About',
 			title: 'Code that powers real-world processes',
 			copy:
-				'I am a Systems Engineer with experience developing end-to-end web applications. I work mainly with Laravel, React and MySQL, turning complex processes into clear, secure and maintainable solutions. I prioritize solid architecture, well-defined business rules and a consistent user experience.',
-			values: ['Clear architecture', 'Security by design', 'Sustainable maintenance'],
+				'Systems Engineer with experience in Laravel, React and MySQL. I build web applications and internal systems that help organize processes, automate tasks and improve information management. I combine technical judgment, security and maintainable structure to build clear, reliable solutions ready to grow.',
+			profileAlt: 'Josue Correa, backend developer specialized in Laravel, PHP and MySQL',
+			values: [
+				{
+					title: 'Clear architecture',
+					description: 'Structure defined clearly from the start.',
+				},
+				{
+					title: 'Security by design',
+					description: 'Integrated validation and protection.',
+				},
+				{
+					title: 'Sustainable maintenance',
+					description: 'Readable, scalable code for the long term.',
+				},
+			],
 		},
 		stack: {
 			kicker: 'Technologies and tools',
@@ -135,6 +167,8 @@ const translations = {
 			role: 'Backend Developer',
 			objective: 'Automate and control the disbursement process and client tracking.',
 			decision: 'Implementation of a layered architecture that decouples business logic from infrastructure and the framework to improve maintainability, scalability and testability.',
+			evidence:
+				'This case study describes a backend system for financial processes where Laravel, PHP and MySQL support validations, business rules, operational statuses and data auditing. The solution organizes the workflow into layers so each disbursement stage can be validated, persisted and reviewed with less coupling between the interface, domain and infrastructure.',
 			status: 'Case study',
 			architecture: {
 				title: 'Architecture map',
@@ -152,6 +186,7 @@ const translations = {
 				solution: 'Solution',
 				role: 'Role',
 				decision: 'Technical decision',
+				evidence: 'Technical evidence',
 			},
 		},
 		contact: {
@@ -161,6 +196,7 @@ const translations = {
 				'Have a project, a proposal or need technical support? Send me a message and we can review how I can help.',
 			email: 'Email',
 			linkedin: 'LinkedIn',
+			github: 'GitHub',
 			open: 'Open',
 		},
 		errors: {

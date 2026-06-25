@@ -13,8 +13,10 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@lucide/astro": "^1.21.0",
     "@tailwindcss/vite": "^4.3.1",
     "astro": "^6.4.7",
+    "simple-icons": "^16.24.0",
     "tailwindcss": "^4.3.1"
   },
   "devDependencies": {

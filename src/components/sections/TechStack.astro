@@ -2,6 +2,7 @@
 import type { Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
 import { getTechnologies } from '../../data/technologies';
+import Icon from '../common/Icon.astro';
 
 interface Props {
 	locale: Locale;
@@ -24,8 +25,9 @@ const technologies = getTechnologies(locale);
 				</h3>
 				<ul class="flex flex-wrap gap-2">
 					{category.items.map((item) => (
-						<li class="border border-line bg-surface px-3 py-2 font-mono text-sm text-ink transition-colors hover:border-accent hover:text-accent">
-							{item}
+						<li class="inline-flex items-center gap-2 border border-line bg-surface px-3 py-2 font-mono text-sm text-ink transition-colors hover:border-accent hover:text-accent">
+							<Icon name={item.icon} class="size-4 shrink-0 text-accent" />
+							{item.label}
 						</li>
 					))}
 				</ul>

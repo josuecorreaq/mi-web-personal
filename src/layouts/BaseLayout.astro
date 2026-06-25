@@ -19,6 +19,69 @@ const {
 	canonical,
 	includeAlternates = false,
 } = Astro.props;
+
+const socialImage = new URL('/og/portafolio-og.png', Astro.site ?? Astro.url);
+const profileImage = new URL('/images/josue-correa.webp', Astro.site ?? Astro.url);
+const socialImageAlt =
+	locale === 'es'
+		? 'Josué Correa, Desarrollador Backend especializado en Laravel, PHP, MySQL y APIs REST'
+		: 'Josue Correa, Backend Developer specialized in Laravel, PHP, MySQL and REST APIs';
+const siteUrl = new URL('/', Astro.site ?? Astro.url);
+const profileUrl = canonical ?? new URL(`/${locale}/`, siteUrl);
+const personId = new URL('/#person', siteUrl).toString();
+const profilePageId = new URL(`${profileUrl.pathname}#profile`, siteUrl).toString();
+const websiteId = new URL('/#website', siteUrl).toString();
+const schema = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'Person',
+			'@id': personId,
+			name: 'Josué Correa',
+			alternateName: 'Josue Correa',
+			jobTitle: locale === 'es' ? 'Desarrollador Backend' : 'Backend Developer',
+			url: profileUrl.toString(),
+			email: 'mailto:contacto@josuecorreaq.com',
+			image: profileImage.toString(),
+			sameAs: ['https://www.linkedin.com/in/josuecorreaqu', 'https://github.com/josuecorreaq'],
+			knowsAbout: [
+				'Laravel',
+				'PHP',
+				'MySQL',
+				'React',
+				'REST APIs',
+				'Backend architecture',
+				'Business process automation',
+			],
+		},
+		{
+			'@type': 'ProfilePage',
+			'@id': profilePageId,
+			url: profileUrl.toString(),
+			name: title,
+			description,
+			inLanguage: locale,
+			about: { '@id': personId },
+			mainEntity: { '@id': personId },
+			primaryImageOfPage: {
+				'@type': 'ImageObject',
+				url: socialImage.toString(),
+				width: 1200,
+				height: 630,
+				caption: socialImageAlt,
+			},
+		},
+		{
+			'@type': 'WebSite',
+			'@id': websiteId,
+			url: siteUrl.toString(),
+			name: 'Josué Correa',
+			inLanguage: ['es', 'en'],
+			author: { '@id': personId },
+		},
+	],
+};
+const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
@@ -63,6 +126,21 @@ const {
 		{description && <meta property="og:title" content={title} />}
 		{description && <meta property="og:description" content={description} />}
 		{description && <meta property="og:locale" content={locale === 'es' ? 'es_PE' : 'en_US'} />}
+		{description && <meta property="og:locale:alternate" content={locale === 'es' ? 'en_US' : 'es_PE'} />}
+		{description && canonical && <meta property="og:url" content={canonical} />}
+		{description && <meta property="og:site_name" content="Josué Correa" />}
+		{description && <meta property="og:image" content={socialImage} />}
+		{description && <meta property="og:image:secure_url" content={socialImage} />}
+		{description && <meta property="og:image:type" content="image/png" />}
+		{description && <meta property="og:image:width" content="1200" />}
+		{description && <meta property="og:image:height" content="630" />}
+		{description && <meta property="og:image:alt" content={socialImageAlt} />}
+
+		{description && <meta name="twitter:card" content="summary_large_image" />}
+		{description && <meta name="twitter:title" content={title} />}
+		{description && <meta name="twitter:description" content={description} />}
+		{description && <meta name="twitter:image" content={socialImage} />}
+		{description && <meta name="twitter:image:alt" content={socialImageAlt} />}
 
 		{canonical && <link rel="canonical" href={canonical} />}
 		{canonical && includeAlternates && <link rel="alternate" hreflang="es" href={new URL('/es/', canonical)} />}
@@ -85,6 +163,7 @@ const {
 			crossorigin
 		/>
 		<title>{title}</title>
+		{description && <script is:inline type="application/ld+json" set:html={schemaJson} />}
 		<slot name="head" />
 	</head>
 	<body>
