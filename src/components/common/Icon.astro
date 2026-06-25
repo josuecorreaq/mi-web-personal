@@ -1,0 +1,60 @@
+---
+import Blocks from '@lucide/astro/icons/blocks';
+import CodeXml from '@lucide/astro/icons/code-xml';
+import ExternalLink from '@lucide/astro/icons/external-link';
+import Mail from '@lucide/astro/icons/mail';
+import ShieldCheck from '@lucide/astro/icons/shield-check';
+import {
+	siDocker,
+	siGit,
+	siGithub,
+	siJavascript,
+	siLaravel,
+	siMysql,
+	siPhp,
+	siReact,
+} from 'simple-icons';
+
+const brandIcons = {
+	laravel: siLaravel,
+	php: siPhp,
+	react: siReact,
+	javascript: siJavascript,
+	mysql: siMysql,
+	git: siGit,
+	docker: siDocker,
+	github: siGithub,
+} as const;
+
+const genericIcons = {
+	'clean-code': CodeXml,
+	'modular-architecture': Blocks,
+	'jwt-security': ShieldCheck,
+	email: Mail,
+	'external-link': ExternalLink,
+} as const;
+
+type BrandIconName = keyof typeof brandIcons;
+type GenericIconName = keyof typeof genericIcons;
+export type IconName = BrandIconName | GenericIconName;
+
+interface Props {
+	name: IconName;
+	class?: string;
+}
+
+const { name } = Astro.props;
+const className = Astro.props.class ?? 'size-4';
+const brandIcon = brandIcons[name as BrandIconName];
+const GenericIcon = genericIcons[name as GenericIconName];
+---
+
+{
+	brandIcon ? (
+		<svg class={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+			<path d={brandIcon.path} />
+		</svg>
+	) : (
+		<GenericIcon class={className} aria-hidden="true" stroke-width={1.8} />
+	)
+}

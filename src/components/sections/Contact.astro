@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
+import Icon from '../common/Icon.astro';
 
 interface Props {
 	locale: Locale;
@@ -26,8 +27,9 @@ const t = useTranslations(locale);
 					{t.contact.email}
 					<span class="text-accent" aria-hidden="true">↗</span>
 				</span>
-				<span class="break-all font-mono text-sm text-ink group-hover:text-accent">
-					contacto@josuecorreaq.com
+				<span class="flex min-w-0 items-center gap-2 font-mono text-sm text-ink group-hover:text-accent">
+					<Icon name="email" class="size-4 shrink-0 text-accent" />
+					<span class="min-w-0 break-all">contacto@josuecorreaq.com</span>
 				</span>
 				<span class="sr-only"> — {t.contact.open}</span>
 			</a>
@@ -41,8 +43,25 @@ const t = useTranslations(locale);
 					{t.contact.linkedin}
 					<span class="text-accent" aria-hidden="true">↗</span>
 				</span>
-				<span class="font-mono text-sm text-ink group-hover:text-accent">
-					linkedin.com/in/josuecorreaqu
+				<span class="flex min-w-0 items-center gap-2 font-mono text-sm text-ink group-hover:text-accent">
+					<Icon name="external-link" class="size-4 shrink-0 text-accent" />
+					<span class="min-w-0 break-all">linkedin.com/in/josuecorreaqu</span>
+				</span>
+				<span class="sr-only"> — {t.contact.open}</span>
+			</a>
+			<a
+				href="https://github.com/josuecorreaq"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="group border border-line bg-canvas p-4 transition-colors hover:border-accent"
+			>
+				<span class="mb-2 flex items-center justify-between font-mono text-[0.65rem] uppercase tracking-[0.1em] text-muted">
+					{t.contact.github}
+					<span class="text-accent" aria-hidden="true">↗</span>
+				</span>
+				<span class="flex min-w-0 items-center gap-2 font-mono text-sm text-ink group-hover:text-accent">
+					<Icon name="github" class="size-4 shrink-0 text-accent" />
+					<span class="min-w-0 break-all">github.com/josuecorreaq</span>
 				</span>
 				<span class="sr-only"> — {t.contact.open}</span>
 			</a>

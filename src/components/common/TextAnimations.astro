@@ -148,50 +148,33 @@
 			element.dataset.textAnimationState = 'pending';
 		});
 
-		const pendingElements = new Set(elements);
-		let animationFrame = 0;
+		if (!('IntersectionObserver' in window)) {
+			elements.forEach(animateElement);
+			return;
+		}
 
-		const stopWatching = () => {
-			window.removeEventListener('scroll', scheduleCheck);
-			window.removeEventListener('resize', scheduleCheck);
-		};
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (!entry.isIntersecting) return;
 
-		const checkVisibility = () => {
-			animationFrame = 0;
-			const activationLine = window.innerHeight * 0.92;
-			const elementsToAnimate: HTMLElement[] = [];
+					const element = entry.target as HTMLElement;
+					observer.unobserve(element);
+					animateElement(element);
+				});
+			},
+			{
+				rootMargin: '0px 0px -8% 0px',
+				threshold: 0,
+			},
+		);
 
-			// Read all geometry before splitText/WAAPI mutate the DOM.
-			pendingElements.forEach((element) => {
-				const bounds = element.getBoundingClientRect();
-				const isApproachingViewport =
-					bounds.top <= activationLine && bounds.bottom >= 0;
-
-				if (!isApproachingViewport) return;
-
-				pendingElements.delete(element);
-				elementsToAnimate.push(element);
-			});
-
-			elementsToAnimate.forEach(animateElement);
-
-			if (pendingElements.size === 0) stopWatching();
-		};
-
-		const scheduleCheck = () => {
-			if (animationFrame) return;
-			animationFrame = window.requestAnimationFrame(checkVisibility);
-		};
-
-		window.addEventListener('scroll', scheduleCheck, { passive: true });
-		window.addEventListener('resize', scheduleCheck, { passive: true });
-		scheduleCheck();
+		elements.forEach((element) => observer.observe(element));
 	};
 
 	try {
 		initializeTextAnimations();
 	} catch {
-		// Never leave readable content hidden if animation initialization fails.
 		delete document.documentElement.dataset.textAnimations;
 	}
 </script>
