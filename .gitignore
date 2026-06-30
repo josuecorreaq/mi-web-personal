@@ -27,3 +27,4 @@ pnpm-debug.log*
 .codex/
 skills-lock.json
 .htaccess
+.env

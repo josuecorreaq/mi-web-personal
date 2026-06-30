@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
+import Icon from '../common/Icon.astro';
 
 interface Props {
 	locale: Locale;
@@ -8,6 +9,7 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
+const aboutValueIcons = ['modular-architecture', 'jwt-security', 'clean-code'] as const;
 ---
 
 <section id="sobre-mi" class="border-y border-line bg-canvas">
@@ -35,14 +37,16 @@ const t = useTranslations(locale);
 			</div>
 		</div>
 
-		<ul class="mt-4 grid gap-px border border-line bg-line sm:grid-cols-3">
+		<ul class="mt-4 grid gap-3 sm:grid-cols-3">
 			{t.about.values.map((value, index) => (
-				<li class="bg-surface p-5 sm:p-6">
-					<span class="block font-mono text-[0.65rem] font-semibold text-accent">0{index + 1}</span>
-					<h3 class="mt-5 text-pretty font-display text-base font-semibold text-ink sm:text-lg" data-animate-text="whole" data-animate-delay={180 + index * 90}>
+				<li class="group relative overflow-hidden border border-line bg-surface p-5 transition-colors hover:border-accent sm:p-6">
+					<span class="mb-5 inline-grid size-10 place-items-center border border-line bg-canvas text-accent transition-colors group-hover:border-accent" aria-hidden="true">
+						<Icon name={aboutValueIcons[index] ?? 'clean-code'} class="size-5" />
+					</span>
+					<h3 class="text-pretty font-display text-base font-semibold text-ink sm:text-lg" data-animate-text="whole" data-animate-delay={180 + index * 90}>
 						{value.title}
 					</h3>
-					<p class="mt-1 text-pretty text-sm leading-6 text-muted">{value.description}</p>
+					<p class="mt-2 text-pretty text-sm leading-6 text-muted">{value.description}</p>
 				</li>
 			))}
 		</ul>
