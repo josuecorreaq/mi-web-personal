@@ -23,5 +23,9 @@
     "@astrojs/check": "^0.9.9",
     "@types/node": "^26.0.0",
     "typescript": "^6.0.3"
+  },
+  "overrides": {
+    "esbuild": "0.28.1",
+    "yaml-language-server": "1.23.0"
   }
 }

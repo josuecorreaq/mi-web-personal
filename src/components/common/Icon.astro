@@ -1,8 +1,11 @@
 ---
 import Blocks from '@lucide/astro/icons/blocks';
+import CircleAlert from '@lucide/astro/icons/circle-alert';
+import CircleCheck from '@lucide/astro/icons/circle-check';
 import CodeXml from '@lucide/astro/icons/code-xml';
 import ExternalLink from '@lucide/astro/icons/external-link';
 import Mail from '@lucide/astro/icons/mail';
+import Send from '@lucide/astro/icons/send';
 import ShieldCheck from '@lucide/astro/icons/shield-check';
 import {
 	siDocker,
@@ -27,11 +30,14 @@ const brandIcons = {
 } as const;
 
 const genericIcons = {
+	'circle-alert': CircleAlert,
+	'circle-check': CircleCheck,
 	'clean-code': CodeXml,
 	'modular-architecture': Blocks,
 	'jwt-security': ShieldCheck,
 	email: Mail,
 	'external-link': ExternalLink,
+	send: Send,
 } as const;
 
 type BrandIconName = keyof typeof brandIcons;

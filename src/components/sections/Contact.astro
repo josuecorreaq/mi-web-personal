@@ -9,63 +9,234 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
+const contactEndpoint = import.meta.env.PUBLIC_CONTACT_API_URL ?? '/api/contact';
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const fieldId = (name: string) => `${locale}-contact-${name}`;
+const statusId = fieldId('status');
 ---
 
 <section id="contacto" class="page-shell section-shell">
-	<div class="relative overflow-hidden border border-line bg-surface p-6 sm:p-10 lg:grid lg:grid-cols-[1fr_0.7fr] lg:gap-20 lg:p-14">
-		<div>
-			<p class="section-kicker" data-animate-text="whole">{t.contact.kicker}</p>
-			<h2 class="section-title" data-animate-text="words" data-animate-delay="80">{t.contact.title}</h2>
-			<p class="section-copy mt-7 max-w-2xl" data-animate-text="whole" data-animate-delay="160">{t.contact.copy}</p>
+	<div class="relative overflow-hidden border border-line bg-surface p-6 sm:p-10 lg:p-14">
+		<div class="grid gap-12 lg:grid-cols-[0.8fr_1.1fr] lg:gap-16">
+			<div>
+				<p class="section-kicker" data-animate-text="whole">{t.contact.kicker}</p>
+				<h2 class="section-title" data-animate-text="words" data-animate-delay="80">{t.contact.title}</h2>
+				<p class="section-copy mt-7 max-w-2xl" data-animate-text="whole" data-animate-delay="160">{t.contact.copy}</p>
+				<div class="mt-9 divide-y divide-line border-y border-line">
+					<a
+						href="mailto:contacto@josuecorreaq.com"
+						class="group flex min-h-16 items-center justify-between gap-4 py-4 transition-colors hover:text-accent"
+					>
+						<span class="flex min-w-0 items-center gap-3">
+							<Icon name="email" class="size-4 shrink-0 text-accent" />
+							<span class="min-w-0">
+								<span class="block font-mono text-[0.65rem] uppercase tracking-[0.1em] text-muted">
+									{t.contact.email}
+								</span>
+								<span class="block break-all font-mono text-sm">contacto@josuecorreaq.com</span>
+							</span>
+						</span>
+						<span class="shrink-0 text-accent" aria-hidden="true">↗</span>
+						<span class="sr-only"> — {t.contact.open}</span>
+					</a>
+					<a
+						href="https://www.linkedin.com/in/josuecorreaqu"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="group flex min-h-16 items-center justify-between gap-4 py-4 transition-colors hover:text-accent"
+					>
+						<span class="flex min-w-0 items-center gap-3">
+							<Icon name="external-link" class="size-4 shrink-0 text-accent" />
+							<span class="min-w-0">
+								<span class="block font-mono text-[0.65rem] uppercase tracking-[0.1em] text-muted">
+									{t.contact.linkedin}
+								</span>
+								<span class="block break-all font-mono text-sm">linkedin.com/in/josuecorreaqu</span>
+							</span>
+						</span>
+						<span class="shrink-0 text-accent" aria-hidden="true">↗</span>
+						<span class="sr-only"> — {t.contact.open}</span>
+					</a>
+					<a
+						href="https://github.com/josuecorreaq"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="group flex min-h-16 items-center justify-between gap-4 py-4 transition-colors hover:text-accent"
+					>
+						<span class="flex min-w-0 items-center gap-3">
+							<Icon name="github" class="size-4 shrink-0 text-accent" />
+							<span class="min-w-0">
+								<span class="block font-mono text-[0.65rem] uppercase tracking-[0.1em] text-muted">
+									{t.contact.github}
+								</span>
+								<span class="block break-all font-mono text-sm">github.com/josuecorreaq</span>
+							</span>
+						</span>
+						<span class="shrink-0 text-accent" aria-hidden="true">↗</span>
+						<span class="sr-only"> — {t.contact.open}</span>
+					</a>
+				</div>
+			</div>
+
+			<form
+				class="grid gap-5"
+				action={contactEndpoint}
+				method="post"
+				aria-describedby={statusId}
+				data-contact-form
+				data-endpoint={contactEndpoint}
+				data-submit-label={t.contact.form.submit}
+				data-sending-label={t.contact.form.sending}
+				data-success-message={t.contact.form.success}
+				data-error-message={t.contact.form.error}
+				data-rate-limit-message={t.contact.form.rateLimit}
+				data-turnstile-required-message={t.contact.form.turnstileRequired}
+				data-turnstile-error-message={t.contact.form.turnstileError}
+				data-modal-success-title={t.contact.form.successTitle}
+				data-modal-error-title={t.contact.form.errorTitle}
+				data-turnstile-enabled={turnstileSiteKey ? 'true' : 'false'}
+			>
+				<div class="grid gap-2">
+					<label class="font-mono text-xs font-bold uppercase tracking-[0.1em] text-muted" for={fieldId('name')}>
+						{t.contact.form.name}
+					</label>
+					<input
+						id={fieldId('name')}
+						name="name"
+						type="text"
+						required
+						pattern="[^0-9]*"
+						maxlength="80"
+						autocomplete="name"
+						placeholder={t.contact.form.namePlaceholder}
+						title={t.contact.form.nameInvalid}
+						data-no-digits
+						class="min-h-12 border border-line bg-canvas px-4 py-3 text-base text-ink placeholder:text-muted/70 transition-colors hover:border-muted focus:border-accent focus:outline-none focus-visible:border-accent focus-visible:!outline-none"
+					/>
+				</div>
+				<div class="grid gap-2">
+					<label class="font-mono text-xs font-bold uppercase tracking-[0.1em] text-muted" for={fieldId('email')}>
+						{t.contact.form.email}
+					</label>
+					<input
+						id={fieldId('email')}
+						name="email"
+						type="email"
+						required
+						maxlength="254"
+						autocomplete="email"
+						placeholder={t.contact.form.emailPlaceholder}
+						class="min-h-12 border border-line bg-canvas px-4 py-3 text-base text-ink placeholder:text-muted/70 transition-colors hover:border-muted focus:border-accent focus:outline-none focus-visible:border-accent focus-visible:!outline-none"
+					/>
+				</div>
+				<div class="grid gap-2">
+					<label class="font-mono text-xs font-bold uppercase tracking-[0.1em] text-muted" for={fieldId('message')}>
+						{t.contact.form.message}
+					</label>
+					<textarea
+						id={fieldId('message')}
+						name="message"
+						required
+						minlength="10"
+						maxlength="2000"
+						rows="6"
+						placeholder={t.contact.form.messagePlaceholder}
+						class="min-h-40 resize-y border border-line bg-canvas px-4 py-3 text-base leading-7 text-ink placeholder:text-muted/70 transition-colors hover:border-muted focus:border-accent focus:outline-none focus-visible:border-accent focus-visible:!outline-none"
+					></textarea>
+				</div>
+				<div class="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+					<label for={fieldId('website')}>{t.contact.form.website}</label>
+					<input
+						id={fieldId('website')}
+						name="website"
+						type="text"
+						tabindex="-1"
+						autocomplete="off"
+					/>
+				</div>
+				{
+					turnstileSiteKey && (
+						<div class="min-h-[65px]" data-turnstile-wrapper>
+							<div
+								class="cf-turnstile"
+								data-sitekey={turnstileSiteKey}
+								data-theme="dark"
+								data-size="normal"
+							/>
+						</div>
+					)
+				}
+				<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+					<button
+						type="submit"
+						class="inline-flex min-h-12 items-center justify-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-sm font-bold text-canvas transition-colors hover:border-accent-hover hover:bg-accent-hover disabled:cursor-not-allowed disabled:border-line disabled:bg-elevated disabled:text-muted"
+					>
+						<Icon name="send" class="size-4 shrink-0" />
+						<span data-submit-text>{t.contact.form.submit}</span>
+					</button>
+					<p
+						id={statusId}
+						class="sr-only"
+						role="status"
+						aria-live="polite"
+						data-contact-status
+					></p>
+				</div>
+				<div
+					class="fixed inset-0 z-50 grid place-items-center bg-black/75 p-4"
+					data-contact-modal
+					hidden
+				>
+					<div
+						class="w-full max-w-md border border-line bg-surface p-5 shadow-2xl sm:p-6"
+						role="dialog"
+						aria-modal="true"
+						aria-labelledby={fieldId('modal-title')}
+						aria-describedby={fieldId('modal-message')}
+						data-contact-modal-panel
+						tabindex="-1"
+					>
+						<div class="flex items-start gap-4">
+							<span
+								class="grid size-11 shrink-0 place-items-center border border-accent bg-accent/5 text-accent"
+								data-contact-modal-success-icon
+								aria-hidden="true"
+							>
+								<Icon name="circle-check" class="size-5" />
+							</span>
+							<span
+								class="grid size-11 shrink-0 place-items-center border border-red-400/60 bg-red-500/10 text-red-300"
+								data-contact-modal-error-icon
+								aria-hidden="true"
+								hidden
+							>
+								<Icon name="circle-alert" class="size-5" />
+							</span>
+							<div class="min-w-0 flex-1">
+								<h3
+									id={fieldId('modal-title')}
+									class="font-display text-xl font-semibold leading-tight text-ink"
+									data-contact-modal-title
+								></h3>
+								<p
+									id={fieldId('modal-message')}
+									class="mt-3 text-pretty text-sm leading-6 text-muted"
+									data-contact-modal-message
+								></p>
+							</div>
+						</div>
+						<div class="mt-6 flex justify-end">
+							<button
+								type="button"
+								class="inline-flex min-h-11 items-center justify-center border border-line bg-canvas px-4 py-2 font-mono text-xs font-bold uppercase tracking-[0.08em] text-ink transition-colors hover:border-accent hover:text-accent"
+								data-contact-modal-close
+							>
+								{t.contact.form.close}
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
 		</div>
-		<div class="mt-10 grid content-center gap-3 lg:mt-0">
-			<a
-				href="mailto:contacto@josuecorreaq.com"
-				class="group border border-line bg-canvas p-4 transition-colors hover:border-accent"
-			>
-				<span class="mb-2 flex items-center justify-between font-mono text-[0.65rem] uppercase tracking-[0.1em] text-muted">
-					{t.contact.email}
-					<span class="text-accent" aria-hidden="true">↗</span>
-				</span>
-				<span class="flex min-w-0 items-center gap-2 font-mono text-sm text-ink group-hover:text-accent">
-					<Icon name="email" class="size-4 shrink-0 text-accent" />
-					<span class="min-w-0 break-all">contacto@josuecorreaq.com</span>
-				</span>
-				<span class="sr-only"> — {t.contact.open}</span>
-			</a>
-			<a
-				href="https://www.linkedin.com/in/josuecorreaqu"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="group border border-line bg-canvas p-4 transition-colors hover:border-accent"
-			>
-				<span class="mb-2 flex items-center justify-between font-mono text-[0.65rem] uppercase tracking-[0.1em] text-muted">
-					{t.contact.linkedin}
-					<span class="text-accent" aria-hidden="true">↗</span>
-				</span>
-				<span class="flex min-w-0 items-center gap-2 font-mono text-sm text-ink group-hover:text-accent">
-					<Icon name="external-link" class="size-4 shrink-0 text-accent" />
-					<span class="min-w-0 break-all">linkedin.com/in/josuecorreaqu</span>
-				</span>
-				<span class="sr-only"> — {t.contact.open}</span>
-			</a>
-			<a
-				href="https://github.com/josuecorreaq"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="group border border-line bg-canvas p-4 transition-colors hover:border-accent"
-			>
-				<span class="mb-2 flex items-center justify-between font-mono text-[0.65rem] uppercase tracking-[0.1em] text-muted">
-					{t.contact.github}
-					<span class="text-accent" aria-hidden="true">↗</span>
-				</span>
-				<span class="flex min-w-0 items-center gap-2 font-mono text-sm text-ink group-hover:text-accent">
-					<Icon name="github" class="size-4 shrink-0 text-accent" />
-					<span class="min-w-0 break-all">github.com/josuecorreaq</span>
-				</span>
-				<span class="sr-only"> — {t.contact.open}</span>
-			</a>
-		</div>
-		<div class="absolute right-0 top-0 h-px w-1/3 bg-accent" aria-hidden="true"></div>
 	</div>
 </section>

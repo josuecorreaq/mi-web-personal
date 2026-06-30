@@ -12,6 +12,7 @@ Portafolio de **Josué Correa**, Ingeniero de Sistemas y Desarrollador Backend e
 - Animaciones de texto con Web Animations API.
 - Compatibilidad con `prefers-reduced-motion`.
 - Navegación accesible por teclado y enlace para saltar al contenido.
+- Formulario de contacto conectado a un endpoint configurable.
 - Metadatos SEO, URL canónica y etiquetas `hreflang`.
 - Página 404 localizada.
 - Fuentes servidas localmente, sin dependencias de terceros en tiempo de ejecución.
@@ -64,6 +65,28 @@ npm run check
 npm run build
 npm run preview
 ```
+
+## Formulario de contacto
+
+El formulario de contacto envía JSON al endpoint configurado en `PUBLIC_CONTACT_API_URL`.
+
+Para desarrollo local:
+
+```bash
+PUBLIC_CONTACT_API_URL=http://127.0.0.1:8000/api/contact
+PUBLIC_TURNSTILE_SITE_KEY=
+```
+
+Contrato esperado:
+
+- `POST /api/contact`
+- Campos: `name`, `email`, `message`, `website`, `turnstile_token`
+- `website` funciona como honeypot y debe permanecer vacío
+- `turnstile_token` sale del campo generado por Cloudflare `cf-turnstile-response`
+- Respuesta publica exitosa: `202 Accepted` con `{"message":"Mensaje recibido."}`
+- `422 Unprocessable Entity` indica validacion o Turnstile invalido; el frontend resetea el widget
+
+La implementación Laravel viva está en `C:\api-josuecorreaq`; su contrato completo está en `C:\api-josuecorreaq\docs\contact-backend-laravel.md`.
 
 ## Rutas
 
@@ -154,8 +177,9 @@ El hosting debe servir `404.html` como página de error personalizada y respetar
 
 ## Seguridad y privacidad
 
-- No se requieren variables de entorno ni secretos para compilar el proyecto.
+- `PUBLIC_CONTACT_API_URL` es una variable pública; no debe contener secretos.
 - No deben agregarse credenciales, tokens o información privada al código fuente.
+- Los secretos SMTP y credenciales del backend deben vivir solo en Laravel `.env`.
 - Los enlaces externos que abren otra pestaña deben conservar `rel="noopener noreferrer"`.
 - Las dependencias deben mantenerse actualizadas y revisarse periódicamente con `npm audit`.
 - La información de contacto publicada es deliberadamente pública; cualquier dato adicional debe evaluarse antes de exponerlo.
