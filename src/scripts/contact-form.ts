@@ -1,5 +1,15 @@
 type TurnstileApi = {
+	render: (container: string | HTMLElement, options: TurnstileRenderOptions) => string;
 	reset: (container?: string | HTMLElement) => void;
+};
+
+type TurnstileRenderOptions = {
+	sitekey: string;
+	theme?: string;
+	size?: string;
+	callback?: (token: string) => void;
+	'expired-callback'?: () => void;
+	'error-callback'?: () => void;
 };
 
 type ValidationResponse = {
@@ -8,7 +18,8 @@ type ValidationResponse = {
 
 type ContactModalType = 'success' | 'error';
 
-const TURNSTILE_API_URL = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+const TURNSTILE_API_URL = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+const TURNSTILE_PROXIMITY_MARGIN = '600px 0px';
 const DIGIT_PATTERN = /\p{N}/gu;
 const FOCUSABLE_SELECTOR = [
 	'a[href]',
@@ -21,18 +32,90 @@ const FOCUSABLE_SELECTOR = [
 
 const getTurnstile = () => (window as Window & { turnstile?: TurnstileApi }).turnstile;
 
-const loadTurnstile = () => {
-	const hasTurnstileWidget = document.querySelector('[data-turnstile-enabled="true"] .cf-turnstile');
+let turnstileScriptPromise: Promise<void> | null = null;
 
-	if (!hasTurnstileWidget || document.querySelector(`script[src="${TURNSTILE_API_URL}"]`)) {
+const loadTurnstileScript = () => {
+	const turnstile = getTurnstile();
+
+	if (turnstile) {
+		return Promise.resolve();
+	}
+
+	if (turnstileScriptPromise) {
+		return turnstileScriptPromise;
+	}
+
+	turnstileScriptPromise = new Promise((resolve, reject) => {
+		const script = document.createElement('script');
+		script.src = TURNSTILE_API_URL;
+		script.async = true;
+		script.defer = true;
+		script.onload = () => resolve();
+		script.onerror = () => reject(new Error('Turnstile failed to load'));
+		document.head.append(script);
+	});
+
+	return turnstileScriptPromise;
+};
+
+const setTurnstileToken = (form: HTMLFormElement, token: string) => {
+	let tokenInput = form.querySelector<HTMLInputElement>('input[name="cf-turnstile-response"]');
+
+	if (!tokenInput) {
+		tokenInput = document.createElement('input');
+		tokenInput.type = 'hidden';
+		tokenInput.name = 'cf-turnstile-response';
+		form.append(tokenInput);
+	}
+
+	tokenInput.value = token;
+};
+
+const renderTurnstile = async (form: HTMLFormElement) => {
+	const widget = form.querySelector<HTMLElement>('.cf-turnstile');
+	const sitekey = widget?.dataset.sitekey;
+
+	if (!widget || !sitekey || widget.dataset.rendered === 'true') return;
+
+	await loadTurnstileScript();
+
+	const turnstile = getTurnstile();
+
+	if (!turnstile || widget.dataset.rendered === 'true') return;
+
+	widget.dataset.widgetId = turnstile.render(widget, {
+		sitekey,
+		theme: widget.dataset.theme,
+		size: widget.dataset.size,
+		callback: (token) => setTurnstileToken(form, token),
+		'expired-callback': () => setTurnstileToken(form, ''),
+		'error-callback': () => setTurnstileToken(form, ''),
+	});
+	widget.dataset.rendered = 'true';
+};
+
+const lazyRenderTurnstile = (form: HTMLFormElement) => {
+	if (form.dataset.turnstileEnabled !== 'true') return;
+
+	if (!('IntersectionObserver' in window)) {
+		void renderTurnstile(form);
 		return;
 	}
 
-	const script = document.createElement('script');
-	script.src = TURNSTILE_API_URL;
-	script.async = true;
-	script.defer = true;
-	document.head.append(script);
+	const observer = new IntersectionObserver(
+		(entries) => {
+			if (!entries.some((entry) => entry.isIntersecting)) return;
+
+			observer.disconnect();
+			void renderTurnstile(form);
+		},
+		{
+			rootMargin: TURNSTILE_PROXIMITY_MARGIN,
+			threshold: 0,
+		},
+	);
+
+	observer.observe(form);
 };
 
 const resetTurnstile = (form: HTMLFormElement) => {
@@ -41,7 +124,8 @@ const resetTurnstile = (form: HTMLFormElement) => {
 
 	if (!widget || !turnstile) return;
 
-	turnstile.reset(widget);
+	turnstile.reset(widget.dataset.widgetId ?? widget);
+	setTurnstileToken(form, '');
 };
 
 const readJsonSafely = async (response: Response): Promise<ValidationResponse | null> => {
@@ -155,6 +239,15 @@ const bindContactForm = (form: HTMLFormElement) => {
 
 		if (!form.reportValidity()) return;
 
+		if (isTurnstileEnabled) {
+			try {
+				await renderTurnstile(form);
+			} catch {
+				showStatus(form.dataset.turnstileErrorMessage ?? form.dataset.errorMessage, 'error');
+				return;
+			}
+		}
+
 		const formData = new FormData(form);
 		const token = formData.get('cf-turnstile-response')?.toString() ?? '';
 
@@ -219,5 +312,7 @@ document.querySelectorAll<HTMLInputElement>('[data-no-digits]').forEach((input) 
 	});
 });
 
-loadTurnstile();
-document.querySelectorAll<HTMLFormElement>('[data-contact-form]').forEach(bindContactForm);
+document.querySelectorAll<HTMLFormElement>('[data-contact-form]').forEach((form) => {
+	lazyRenderTurnstile(form);
+	bindContactForm(form);
+});
