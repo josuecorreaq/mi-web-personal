@@ -18,9 +18,13 @@ const technologies = getTechnologies(locale);
 	<h2 class="section-title" data-animate-text="words" data-animate-delay="80">{t.stack.title}</h2>
 
 	<div class="mt-14 border-t border-line">
-		{technologies.map((category) => (
-			<div class="grid gap-5 border-b border-line py-6 sm:grid-cols-[12rem_1fr] sm:items-center">
-				<h3 class="font-mono text-xs font-semibold uppercase tracking-[0.12em] text-muted" data-animate-text="whole">
+		{technologies.map((category, index) => (
+			<div
+				class="grid gap-5 border-b border-line py-6 sm:grid-cols-[12rem_1fr] sm:items-center"
+				data-animate-reveal="up"
+				data-animate-reveal-delay={index * 70}
+			>
+				<h3 class="font-mono text-xs font-semibold uppercase tracking-[0.12em] text-muted">
 					{category.name}
 				</h3>
 				<ul class="flex flex-wrap gap-2">
