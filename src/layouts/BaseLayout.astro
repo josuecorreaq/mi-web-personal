@@ -111,13 +111,14 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 				document.documentElement.dataset.theme = theme;
 				document.documentElement.style.colorScheme = theme;
 
-				const canAnimateText =
+				const canAnimateMotion =
 					'animate' in Element.prototype &&
 					'requestAnimationFrame' in window &&
 					!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-				if (canAnimateText) {
+				if (canAnimateMotion) {
 					document.documentElement.dataset.textAnimations = 'enabled';
+					document.documentElement.dataset.revealAnimations = 'enabled';
 				}
 			})();
 		</script>

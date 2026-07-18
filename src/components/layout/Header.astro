@@ -1,4 +1,5 @@
 ---
+import Menu from '@lucide/astro/icons/menu';
 import type { Locale } from '../../i18n/config';
 import { getAlternatePath } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
@@ -32,11 +33,11 @@ const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
 			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('sobre-mi')} data-scroll-target={scrollTarget('sobre-mi')}>
 				<span class="nav-link-label">{t.nav.about}</span>
 			</a>
-			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('stack')} data-scroll-target={scrollTarget('stack')}>
-				<span class="nav-link-label">{t.nav.stack}</span>
-			</a>
 			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('proyectos')} data-scroll-target={scrollTarget('proyectos')}>
 				<span class="nav-link-label">{t.nav.projects}</span>
+			</a>
+			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('stack')} data-scroll-target={scrollTarget('stack')}>
+				<span class="nav-link-label">{t.nav.stack}</span>
 			</a>
 			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('contacto')} data-scroll-target={scrollTarget('contacto')}>
 				<span class="nav-link-label">{t.nav.contact}</span>
@@ -58,8 +59,11 @@ const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
 			<ThemeToggle locale={locale} />
 
 			<details class="relative md:hidden">
-				<summary class="cursor-pointer list-none border border-line px-3 py-2 font-mono text-xs font-bold text-ink marker:content-none">
-					{t.nav.menu}
+				<summary
+					class="inline-flex size-10 cursor-pointer list-none items-center justify-center border border-line text-ink marker:content-none"
+					aria-label={t.nav.menu}
+				>
+					<Menu class="size-4" aria-hidden="true" stroke-width={2} />
 				</summary>
 				<nav
 					class="absolute right-0 top-[calc(100%+0.75rem)] grid min-w-44 border border-line bg-surface p-2 shadow-2xl"
@@ -68,11 +72,11 @@ const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
 					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('sobre-mi')} data-scroll-target={scrollTarget('sobre-mi')}>
 						<span class="nav-link-label">{t.nav.about}</span>
 					</a>
-					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('stack')} data-scroll-target={scrollTarget('stack')}>
-						<span class="nav-link-label">{t.nav.stack}</span>
-					</a>
 					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('proyectos')} data-scroll-target={scrollTarget('proyectos')}>
 						<span class="nav-link-label">{t.nav.projects}</span>
+					</a>
+					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('stack')} data-scroll-target={scrollTarget('stack')}>
+						<span class="nav-link-label">{t.nav.stack}</span>
 					</a>
 					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('contacto')} data-scroll-target={scrollTarget('contacto')}>
 						<span class="nav-link-label">{t.nav.contact}</span>

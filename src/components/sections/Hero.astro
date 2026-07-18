@@ -33,13 +33,17 @@ const t = useTranslations(locale);
 		>
 			{t.hero.description}
 		</p>
-		<div class="mt-9 flex flex-wrap gap-3">
+		<div class="mt-9 flex flex-wrap gap-3" data-animate-reveal="up" data-animate-reveal-delay="360">
 			<Button href="#contacto" scrollTarget="contacto">{t.hero.secondaryCta}</Button>
 			<Button href="#proyectos" scrollTarget="proyectos" variant="secondary">{t.hero.primaryCta}</Button>
 		</div>
 	</div>
 
-	<div class="relative mx-auto w-full max-w-[30rem] border border-line bg-surface/75 p-3.5 sm:p-5">
+	<div
+		class="relative mx-auto w-full max-w-[30rem] border border-line bg-surface/75 p-3.5 sm:p-5"
+		data-animate-reveal="scale"
+		data-animate-reveal-delay="120"
+	>
 		<div class="flex items-center justify-between border-b border-line pb-3">
 			<p class="font-mono text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-muted" data-animate-text="whole" data-animate-delay="280">
 				{t.hero.flowLabel}

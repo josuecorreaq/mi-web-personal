@@ -15,7 +15,10 @@ const aboutValueIcons = ['modular-architecture', 'jwt-security', 'clean-code'] a
 <section id="sobre-mi" class="border-y border-line bg-canvas">
 	<div class="page-shell section-shell">
 		<div class="grid overflow-hidden border border-line bg-surface lg:grid-cols-[minmax(14rem,0.32fr)_1fr]">
-			<figure class="flex items-end justify-center border-b border-line bg-surface lg:border-b-0 lg:border-r">
+			<figure
+				class="flex items-end justify-center border-b border-line bg-surface lg:border-b-0 lg:border-r"
+				data-animate-reveal="left"
+			>
 				<img
 					src="/images/profile.webp"
 					width="600"
@@ -39,11 +42,15 @@ const aboutValueIcons = ['modular-architecture', 'jwt-security', 'clean-code'] a
 
 		<ul class="mt-4 grid gap-3 sm:grid-cols-3">
 			{t.about.values.map((value, index) => (
-				<li class="group relative overflow-hidden border border-line bg-surface p-5 transition-colors hover:border-accent sm:p-6">
+				<li
+					class="group relative overflow-hidden border border-line bg-surface p-5 transition-colors hover:border-accent sm:p-6"
+					data-animate-reveal="up"
+					data-animate-reveal-delay={index * 90}
+				>
 					<span class="mb-5 inline-grid size-10 place-items-center border border-line bg-canvas text-accent transition-colors group-hover:border-accent" aria-hidden="true">
 						<Icon name={aboutValueIcons[index] ?? 'clean-code'} class="size-5" />
 					</span>
-					<h3 class="text-pretty font-display text-base font-semibold text-ink sm:text-lg" data-animate-text="whole" data-animate-delay={180 + index * 90}>
+					<h3 class="text-pretty font-display text-base font-semibold text-ink sm:text-lg">
 						{value.title}
 					</h3>
 					<p class="mt-2 text-pretty text-sm leading-6 text-muted">{value.description}</p>

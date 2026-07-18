@@ -22,7 +22,11 @@ const statusId = fieldId('status');
 				<p class="section-kicker" data-animate-text="whole">{t.contact.kicker}</p>
 				<h2 class="section-title" data-animate-text="words" data-animate-delay="80">{t.contact.title}</h2>
 				<p class="section-copy mt-7 max-w-2xl" data-animate-text="whole" data-animate-delay="160">{t.contact.copy}</p>
-				<div class="mt-9 divide-y divide-line border-y border-line">
+				<div
+					class="mt-9 divide-y divide-line border-y border-line"
+					data-animate-reveal="up"
+					data-animate-reveal-delay="220"
+				>
 					<a
 						href="mailto:contacto@josuecorreaq.com"
 						class="group flex min-h-16 items-center justify-between gap-4 py-4 transition-colors hover:text-accent"
@@ -80,6 +84,8 @@ const statusId = fieldId('status');
 
 			<form
 				class="grid gap-5"
+				data-animate-reveal="right"
+				data-animate-reveal-delay="120"
 				action={contactEndpoint}
 				method="post"
 				aria-describedby={statusId}

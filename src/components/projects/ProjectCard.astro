@@ -13,7 +13,7 @@ const t = useTranslations(locale).projects;
 
 <article class="grid border border-line bg-surface lg:grid-cols-[1fr_0.8fr]">
 	<div class="p-6 sm:p-10 lg:p-12">
-		<div class="mb-8 flex flex-wrap items-center gap-3">
+		<div class="mb-8 flex flex-wrap items-center gap-3" data-animate-reveal="up">
 			<Badge>Laravel</Badge>
 			<Badge>PHP</Badge>
 			<Badge>MySQL</Badge>
@@ -24,7 +24,7 @@ const t = useTranslations(locale).projects;
 		</h3>
 		<p class="mt-6 max-w-xl text-lg leading-8 text-muted" data-animate-text="whole" data-animate-delay="120">{t.objective}</p>
 
-		<dl class="mt-10 grid gap-8 sm:grid-cols-2">
+		<dl class="mt-10 grid gap-8 sm:grid-cols-2" data-animate-reveal="up" data-animate-reveal-delay="160">
 			<div>
 				<dt class="mb-2 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-accent">{t.labels.context}</dt>
 				<dd class="text-sm leading-6 text-muted">{t.context}</dd>
@@ -48,7 +48,11 @@ const t = useTranslations(locale).projects;
 		</dl>
 	</div>
 
-	<div class="relative min-h-80 overflow-hidden border-t border-line bg-canvas p-6 lg:min-h-full lg:border-l lg:border-t-0">
+	<div
+		class="relative min-h-80 overflow-hidden border-t border-line bg-canvas p-6 lg:min-h-full lg:border-l lg:border-t-0"
+		data-animate-reveal="right"
+		data-animate-reveal-delay="120"
+	>
 		<div class="relative flex h-full min-h-72 flex-col border border-line bg-surface/90 p-5">
 			<div class="flex items-center justify-between font-mono text-[0.6rem] uppercase tracking-[0.12em] text-muted">
 				<span>{t.architecture.title}</span>

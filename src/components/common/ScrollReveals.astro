@@ -1,0 +1,110 @@
+<script>
+	type RevealVariant = 'up' | 'left' | 'right' | 'scale';
+
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+	const revealKeyframes: Record<RevealVariant, Keyframe[]> = {
+		up: [
+			{ opacity: 0, transform: 'translate3d(0, 20px, 0)' },
+			{ opacity: 1, transform: 'translate3d(0, 0, 0)' },
+		],
+		left: [
+			{ opacity: 0, transform: 'translate3d(-20px, 0, 0)' },
+			{ opacity: 1, transform: 'translate3d(0, 0, 0)' },
+		],
+		right: [
+			{ opacity: 0, transform: 'translate3d(20px, 0, 0)' },
+			{ opacity: 1, transform: 'translate3d(0, 0, 0)' },
+		],
+		scale: [
+			{ opacity: 0, transform: 'scale(0.98)' },
+			{ opacity: 1, transform: 'scale(1)' },
+		],
+	};
+
+	const completeReveal = (element: HTMLElement, animation?: Animation) => {
+		element.dataset.revealAnimationState = 'complete';
+		animation?.cancel();
+		element.style.removeProperty('will-change');
+	};
+
+	const revealElement = (element: HTMLElement) => {
+		if (element.dataset.revealAnimationState === 'complete') return;
+
+		const requestedVariant = element.dataset.animateReveal as RevealVariant | undefined;
+		const variant = requestedVariant && requestedVariant in revealKeyframes
+			? requestedVariant
+			: 'up';
+		const requestedDelay = Number(element.dataset.animateRevealDelay ?? 0);
+		const delay = Number.isFinite(requestedDelay)
+			? Math.min(Math.max(requestedDelay, 0), 600)
+			: 0;
+
+		element.style.willChange = 'transform, opacity';
+
+		try {
+			const animation = element.animate(revealKeyframes[variant], {
+				duration: 650,
+				delay,
+				easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+				fill: 'both',
+			});
+
+			element.dataset.revealAnimationState = 'running';
+			animation.finished
+				.then(() => completeReveal(element, animation))
+				.catch(() => completeReveal(element));
+		} catch {
+			completeReveal(element);
+		}
+	};
+
+	const initializeScrollReveals = () => {
+		if (reduceMotion.matches) return;
+
+		const elements = Array.from(
+			document.querySelectorAll<HTMLElement>('[data-animate-reveal]'),
+		);
+
+		elements.forEach((element) => {
+			element.dataset.revealAnimationState = 'pending';
+		});
+
+		if (!('IntersectionObserver' in window)) {
+			elements.forEach(revealElement);
+			return;
+		}
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (!entry.isIntersecting) return;
+
+					const element = entry.target as HTMLElement;
+					observer.unobserve(element);
+					revealElement(element);
+				});
+			},
+			{
+				rootMargin: '0px 0px -8% 0px',
+				threshold: 0,
+			},
+		);
+
+		elements.forEach((element) => observer.observe(element));
+	};
+
+	try {
+		initializeScrollReveals();
+	} catch {
+		delete document.documentElement.dataset.revealAnimations;
+	}
+</script>
+
+<style is:global>
+	html[data-reveal-animations='enabled']
+		[data-animate-reveal][data-reveal-animation-state='pending'],
+	html[data-reveal-animations='enabled']
+		[data-animate-reveal]:not([data-reveal-animation-state]) {
+		opacity: 0;
+	}
+</style>
