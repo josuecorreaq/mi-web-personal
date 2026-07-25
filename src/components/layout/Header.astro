@@ -58,7 +58,7 @@ const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
 
 			<ThemeToggle locale={locale} />
 
-			<details class="relative md:hidden">
+			<details class="relative md:hidden" data-mobile-menu>
 				<summary
 					class="inline-flex size-10 cursor-pointer list-none items-center justify-center border border-line text-ink marker:content-none"
 					aria-label={t.nav.menu}
@@ -69,16 +69,16 @@ const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
 					class="absolute right-0 top-[calc(100%+0.75rem)] grid min-w-44 border border-line bg-surface p-2 shadow-2xl"
 					aria-label={t.nav.menu}
 				>
-					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('sobre-mi')} data-scroll-target={scrollTarget('sobre-mi')}>
+					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('sobre-mi')} data-scroll-target={scrollTarget('sobre-mi')} data-mobile-menu-link>
 						<span class="nav-link-label">{t.nav.about}</span>
 					</a>
-					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('proyectos')} data-scroll-target={scrollTarget('proyectos')}>
+					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('proyectos')} data-scroll-target={scrollTarget('proyectos')} data-mobile-menu-link>
 						<span class="nav-link-label">{t.nav.projects}</span>
 					</a>
-					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('stack')} data-scroll-target={scrollTarget('stack')}>
+					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('stack')} data-scroll-target={scrollTarget('stack')} data-mobile-menu-link>
 						<span class="nav-link-label">{t.nav.stack}</span>
 					</a>
-					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('contacto')} data-scroll-target={scrollTarget('contacto')}>
+					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('contacto')} data-scroll-target={scrollTarget('contacto')} data-mobile-menu-link>
 						<span class="nav-link-label">{t.nav.contact}</span>
 					</a>
 				</nav>
@@ -101,6 +101,14 @@ const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
 			} catch {
 				// Navigation still works when storage is unavailable.
 			}
+		});
+	});
+
+	const mobileMenuLinks = document.querySelectorAll<HTMLAnchorElement>('[data-mobile-menu-link]');
+
+	mobileMenuLinks.forEach((mobileMenuLink) => {
+		mobileMenuLink.addEventListener('click', () => {
+			mobileMenuLink.closest<HTMLDetailsElement>('[data-mobile-menu]')?.removeAttribute('open');
 		});
 	});
 </script>
