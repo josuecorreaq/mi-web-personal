@@ -4,7 +4,7 @@ import Footer from '../components/layout/Footer.astro';
 import ScrollReveals from '../components/common/ScrollReveals.astro';
 import TextAnimations from '../components/common/TextAnimations.astro';
 import BaseLayout from './BaseLayout.astro';
-import type { Locale } from '../i18n/config';
+import { getLocalePath, type Locale } from '../i18n/config';
 import { useTranslations } from '../i18n/translations';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-const canonical = new URL(`/${locale}/`, Astro.site ?? Astro.url);
+const canonical = new URL(getLocalePath(locale), Astro.site ?? Astro.url);
 ---
 
 <BaseLayout

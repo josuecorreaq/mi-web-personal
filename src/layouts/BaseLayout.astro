@@ -1,5 +1,5 @@
 ---
-import type { Locale } from '../i18n/config';
+import { getLocalePath, type Locale } from '../i18n/config';
 import '../styles/global.css';
 
 interface Props {
@@ -27,7 +27,7 @@ const socialImageAlt =
 		? 'Josué Correa, Desarrollador Backend especializado en Laravel, PHP, MySQL y APIs REST'
 		: 'Josue Correa, Backend Developer specialized in Laravel, PHP, MySQL and REST APIs';
 const siteUrl = new URL('/', Astro.site ?? Astro.url);
-const profileUrl = canonical ?? new URL(`/${locale}/`, siteUrl);
+const profileUrl = canonical ?? new URL(getLocalePath(locale), siteUrl);
 const personId = new URL('/#person', siteUrl).toString();
 const profilePageId = new URL(`${profileUrl.pathname}#profile`, siteUrl).toString();
 const websiteId = new URL('/#website', siteUrl).toString();
@@ -43,7 +43,11 @@ const schema = {
 			url: profileUrl.toString(),
 			email: 'mailto:contacto@josuecorreaq.com',
 			image: profileImage.toString(),
-			sameAs: ['https://www.linkedin.com/in/josuecorreaqu', 'https://github.com/josuecorreaq'],
+			sameAs: [
+				'https://www.linkedin.com/in/josuecorreaqu',
+				'https://github.com/josuecorreaq',
+				'https://x.com/josuecorreaqu',
+			],
 			knowsAbout: [
 				'Laravel',
 				'PHP',
@@ -92,7 +96,7 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 		<meta name="generator" content={Astro.generator} />
 		<meta name="theme-color" content="#09090b" />
 		{description && <meta name="description" content={description} />}
-		{robots && <meta name="robots" content={robots} />}
+		<meta name="robots" content={robots ?? 'index, follow, max-image-preview:large'} />
 
 		<script is:inline>
 			(() => {
@@ -138,17 +142,22 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 		{description && <meta property="og:image:alt" content={socialImageAlt} />}
 
 		{description && <meta name="twitter:card" content="summary_large_image" />}
+		{description && <meta name="twitter:site" content="@josuecorreaqu" />}
+		{description && <meta name="twitter:creator" content="@josuecorreaqu" />}
 		{description && <meta name="twitter:title" content={title} />}
 		{description && <meta name="twitter:description" content={description} />}
 		{description && <meta name="twitter:image" content={socialImage} />}
 		{description && <meta name="twitter:image:alt" content={socialImageAlt} />}
 
 		{canonical && <link rel="canonical" href={canonical} />}
-		{canonical && includeAlternates && <link rel="alternate" hreflang="es" href={new URL('/es/', canonical)} />}
+		{canonical && includeAlternates && <link rel="alternate" hreflang="es" href={new URL('/', canonical)} />}
 		{canonical && includeAlternates && <link rel="alternate" hreflang="en" href={new URL('/en/', canonical)} />}
-		{canonical && includeAlternates && <link rel="alternate" hreflang="x-default" href={new URL('/es/', canonical)} />}
+		{canonical && includeAlternates && <link rel="alternate" hreflang="x-default" href={new URL('/', canonical)} />}
 
+		<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
 		<link rel="icon" type="image/svg+xml" href="/logo.svg" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
 		<link
 			rel="preload"
 			href="/fonts/inter-latin.woff2"
