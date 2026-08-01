@@ -5,7 +5,7 @@ const translations = {
 		meta: {
 			title: 'Josué Correa | Desarrollador Backend',
 			description:
-				'Portafolio de Josué Correa, Ingeniero de Sistemas y Desarrollador Backend especializado en Laravel, PHP, MySQL, React, APIs REST y sistemas web para procesos de negocio.',
+				'Portafolio de Josué Correa, Ingeniero de Sistemas y Desarrollador Backend especializado en Laravel, PHP, MySQL, APIs REST y automatización de procesos.',
 		},
 		nav: {
 			projects: 'Proyectos',
@@ -129,7 +129,7 @@ const translations = {
 		meta: {
 			title: 'Josue Correa | Backend Developer',
 			description:
-				'Portfolio of Josue Correa, a Systems Engineer and Backend Developer specialized in Laravel, PHP, MySQL, React, REST APIs and web systems for business processes.',
+				'Portfolio of Josue Correa, a Systems Engineer and Backend Developer specialized in Laravel, PHP, MySQL, REST APIs and business process automation.',
 		},
 		nav: {
 			projects: 'Projects',

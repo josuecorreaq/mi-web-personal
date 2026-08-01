@@ -1,7 +1,7 @@
 ---
 import Menu from '@lucide/astro/icons/menu';
 import type { Locale } from '../../i18n/config';
-import { getAlternatePath } from '../../i18n/config';
+import { getAlternatePath, getLocalePath } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
 import ThemeToggle from '../common/ThemeToggle.astro';
 
@@ -12,7 +12,7 @@ interface Props {
 
 const { locale, isLanding = true } = Astro.props;
 const t = useTranslations(locale);
-const basePath = `/${locale}/`;
+const basePath = getLocalePath(locale);
 const sectionHref = (targetId: string) =>
 	isLanding ? `#${targetId}` : `${basePath}#${targetId}`;
 const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;

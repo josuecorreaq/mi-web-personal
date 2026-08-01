@@ -5,7 +5,7 @@ Portafolio de **Josué Correa**, Ingeniero de Sistemas y Desarrollador Backend e
 ## Características
 
 - Contenido completo en español e inglés.
-- Selección automática de idioma en la ruta raíz.
+- Español en la ruta raíz e inglés en `/en/`.
 - Cambio manual de idioma con persistencia de la preferencia.
 - Temas claro y oscuro con detección de la preferencia del sistema.
 - Diseño responsive para escritorio y dispositivos móviles.
@@ -92,12 +92,11 @@ La implementación Laravel viva está en `C:\api-josuecorreaq`; su contrato comp
 
 | Ruta | Función |
 | --- | --- |
-| `/` | Detecta la preferencia guardada o el idioma del navegador y redirige a una versión localizada. |
-| `/es/` | Portafolio en español. |
+| `/` | Portafolio en español y URL canónica principal. |
 | `/en/` | Portafolio en inglés. |
 | `/404.html` | Página de error localizada según el idioma del usuario. |
 
-La detección automática solo ocurre en `/`. Las rutas explícitas `/es/` y `/en/` permanecen estables.
+El selector de idioma enlaza directamente entre `/` y `/en/`.
 
 ## Estructura del proyecto
 
@@ -153,7 +152,7 @@ export default defineConfig({
 
 Si el sitio se publica en otro dominio, actualiza `site` antes de compilar. Astro utiliza este valor para generar las URL canónicas y las referencias `hreflang`.
 
-La ruta `/` incluye `noindex, follow` porque funciona únicamente como selector y redirección de idioma. Las páginas localizadas son las URL indexables.
+Las URL indexables son `/` para español y `/en/` para inglés. Ambas publican canonical propio y etiquetas `hreflang` recíprocas.
 
 ## Despliegue
 
