@@ -8,7 +8,6 @@ interface Project {
 	readonly decision: string;
 	readonly evidence: string;
 	readonly architecture: {
-		readonly title: string;
 		readonly version: string;
 		readonly layers: readonly string[];
 	};
@@ -70,10 +69,7 @@ const { architecture } = project;
 		data-animate-reveal-delay="120"
 	>
 		<div class="relative flex h-full min-h-72 flex-col border border-line bg-surface/90 p-5">
-			<div class="flex items-center justify-between font-mono text-[0.6rem] uppercase tracking-[0.12em] text-muted">
-				<span>{architecture.title}</span>
-				<span>{architecture.version}</span>
-			</div>
+			<p class="font-mono text-[0.6rem] uppercase tracking-[0.12em] text-muted">{architecture.version}</p>
 
 			<div class="grid flex-1 content-center gap-3">
 				{architecture.layers.map((layer, layerIndex) => (

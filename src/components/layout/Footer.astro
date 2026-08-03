@@ -1,22 +1,17 @@
 ---
 import type { Locale } from '../../i18n/config';
-import { useTranslations } from '../../i18n/translations';
 
 interface Props {
 	locale: Locale;
 }
 
 const { locale } = Astro.props;
-const t = useTranslations(locale);
 const name = locale === 'es' ? 'Josué Correa' : 'Josue Correa';
 const year = new Date().getFullYear();
 ---
 
 <footer class="border-t border-line bg-canvas">
-	<div
-		class="page-shell flex flex-col gap-2 py-8 font-mono text-xs text-muted sm:flex-row sm:items-center sm:justify-between"
-	>
+	<div class="page-shell py-8 text-center font-mono text-xs text-muted">
 		<p>© {year} {name}</p>
-		<p>{t.footer.builtWith}</p>
 	</div>
 </footer>

@@ -17,9 +17,6 @@ const translations = {
 			mainLabel: 'Navegación principal',
 			homeLabel: 'Josué Correa, inicio',
 		},
-		footer: {
-			builtWith: 'Hecho con Astro y <3',
-		},
 		hero: {
 			name: 'Josué Correa',
 			role: 'Desarrollador Backend',
@@ -164,7 +161,6 @@ const translations = {
 					decision: 'Separación de responsabilidades entre API, reglas de negocio, interfaz y persistencia para reducir acoplamiento y facilitar mantenimiento.',
 					evidence: 'Reducción del 50 % en pasos manuales de validación de pagos, con acceso centralizado a la información operativa.',
 					architecture: {
-						title: 'Arquitectura implementada',
 						version: 'Producción',
 						layers: [
 							'HTTP / API',
@@ -184,7 +180,6 @@ const translations = {
 					decision: 'La capa Domain no depende del framework, y ningún módulo entra a las tablas ni a las clases internas de otro: solo consume sus Actions y Queries públicas.',
 					evidence: 'La migración avanza por fases con un test de contrato que congela las rutas públicas de la API: reestructurar un módulo no rompe a sus consumidores.',
 					architecture: {
-						title: 'Estructura del sistema',
 						version: 'En desarrollo',
 						layers: [
 							'Http · controllers, requests, resources',
@@ -251,9 +246,6 @@ const translations = {
 			menu: 'Menu',
 			mainLabel: 'Main navigation',
 			homeLabel: 'Josue Correa, home',
-		},
-		footer: {
-			builtWith: 'Built with Astro and <3',
 		},
 		hero: {
 			name: 'Josue Correa',
@@ -399,7 +391,6 @@ const translations = {
 					decision: 'Separated the API, business rules, interface and persistence responsibilities to reduce coupling and simplify maintenance.',
 					evidence: 'Reduced manual payment-validation steps by 50% while centralizing access to operational information.',
 					architecture: {
-						title: 'Implemented architecture',
 						version: 'Production',
 						layers: [
 							'HTTP / API',
@@ -419,7 +410,6 @@ const translations = {
 					decision: 'The Domain layer does not depend on the framework, and no module reaches into another module’s tables or internal classes: it only consumes its public Actions and Queries.',
 					evidence: 'The migration advances in phases behind a contract test that freezes the public API routes: restructuring a module never breaks its consumers.',
 					architecture: {
-						title: 'System structure',
 						version: 'In development',
 						layers: [
 							'Http · controllers, requests, resources',
