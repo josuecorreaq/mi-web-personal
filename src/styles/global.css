@@ -83,6 +83,12 @@ button {
 	-webkit-tap-highlight-color: transparent;
 }
 
+/* Tailwind's preflight resets buttons to cursor: default. */
+button:not(:disabled),
+summary {
+	cursor: pointer;
+}
+
 .nav-link-label {
 	position: relative;
 	display: inline-block;
@@ -258,6 +264,31 @@ button {
 @media (max-width: 640px) {
 	.page-shell {
 		width: min(100% - 1.25rem, 75rem);
+	}
+}
+
+@media print {
+	:root,
+	:root[data-theme="dark"],
+	:root[data-theme="light"] {
+		color-scheme: light;
+		--color-canvas: #ffffff;
+		--color-surface: #ffffff;
+		--color-elevated: #ffffff;
+		--color-accent: #3f3f46;
+		--color-accent-hover: #3f3f46;
+		--color-ink: #18181b;
+		--color-muted: #52525b;
+		--color-line: #d4d4d8;
+	}
+
+	html,
+	body {
+		background: #ffffff;
+	}
+
+	.page-shell {
+		width: 100%;
 	}
 }
 

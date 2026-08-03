@@ -1,0 +1,43 @@
+---
+import type { Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n/translations';
+import CvDocument from './CvDocument.astro';
+import Icon from '../common/Icon.astro';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const cv = useTranslations(locale).cv;
+const titleId = `${locale}-cv-modal-title`;
+---
+
+<div class="fixed inset-0 z-50 grid place-items-center bg-black/75 p-4 sm:p-6" data-cv-modal hidden>
+	<div
+		class="flex max-h-[90svh] w-full max-w-3xl flex-col border border-line bg-surface shadow-2xl"
+		role="dialog"
+		aria-modal="true"
+		aria-labelledby={titleId}
+		data-cv-modal-panel
+		tabindex="-1"
+	>
+		<div class="flex items-center justify-between gap-4 border-b border-line px-5 py-4 sm:px-8">
+			<p id={titleId} class="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-muted">
+				{cv.modalTitle}
+			</p>
+			<button
+				type="button"
+				class="grid size-10 shrink-0 place-items-center border border-line bg-canvas text-ink transition-colors hover:border-accent hover:text-accent"
+				aria-label={cv.close}
+				data-cv-modal-close
+			>
+				<Icon name="close" class="size-4" />
+			</button>
+		</div>
+
+		<div class="overflow-y-auto overscroll-contain p-5 sm:p-8">
+			<CvDocument locale={locale} />
+		</div>
+	</div>
+</div>

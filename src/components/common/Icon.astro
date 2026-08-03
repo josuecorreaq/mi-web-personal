@@ -7,6 +7,7 @@ import ExternalLink from '@lucide/astro/icons/external-link';
 import Mail from '@lucide/astro/icons/mail';
 import Send from '@lucide/astro/icons/send';
 import ShieldCheck from '@lucide/astro/icons/shield-check';
+import X from '@lucide/astro/icons/x';
 import {
 	siDocker,
 	siGit,
@@ -38,6 +39,7 @@ const genericIcons = {
 	email: Mail,
 	'external-link': ExternalLink,
 	send: Send,
+	close: X,
 } as const;
 
 type BrandIconName = keyof typeof brandIcons;

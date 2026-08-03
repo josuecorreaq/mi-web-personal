@@ -11,12 +11,14 @@ const { locale } = Astro.props;
 const t = useTranslations(locale);
 ---
 
-<section id="proyectos" class="border-y border-line bg-canvas">
+<section id="proyectos" class="border-b border-line bg-canvas">
 	<div class="page-shell section-shell">
 		<p class="section-kicker" data-animate-text="whole">{t.projects.kicker}</p>
 		<h2 class="section-title" data-animate-text="words" data-animate-delay="80">{t.projects.title}</h2>
-		<div class="mt-14">
-			<ProjectCard locale={locale} />
+		<div class="mt-14 grid gap-6 lg:gap-8">
+			{t.projects.items.map((project, index) => (
+				<ProjectCard project={project} labels={t.projects.labels} index={index} />
+			))}
 		</div>
 	</div>
 </section>

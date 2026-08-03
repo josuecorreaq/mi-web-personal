@@ -1,3 +1,5 @@
+import { trapFocus } from './focus-trap';
+
 type TurnstileApi = {
 	render: (container: string | HTMLElement, options: TurnstileRenderOptions) => string;
 	reset: (container?: string | HTMLElement) => void;
@@ -21,14 +23,6 @@ type ContactModalType = 'success' | 'error';
 const TURNSTILE_API_URL = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 const TURNSTILE_PROXIMITY_MARGIN = '600px 0px';
 const DIGIT_PATTERN = /\p{N}/gu;
-const FOCUSABLE_SELECTOR = [
-	'a[href]',
-	'button:not([disabled])',
-	'input:not([disabled])',
-	'select:not([disabled])',
-	'textarea:not([disabled])',
-	'[tabindex]:not([tabindex="-1"])',
-].join(',');
 
 const getTurnstile = () => (window as Window & { turnstile?: TurnstileApi }).turnstile;
 
@@ -158,11 +152,6 @@ const bindContactForm = (form: HTMLFormElement) => {
 		status.textContent = message;
 	};
 
-	const getFocusableModalElements = () =>
-		Array.from(modal?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR) ?? []).filter(
-			(element) => !element.hasAttribute('hidden') && !element.getAttribute('aria-hidden'),
-		);
-
 	const closeModal = () => {
 		if (!modal) return;
 
@@ -214,24 +203,7 @@ const bindContactForm = (form: HTMLFormElement) => {
 			return;
 		}
 
-		if (event.key !== 'Tab') return;
-
-		const focusableElements = getFocusableModalElements();
-		const firstElement = focusableElements[0];
-		const lastElement = focusableElements[focusableElements.length - 1];
-
-		if (!firstElement || !lastElement) return;
-
-		if (event.shiftKey && document.activeElement === firstElement) {
-			event.preventDefault();
-			lastElement.focus();
-			return;
-		}
-
-		if (!event.shiftKey && document.activeElement === lastElement) {
-			event.preventDefault();
-			firstElement.focus();
-		}
+		trapFocus(modal, event);
 	});
 
 	form.addEventListener('submit', async (event) => {

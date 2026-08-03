@@ -1,5 +1,6 @@
 ---
 import { getLocalePath, type Locale } from '../i18n/config';
+import { social, socialProfileUrls } from '../data/social';
 import '../styles/global.css';
 
 interface Props {
@@ -41,13 +42,9 @@ const schema = {
 			alternateName: 'Josue Correa',
 			jobTitle: locale === 'es' ? 'Desarrollador Backend' : 'Backend Developer',
 			url: profileUrl.toString(),
-			email: 'mailto:contacto@josuecorreaq.com',
+			email: `mailto:${social.email}`,
 			image: profileImage.toString(),
-			sameAs: [
-				'https://www.linkedin.com/in/josuecorreaqu',
-				'https://github.com/josuecorreaq',
-				'https://x.com/josuecorreaqu',
-			],
+			sameAs: socialProfileUrls,
 			knowsAbout: [
 				'Laravel',
 				'PHP',
@@ -157,7 +154,6 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 		<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
 		<link rel="icon" type="image/svg+xml" href="/logo.svg" />
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-		<link rel="manifest" href="/site.webmanifest" />
 		<link
 			rel="preload"
 			href="/fonts/inter-latin.woff2"

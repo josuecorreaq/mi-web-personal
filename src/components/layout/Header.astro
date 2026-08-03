@@ -33,6 +33,9 @@ const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
 			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('sobre-mi')} data-scroll-target={scrollTarget('sobre-mi')}>
 				<span class="nav-link-label">{t.nav.about}</span>
 			</a>
+			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('experiencia')} data-scroll-target={scrollTarget('experiencia')}>
+				<span class="nav-link-label">{t.nav.experience}</span>
+			</a>
 			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('proyectos')} data-scroll-target={scrollTarget('proyectos')}>
 				<span class="nav-link-label">{t.nav.projects}</span>
 			</a>
@@ -71,6 +74,9 @@ const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
 				>
 					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('sobre-mi')} data-scroll-target={scrollTarget('sobre-mi')} data-mobile-menu-link>
 						<span class="nav-link-label">{t.nav.about}</span>
+					</a>
+					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('experiencia')} data-scroll-target={scrollTarget('experiencia')} data-mobile-menu-link>
+						<span class="nav-link-label">{t.nav.experience}</span>
 					</a>
 					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('proyectos')} data-scroll-target={scrollTarget('proyectos')} data-mobile-menu-link>
 						<span class="nav-link-label">{t.nav.projects}</span>
