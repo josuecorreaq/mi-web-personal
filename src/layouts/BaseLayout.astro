@@ -120,6 +120,19 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 				if (canAnimateMotion) {
 					document.documentElement.dataset.textAnimations = 'enabled';
 					document.documentElement.dataset.revealAnimations = 'enabled';
+
+					setTimeout(() => {
+						const unclaimed = (target, state) =>
+							document.querySelector('[' + target + ']:not([' + state + '])') !== null;
+
+						if (unclaimed('data-animate-text', 'data-text-animation-state')) {
+							delete document.documentElement.dataset.textAnimations;
+						}
+
+						if (unclaimed('data-animate-reveal', 'data-reveal-animation-state')) {
+							delete document.documentElement.dataset.revealAnimations;
+						}
+					}, 2000);
 				}
 			})();
 		</script>

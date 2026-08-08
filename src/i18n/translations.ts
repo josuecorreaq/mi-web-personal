@@ -11,10 +11,12 @@ const translations = {
 			projects: 'Proyectos',
 			about: 'Sobre mí',
 			experience: 'Experiencia',
+			services: 'Servicios',
 			stack: 'Tecnologías',
 			contact: 'Contacto',
 			menu: 'Menú',
 			mainLabel: 'Navegación principal',
+			languageLabel: 'Ver esta página en inglés',
 			homeLabel: 'Josué Correa, inicio',
 		},
 		hero: {
@@ -22,8 +24,9 @@ const translations = {
 			role: 'Desarrollador Backend',
 			description:
 				'Desarrollador Backend especializado en Laravel, PHP y MySQL. Diseño APIs y sistemas web escalables para automatizar procesos de negocio.',
-			primaryCta: 'Ver proyectos',
-			secondaryCta: 'Contactar',
+			projectsCta: 'Ver proyectos',
+			contactCta: 'Contactar',
+			location: 'Perú',
 			flowLabel: 'Flujo backend',
 			flowStatus: '200 OK',
 			flowMethod: 'POST',
@@ -38,33 +41,69 @@ const translations = {
 			profileAlt: 'Josué Correa, desarrollador backend especializado en Laravel, PHP y MySQL',
 			values: [
 				{
-					title: 'Arquitectura clara',
-					description: 'Estructura bien definida desde el inicio.',
+					title: 'Separación por dominios',
+					description: 'Cada área del negocio vive en su propio módulo, con una frontera pública explícita.',
 				},
 				{
-					title: 'Seguridad por diseño',
-					description: 'Validaciones y protección integradas.',
+					title: 'Acceso controlado en el servidor',
+					description: 'Sesión, permiso por acción y alcance por sede se validan en el backend, nunca en la interfaz.',
 				},
 				{
-					title: 'Mantenimiento sostenible',
-					description: 'Código legible y escalable a largo plazo.',
+					title: 'Cambios verificados',
+					description: 'Las rutas públicas están cubiertas por pruebas: una migración interna no rompe a quien ya consume la API.',
+				},
+			],
+		},
+		services: {
+			kicker: 'Qué resuelvo',
+			title: 'Problemas de operación, no solo de código',
+			copy:
+				'Cuando el día a día se sostiene con archivos sueltos y mensajes, el problema no es de tecnología: es que nadie sabe cuál es el dato bueno. Ahí es donde entro.',
+			items: [
+				{
+					problem: 'El equipo mueve datos entre Excel, correo y mensajería',
+					outcome: 'Un solo sistema donde cada registro queda guardado con fecha y responsable.',
+				},
+				{
+					problem: 'Cada área trabaja con su propia versión de la información',
+					outcome: 'Una única fuente de datos, con permisos por rol y por sede.',
+				},
+				{
+					problem: 'Saber qué pasó con un pago obliga a preguntar',
+					outcome: 'Historial consultable de cada operación, sin depender de quién estaba de turno.',
 				},
 			],
 		},
 		experience: {
 			kicker: 'Experiencia',
 			title: 'Trabajo aplicado a operaciones financieras reales',
-			organization: 'Entidad del sector financiero',
-			role: 'Desarrollador web',
-			period: 'Abril — diciembre de 2025',
-			description:
-				'Desarrollo de un sistema para reemplazar procesos manuales de desembolso, pagos, cuotas y reportes por una operación centralizada y trazable.',
-			highlights: [
-				'Reducción del 50 % en pasos manuales de validación de pagos.',
-				'APIs REST con Laravel y componentes reutilizables con React.',
-				'Módulos separados, validaciones de negocio y control de consistencia de datos.',
-			],
 			cvCta: 'Ver CV',
+			items: [
+				{
+					organization: 'Proyecto independiente',
+					role: 'Desarrollador de software',
+					period: 'Enero de 2026 — Actualidad',
+					current: true,
+					description: 'Plataforma Integral de Gestión Crediticia.',
+					highlights: [
+						'Arquitectura modular de nueve dominios.',
+						'Control de accesos por usuario, rol y sede.',
+						'Migración por fases sobre tests de contrato.',
+					],
+				},
+				{
+					organization: 'Entidad del sector financiero',
+					role: 'Desarrollador web',
+					period: 'Abril — diciembre de 2025',
+					current: false,
+					description: 'Sistema de Gestión de Desembolsos Financieros.',
+					highlights: [
+						'APIs REST con Laravel y frontend en React.',
+						'Operación centralizada y trazable, sin archivos locales.',
+						'Soporte de incidencias con el sistema en producción.',
+					],
+				},
+			],
 		},
 		cv: {
 			modalTitle: 'Curriculum vitae',
@@ -85,6 +124,18 @@ const translations = {
 				competencies: 'Competencias',
 			},
 			experience: [
+				{
+					organization: 'Proyecto independiente',
+					location: 'Piura, Perú',
+					role: 'Desarrollador de software',
+					period: 'Enero de 2026 — Actualidad',
+					bullets: [
+						'Desarrollo una plataforma integral de gestión crediticia con Laravel, React y MySQL, cubriendo admisiones, evaluaciones, créditos y seguimiento de cartera.',
+						'Diseñé la arquitectura como monolito modular: nueve dominios con frontera pública propia y dependencias en una sola dirección, migrando cada módulo a las capas Http, Application, Domain e Infrastructure.',
+						'Implementé autorización por usuario, rol y sede, con evaluación diferenciada según el tipo de cliente.',
+						'Sostengo la migración progresiva con un test de contrato que congela las rutas públicas de la API, de modo que reestructurar un módulo no rompe al frontend.',
+					],
+				},
 				{
 					organization: 'Entidad del sector financiero',
 					location: 'Piura, Perú',
@@ -143,13 +194,14 @@ const translations = {
 		},
 		projects: {
 			kicker: 'Proyectos',
-			title: 'Dos sistemas, dos etapas de una misma especialización',
+			title: 'Dos sistemas financieros: uno en producción, otro en construcción',
 			labels: {
 				context: 'Contexto',
 				solution: 'Solución',
 				role: 'Rol',
 				decision: 'Decisión técnica',
 				evidence: 'Evidencia técnica',
+				details: 'Ver detalle técnico',
 			},
 			items: [
 				{
@@ -157,9 +209,19 @@ const translations = {
 					objective: 'Centralizar el desembolso, la validación de pagos, las cuotas y los reportes financieros.',
 					context: 'Operación financiera sostenida por archivos y validaciones manuales, con información dispersa entre distintos responsables.',
 					solution: 'Sistema web que ordena el flujo operativo, centraliza la información y mejora la trazabilidad de pagos y desembolsos.',
-					role: 'Desarrollador web con enfoque backend',
+					role: 'Desarrollador web',
 					decision: 'Separación de responsabilidades entre API, reglas de negocio, interfaz y persistencia para reducir acoplamiento y facilitar mantenimiento.',
-					evidence: 'Reducción del 50 % en pasos manuales de validación de pagos, con acceso centralizado a la información operativa.',
+					metrics: [
+						{ value: '−50 %', label: 'Pasos manuales en validación de pagos' },
+						{ value: '153', label: 'Endpoints REST en producción' },
+						{ value: '21', label: 'Suites de pruebas automatizadas' },
+					],
+					evidence: [
+						'153 endpoints REST sobre sesión JWT: préstamos, pagos, cuotas, cartera, moras y reprogramación.',
+						'21 suites de pruebas de funcionalidad, una por controlador crítico: autenticación, clientes, cartera, moras, reprogramación y calculadora.',
+						'Reducción del 50 % en pasos manuales de validación de pagos, medida contra el proceso anterior.',
+						'Reportes financieros generados desde los registros del sistema, no desde hojas de cálculo paralelas.',
+					],
 					architecture: {
 						version: 'Producción',
 						layers: [
@@ -173,18 +235,44 @@ const translations = {
 				},
 				{
 					name: 'Plataforma Integral de Gestión Crediticia',
-					objective: 'Cubrir el ciclo crediticio completo —admisión, evaluación, garantías y cartera— sobre una base modular que crece por fases.',
+					objective: 'Cubrir el ciclo crediticio completo —admisiones, evaluaciones, créditos y seguimiento de cartera— sobre una base modular que crece por fases.',
 					context: 'Nueve dominios de negocio con reglas propias, evaluación diferenciada por tipo de cliente y accesos delimitados por usuario, rol y sede.',
-					solution: 'Monolito modular: cada dominio es un módulo con cuatro capas internas y dependencias en una sola dirección, para crecer sin acoplar.',
-					role: 'Desarrollo full stack y definición de la arquitectura modular',
+					solution: 'Monolito modular: cada dominio es un módulo con frontera pública propia y dependencias en una sola dirección; las capas internas se completan módulo a módulo.',
+					role: 'Desarrollo full stack',
 					decision: 'La capa Domain no depende del framework, y ningún módulo entra a las tablas ni a las clases internas de otro: solo consume sus Actions y Queries públicas.',
-					evidence: 'La migración avanza por fases con un test de contrato que congela las rutas públicas de la API: reestructurar un módulo no rompe a sus consumidores.',
+					metrics: [
+						{ value: '9', label: 'Dominios de negocio modulares' },
+						{ value: '100 %', label: 'De la API verificada en cada cambio' },
+						{ value: '3', label: 'Niveles de acceso: usuario, rol y sede' },
+					],
+					evidence: [
+						'118 rutas públicas congeladas en un test de contrato que fija método, URI, controlador y middleware de cada una.',
+						'Nueve dominios definidos, cada uno como módulo independiente con su propia frontera pública.',
+						'Autorización en tres niveles: sesión JWT, permiso granular por acción y alcance por sede.',
+						'Capa Domain sin dependencias del framework; entre módulos solo hay Actions y Queries públicas.',
+					],
+					apiSample: {
+						label: 'Extracto del test de contrato',
+						caption:
+							'Cada fila fija método, URI, controlador y middleware. Si una migración los cambia, el test falla antes que el frontend.',
+						rows: [
+							'// RouteContractTest.php',
+							'',
+							"['GET', 'api/v1/proceso-negocio',",
+							'  ProcesoNegocioController@index,',
+							"  ['jwt', 'permiso:proceso.listar']],",
+							'',
+							"['PATCH', 'api/v1/proceso-negocio/{id}',",
+							'  ProcesoNegocioController@update,',
+							"  ['jwt', 'permiso:proceso.editar']],",
+						],
+					},
 					architecture: {
 						version: 'En desarrollo',
 						layers: [
 							'Http · controllers, requests, resources',
 							'Application · casos de uso y transacciones',
-							'Domain · reglas de negocio puras',
+							'Domain · reglas de negocio',
 							'Infrastructure · persistencia y adapters',
 						],
 					},
@@ -219,6 +307,7 @@ const translations = {
 			email: 'Email',
 			linkedin: 'LinkedIn',
 			github: 'GitHub',
+			x: 'X',
 			open: 'Abrir',
 		},
 		errors: {
@@ -241,10 +330,12 @@ const translations = {
 			projects: 'Projects',
 			about: 'About',
 			experience: 'Experience',
+			services: 'Services',
 			stack: 'Technologies',
 			contact: 'Contact',
 			menu: 'Menu',
 			mainLabel: 'Main navigation',
+			languageLabel: 'Ver esta página en español',
 			homeLabel: 'Josue Correa, home',
 		},
 		hero: {
@@ -252,8 +343,9 @@ const translations = {
 			role: 'Backend Developer',
 			description:
 				'Backend Developer specialized in Laravel, PHP and MySQL. I design APIs and scalable web systems to automate business processes.',
-			primaryCta: 'View projects',
-			secondaryCta: 'Get in touch',
+			projectsCta: 'View projects',
+			contactCta: 'Get in touch',
+			location: 'Peru',
 			flowLabel: 'Backend flow',
 			flowStatus: '200 OK',
 			flowMethod: 'POST',
@@ -268,33 +360,69 @@ const translations = {
 			profileAlt: 'Josue Correa, backend developer specialized in Laravel, PHP and MySQL',
 			values: [
 				{
-					title: 'Clear architecture',
-					description: 'Structure defined clearly from the start.',
+					title: 'Separation by domain',
+					description: 'Every business area lives in its own module, behind an explicit public boundary.',
 				},
 				{
-					title: 'Security by design',
-					description: 'Integrated validation and protection.',
+					title: 'Access enforced on the server',
+					description: 'Session, per-action permission and branch scope are checked in the backend, never in the interface.',
 				},
 				{
-					title: 'Sustainable maintenance',
-					description: 'Readable, scalable code for the long term.',
+					title: 'Verified changes',
+					description: 'Public routes are covered by tests: an internal migration never breaks an existing API consumer.',
+				},
+			],
+		},
+		services: {
+			kicker: 'What I solve',
+			title: 'Operational problems, not just code',
+			copy:
+				'When daily work runs on loose files and messages, the problem is not technology: nobody knows which copy of the data is the good one. That is where I come in.',
+			items: [
+				{
+					problem: 'The team moves data between spreadsheets, email and chat',
+					outcome: 'One system where every record is stored with a date and an owner.',
+				},
+				{
+					problem: 'Each area works from its own version of the information',
+					outcome: 'A single source of data, with permissions by role and by branch.',
+				},
+				{
+					problem: 'Finding out what happened to a payment means asking around',
+					outcome: 'A searchable history of every operation, independent of who was on shift.',
 				},
 			],
 		},
 		experience: {
 			kicker: 'Experience',
 			title: 'Engineering applied to real financial operations',
-			organization: 'Financial-sector organization',
-			role: 'Web Developer',
-			period: 'April — December 2025',
-			description:
-				'Developed a system that replaced manual disbursement, payment, installment and reporting processes with a centralized and traceable operation.',
-			highlights: [
-				'Reduced manual payment-validation steps by 50%.',
-				'Built REST APIs with Laravel and reusable components with React.',
-				'Separated modules, business validation and data-consistency controls.',
-			],
 			cvCta: 'View CV',
+			items: [
+				{
+					organization: 'Independent project',
+					role: 'Software Developer',
+					period: 'January 2026 — Present',
+					current: true,
+					description: 'End-to-End Credit Management Platform.',
+					highlights: [
+						'Modular architecture across nine domains.',
+						'Access control by user, role and branch.',
+						'Phased migration backed by contract tests.',
+					],
+				},
+				{
+					organization: 'Financial-sector organization',
+					role: 'Web Developer',
+					period: 'April — December 2025',
+					current: false,
+					description: 'Financial Disbursement Management System.',
+					highlights: [
+						'REST APIs with Laravel and a React frontend.',
+						'Centralized, traceable operation with no local files.',
+						'Incident support with the system in production.',
+					],
+				},
+			],
 		},
 		cv: {
 			modalTitle: 'Curriculum vitae',
@@ -315,6 +443,18 @@ const translations = {
 				competencies: 'Competencies',
 			},
 			experience: [
+				{
+					organization: 'Independent project',
+					location: 'Piura, Peru',
+					role: 'Software Developer',
+					period: 'January 2026 — Present',
+					bullets: [
+						'Building an end-to-end credit management platform with Laravel, React and MySQL, covering admissions, evaluations, credits and portfolio tracking.',
+						'Designed the architecture as a modular monolith: nine domains with their own public boundary and dependencies running one way, migrating each module to the Http, Application, Domain and Infrastructure layers.',
+						'Implemented authorization by user, role and branch, with evaluation that differs by client type.',
+						'Sustain the phased migration with a contract test that freezes the public API routes, so restructuring a module never breaks the frontend.',
+					],
+				},
 				{
 					organization: 'Financial-sector organization',
 					location: 'Piura, Peru',
@@ -373,13 +513,14 @@ const translations = {
 		},
 		projects: {
 			kicker: 'Projects',
-			title: 'Two systems, two stages of the same specialization',
+			title: 'Two financial systems: one in production, one being built',
 			labels: {
 				context: 'Context',
 				solution: 'Solution',
 				role: 'Role',
 				decision: 'Technical decision',
 				evidence: 'Technical evidence',
+				details: 'View technical detail',
 			},
 			items: [
 				{
@@ -387,9 +528,19 @@ const translations = {
 					objective: 'Centralize disbursements, payment validation, installments and financial reporting.',
 					context: 'A financial operation supported by local files and manual checks, with information scattered across different roles.',
 					solution: 'A web system that structures the operational flow, centralizes information and improves payment and disbursement traceability.',
-					role: 'Web Developer with a backend focus',
+					role: 'Web Developer',
 					decision: 'Separated the API, business rules, interface and persistence responsibilities to reduce coupling and simplify maintenance.',
-					evidence: 'Reduced manual payment-validation steps by 50% while centralizing access to operational information.',
+					metrics: [
+						{ value: '−50%', label: 'Manual steps in payment validation' },
+						{ value: '153', label: 'REST endpoints in production' },
+						{ value: '21', label: 'Automated test suites' },
+					],
+					evidence: [
+						'153 REST endpoints behind a JWT session: loans, payments, installments, portfolio, arrears and rescheduling.',
+						'21 feature test suites, one per critical controller: authentication, clients, portfolio, arrears, rescheduling and calculator.',
+						'Manual payment-validation steps cut by 50%, measured against the previous process.',
+						'Financial reports generated from system records instead of parallel spreadsheets.',
+					],
 					architecture: {
 						version: 'Production',
 						layers: [
@@ -403,18 +554,44 @@ const translations = {
 				},
 				{
 					name: 'End-to-End Credit Management Platform',
-					objective: 'Cover the full credit lifecycle — admission, evaluation, guarantees and portfolio — on a modular base that grows in phases.',
+					objective: 'Cover the full credit lifecycle — admissions, evaluations, credits and portfolio tracking — on a modular base that grows in phases.',
 					context: 'Nine business domains with their own rules, evaluation that differs by client type, and access scoped by user, role and branch.',
-					solution: 'A modular monolith: each domain is a module with four internal layers and dependencies running one way, so it grows without coupling.',
-					role: 'Full-stack development and modular architecture definition',
+					solution: 'A modular monolith: each domain is a module with its own public boundary and dependencies running one way; the internal layers land module by module.',
+					role: 'Full-stack development',
 					decision: 'The Domain layer does not depend on the framework, and no module reaches into another module’s tables or internal classes: it only consumes its public Actions and Queries.',
-					evidence: 'The migration advances in phases behind a contract test that freezes the public API routes: restructuring a module never breaks its consumers.',
+					metrics: [
+						{ value: '9', label: 'Modular business domains' },
+						{ value: '100%', label: 'Of the API verified on every change' },
+						{ value: '3', label: 'Access scopes: user, role and branch' },
+					],
+					evidence: [
+						'118 public routes frozen in a contract test that pins the method, URI, controller and middleware of each one.',
+						'Nine domains defined, each an independent module with its own public boundary.',
+						'Authorization at three levels: JWT session, granular per-action permission and branch scope.',
+						'Domain layer free of framework dependencies; modules talk only through public Actions and Queries.',
+					],
+					apiSample: {
+						label: 'Contract test excerpt',
+						caption:
+							'Each row pins the method, URI, controller and middleware. If a migration changes them, the test fails before the frontend does.',
+						rows: [
+							'// RouteContractTest.php',
+							'',
+							"['GET', 'api/v1/business-process',",
+							'  BusinessProcessController@index,',
+							"  ['jwt', 'permission:process.list']],",
+							'',
+							"['PATCH', 'api/v1/business-process/{id}',",
+							'  BusinessProcessController@update,',
+							"  ['jwt', 'permission:process.edit']],",
+						],
+					},
 					architecture: {
 						version: 'In development',
 						layers: [
 							'Http · controllers, requests, resources',
 							'Application · use cases and transactions',
-							'Domain · pure business rules',
+							'Domain · business rules',
 							'Infrastructure · persistence and adapters',
 						],
 					},
@@ -449,6 +626,7 @@ const translations = {
 			email: 'Email',
 			linkedin: 'LinkedIn',
 			github: 'GitHub',
+			x: 'X',
 			open: 'Open',
 		},
 		errors: {

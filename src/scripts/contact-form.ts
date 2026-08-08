@@ -1,5 +1,3 @@
-import { trapFocus } from './focus-trap';
-
 type TurnstileApi = {
 	render: (container: string | HTMLElement, options: TurnstileRenderOptions) => string;
 	reset: (container?: string | HTMLElement) => void;
@@ -134,8 +132,7 @@ const bindContactForm = (form: HTMLFormElement) => {
 	const submitButton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
 	const submitText = form.querySelector<HTMLElement>('[data-submit-text]');
 	const status = form.querySelector<HTMLElement>('[data-contact-status]');
-	const modal = form.querySelector<HTMLElement>('[data-contact-modal]');
-	const modalPanel = form.querySelector<HTMLElement>('[data-contact-modal-panel]');
+	const modal = form.querySelector<HTMLDialogElement>('[data-contact-modal]');
 	const modalTitle = form.querySelector<HTMLElement>('[data-contact-modal-title]');
 	const modalMessage = form.querySelector<HTMLElement>('[data-contact-modal-message]');
 	const modalSuccessIcon = form.querySelector<HTMLElement>('[data-contact-modal-success-icon]');
@@ -144,20 +141,11 @@ const bindContactForm = (form: HTMLFormElement) => {
 	const submitLabel = form.dataset.submitLabel ?? submitText?.textContent ?? '';
 	const sendingLabel = form.dataset.sendingLabel ?? submitLabel;
 	const isTurnstileEnabled = form.dataset.turnstileEnabled === 'true';
-	let modalFocusReturn: HTMLElement | null = null;
 
 	const setStatus = (message = '') => {
 		if (!status) return;
 
 		status.textContent = message;
-	};
-
-	const closeModal = () => {
-		if (!modal) return;
-
-		modal.hidden = true;
-		modalFocusReturn?.focus();
-		modalFocusReturn = null;
 	};
 
 	const showStatus = (message: string | undefined, type: ContactModalType) => {
@@ -167,17 +155,14 @@ const bindContactForm = (form: HTMLFormElement) => {
 
 		if (!modal || !modalTitle || !modalMessage || !modalSuccessIcon || !modalErrorIcon) return;
 
-		modalFocusReturn = document.activeElement instanceof HTMLElement ? document.activeElement : submitButton;
 		modalTitle.textContent =
 			type === 'success' ? form.dataset.modalSuccessTitle ?? '' : form.dataset.modalErrorTitle ?? '';
 		modalMessage.textContent = safeMessage;
 		modalSuccessIcon.hidden = type !== 'success';
 		modalErrorIcon.hidden = type !== 'error';
-		modal.hidden = false;
-
-		requestAnimationFrame(() => {
-			(modalClose ?? modalPanel)?.focus();
-		});
+		setSubmitting(false);
+		submitButton?.focus();
+		modal.showModal();
 	};
 
 	const setSubmitting = (isSubmitting: boolean) => {
@@ -190,20 +175,13 @@ const bindContactForm = (form: HTMLFormElement) => {
 		}
 	};
 
-	modalClose?.addEventListener('click', closeModal);
+	// `showModal()` covers focus trapping, Escape and background inertness natively.
+	modalClose?.addEventListener('click', () => modal?.close());
 	modal?.addEventListener('click', (event) => {
+		// The panel is the dialog itself, so only backdrop clicks target it.
 		if (event.target === modal) {
-			closeModal();
+			modal.close();
 		}
-	});
-	modal?.addEventListener('keydown', (event) => {
-		if (event.key === 'Escape') {
-			event.preventDefault();
-			closeModal();
-			return;
-		}
-
-		trapFocus(modal, event);
 	});
 
 	form.addEventListener('submit', async (event) => {
@@ -229,7 +207,6 @@ const bindContactForm = (form: HTMLFormElement) => {
 		}
 
 		if (token) {
-			// Avoid browser autofill false positives on the hidden honeypot field.
 			formData.set('website', '');
 		}
 

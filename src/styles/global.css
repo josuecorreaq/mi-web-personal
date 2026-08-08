@@ -41,6 +41,7 @@
 :root {
 	color-scheme: dark;
 	scroll-behavior: smooth;
+	--optical-inset: -0.03em;
 }
 
 :root[data-theme="light"] {
@@ -73,6 +74,10 @@ body {
 	-webkit-font-smoothing: antialiased;
 }
 
+body:has(dialog[open]) {
+	overflow: hidden;
+}
+
 ::selection {
 	background: var(--color-accent);
 	color: var(--color-canvas);
@@ -83,7 +88,6 @@ button {
 	-webkit-tap-highlight-color: transparent;
 }
 
-/* Tailwind's preflight resets buttons to cursor: default. */
 button:not(:disabled),
 summary {
 	cursor: pointer;
@@ -110,6 +114,41 @@ summary {
 .nav-item:hover .nav-link-label::after,
 .nav-item:focus-visible .nav-link-label::after {
 	transform: scaleX(1);
+}
+
+.language-toggle {
+	display: inline-flex;
+	height: 2.5rem;
+	align-items: center;
+	gap: 0.5rem;
+	border: 1px solid var(--color-line);
+	padding-inline: 0.75rem;
+	color: var(--color-ink);
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	font-weight: 700;
+	transition:
+		border-color 160ms ease,
+		color 160ms ease,
+		background-color 160ms ease,
+		scale 160ms ease;
+}
+
+.language-toggle:hover {
+	border-color: var(--color-accent);
+	background: var(--color-surface);
+	color: var(--color-accent);
+}
+
+.language-toggle:active {
+	scale: 0.96;
+}
+
+.language-toggle-current {
+	border-left: 1px solid var(--color-line);
+	padding-left: 0.5rem;
+	color: var(--color-muted);
+	font-weight: 500;
 }
 
 .theme-toggle {
@@ -209,9 +248,6 @@ summary {
 }
 
 .section-kicker {
-	display: flex;
-	align-items: center;
-	gap: 0.75rem;
 	margin-bottom: 1.25rem;
 	color: var(--color-accent);
 	font-family: var(--font-mono);
@@ -221,15 +257,9 @@ summary {
 	text-transform: uppercase;
 }
 
-.section-kicker::before {
-	width: 1.75rem;
-	height: 1px;
-	background: currentColor;
-	content: "";
-}
-
 .section-title {
 	max-width: 48rem;
+	margin-left: var(--optical-inset);
 	font-family: var(--font-display);
 	font-size: clamp(2.25rem, 5vw, 4rem);
 	font-weight: 600;

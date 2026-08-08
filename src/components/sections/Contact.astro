@@ -80,6 +80,24 @@ const statusId = fieldId('status');
 						<span class="shrink-0 text-accent" aria-hidden="true">↗</span>
 						<span class="sr-only"> — {t.contact.open}</span>
 					</a>
+					<a
+						href={social.x.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="group flex min-h-16 items-center justify-between gap-4 py-4 transition-colors hover:text-accent"
+					>
+						<span class="flex min-w-0 items-center gap-3">
+							<Icon name="x" class="size-4 shrink-0 text-accent" />
+							<span class="min-w-0">
+								<span class="block font-mono text-[0.65rem] uppercase tracking-[0.1em] text-muted">
+									{t.contact.x}
+								</span>
+								<span class="block break-all font-mono text-sm">{social.x.handle}</span>
+							</span>
+						</span>
+						<span class="shrink-0 text-accent" aria-hidden="true">↗</span>
+						<span class="sr-only"> — {t.contact.open}</span>
+					</a>
 				</div>
 			</div>
 
@@ -189,20 +207,13 @@ const statusId = fieldId('status');
 						data-contact-status
 					></p>
 				</div>
-				<div
-					class="fixed inset-0 z-50 grid place-items-center bg-black/75 p-4"
+				<dialog
+					class="m-auto w-[calc(100%-2rem)] max-w-md border border-line bg-surface p-0 text-ink shadow-2xl backdrop:bg-black/75"
+					aria-labelledby={fieldId('modal-title')}
+					aria-describedby={fieldId('modal-message')}
 					data-contact-modal
-					hidden
 				>
-					<div
-						class="w-full max-w-md border border-line bg-surface p-5 shadow-2xl sm:p-6"
-						role="dialog"
-						aria-modal="true"
-						aria-labelledby={fieldId('modal-title')}
-						aria-describedby={fieldId('modal-message')}
-						data-contact-modal-panel
-						tabindex="-1"
-					>
+					<div class="p-5 sm:p-6">
 						<div class="flex items-start gap-4">
 							<span
 								class="grid size-11 shrink-0 place-items-center border border-accent bg-accent/5 text-accent"
@@ -220,11 +231,11 @@ const statusId = fieldId('status');
 								<Icon name="circle-alert" class="size-5" />
 							</span>
 							<div class="min-w-0 flex-1">
-								<h3
+								<p
 									id={fieldId('modal-title')}
 									class="font-display text-xl font-semibold leading-tight text-ink"
 									data-contact-modal-title
-								></h3>
+								></p>
 								<p
 									id={fieldId('modal-message')}
 									class="mt-3 text-pretty text-sm leading-6 text-muted"
@@ -236,13 +247,14 @@ const statusId = fieldId('status');
 							<button
 								type="button"
 								class="inline-flex min-h-11 items-center justify-center border border-line bg-canvas px-4 py-2 font-mono text-xs font-bold uppercase tracking-[0.08em] text-ink transition-colors hover:border-accent hover:text-accent"
+								autofocus
 								data-contact-modal-close
 							>
 								{t.contact.form.close}
 							</button>
 						</div>
 					</div>
-				</div>
+				</dialog>
 			</form>
 		</div>
 	</div>

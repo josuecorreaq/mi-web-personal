@@ -52,11 +52,7 @@ const canonical = new URL(getLocalePath(locale), Astro.site ?? Astro.url);
 			const target = document.getElementById(targetId);
 
 			if (!target) return false;
-
-			target.scrollIntoView({
-				behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-				block: 'start',
-			});
+			target.scrollIntoView({ block: 'start' });
 
 			if (shouldFocus) {
 				target.focus({ preventScroll: true });
