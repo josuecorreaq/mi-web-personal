@@ -84,7 +84,7 @@ const translations = {
 					role: 'Desarrollador de software',
 					period: 'Enero de 2026 — Actualidad',
 					current: true,
-					description: 'Plataforma Integral de Gestión Crediticia.',
+					description: 'Plataforma Integral de Gestión Crediticia',
 					highlights: [
 						'Arquitectura modular de nueve dominios.',
 						'Control de accesos por usuario, rol y sede.',
@@ -96,7 +96,7 @@ const translations = {
 					role: 'Desarrollador web',
 					period: 'Abril — diciembre de 2025',
 					current: false,
-					description: 'Sistema de Gestión de Desembolsos Financieros.',
+					description: 'Sistema de Gestión de Desembolsos Financieros',
 					highlights: [
 						'APIs REST con Laravel y frontend en React.',
 						'Operación centralizada y trazable, sin archivos locales.',
@@ -403,7 +403,7 @@ const translations = {
 					role: 'Software Developer',
 					period: 'January 2026 — Present',
 					current: true,
-					description: 'End-to-End Credit Management Platform.',
+					description: 'End-to-End Credit Management Platform',
 					highlights: [
 						'Modular architecture across nine domains.',
 						'Access control by user, role and branch.',
@@ -415,7 +415,7 @@ const translations = {
 					role: 'Web Developer',
 					period: 'April — December 2025',
 					current: false,
-					description: 'Financial Disbursement Management System.',
+					description: 'Financial Disbursement Management System',
 					highlights: [
 						'REST APIs with Laravel and a React frontend.',
 						'Centralized, traceable operation with no local files.',

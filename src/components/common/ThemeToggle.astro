@@ -36,7 +36,6 @@ const labels =
 
 	const setTheme = (theme: 'light' | 'dark') => {
 		root.dataset.theme = theme;
-		root.style.colorScheme = theme;
 		const switchesToLight = theme === 'dark';
 
 		toggles.forEach((toggle) => {
@@ -69,7 +68,12 @@ const labels =
 				return;
 			}
 
-			document.startViewTransition(() => setTheme(nextTheme));
+			const transition = document.startViewTransition(() => setTheme(nextTheme));
+
+			// El navegador rechaza la transición si la pestaña está oculta o si otra la
+			// interrumpe. El tema ya se aplicó; solo hay que evitar el rechazo sin capturar.
+			transition.ready.catch(() => {});
+			transition.finished.catch(() => {});
 		});
 	});
 

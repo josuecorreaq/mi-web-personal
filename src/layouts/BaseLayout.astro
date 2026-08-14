@@ -110,7 +110,9 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 				}
 
 				document.documentElement.dataset.theme = theme;
-				document.documentElement.style.colorScheme = theme;
+				document
+					.querySelector('meta[name="theme-color"]')
+					?.setAttribute('content', theme === 'dark' ? '#09090b' : '#f4f4f0');
 
 				const canAnimateMotion =
 					'animate' in Element.prototype &&
@@ -167,6 +169,7 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 		<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
 		<link rel="icon" type="image/svg+xml" href="/logo.svg" />
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
 		<link
 			rel="preload"
 			href="/fonts/inter-latin.woff2"
