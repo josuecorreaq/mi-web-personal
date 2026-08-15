@@ -184,6 +184,13 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 			type="font/woff2"
 			crossorigin
 		/>
+		<link
+			rel="preload"
+			href="/fonts/jetbrains-mono-latin.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
 		<title>{title}</title>
 		{description && <script is:inline type="application/ld+json" set:html={schemaJson} />}
 		<slot name="head" />

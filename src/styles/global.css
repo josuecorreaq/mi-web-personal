@@ -11,7 +11,7 @@
 @font-face {
 	font-family: "JetBrains Mono";
 	font-style: normal;
-	font-weight: 500 800;
+	font-weight: 400 800;
 	font-display: swap;
 	src: url("/fonts/jetbrains-mono-latin.woff2") format("woff2");
 }
@@ -19,7 +19,7 @@
 @font-face {
 	font-family: "Space Grotesk";
 	font-style: normal;
-	font-weight: 500 700;
+	font-weight: 600;
 	font-display: swap;
 	src: url("/fonts/space-grotesk-latin.woff2") format("woff2");
 }
@@ -283,7 +283,7 @@ summary {
 	background: var(--color-accent);
 	padding: 0.75rem 1rem;
 	color: var(--color-canvas);
-	font-weight: 700;
+	font-weight: 600;
 	transition: transform 160ms ease;
 }
 

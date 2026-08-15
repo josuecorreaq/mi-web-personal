@@ -2,6 +2,7 @@
 import type { Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
 import CvModal from '../cv/CvModal.astro';
+import Icon from '../common/Icon.astro';
 
 interface Props {
 	locale: Locale;
@@ -25,7 +26,7 @@ const t = useTranslations(locale).experience;
 				data-cv-open
 			>
 				{t.cvCta}
-				<span aria-hidden="true">↗</span>
+				<Icon name="arrow-up-right" class="size-4 shrink-0" />
 			</button>
 		</div>
 
