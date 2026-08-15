@@ -174,11 +174,21 @@ Node version: 22.12.0 o superior
 
 El hosting debe servir `404.html` como página de error personalizada y respetar las rutas con barra final.
 
+### CSP en cPanel/LiteSpeed
+
+`npm run build` compila Astro y después ejecuta `scripts/generate-csp.mjs`. El generador calcula hashes SHA-256 para cada script y estilo inline del HTML final y reemplaza el marcador de `public/.htaccess` dentro de `dist/.htaccess`.
+
+- Despliega juntos el contenido de `dist/` y su `.htaccess`; los hashes pertenecen exactamente a ese build.
+- Si cPanel administra `.htaccess`, conserva sus bloques y copia únicamente la línea `Content-Security-Policy` generada.
+- No publiques `public/.htaccess` directamente: contiene el marcador, no la política final.
+- Evita dejar HTML antiguo en `/es/`. La ruta española canónica actual es `/`; elimina el artefacto obsoleto durante un despliegue limpio o configúralo como redirección permanente a `/`.
+
 ## Seguridad y privacidad
 
 - `PUBLIC_CONTACT_API_URL` es una variable pública; no debe contener secretos.
 - No deben agregarse credenciales, tokens o información privada al código fuente.
 - Los secretos SMTP y credenciales del backend deben vivir solo en Laravel `.env`.
+- La CSP debe permanecer basada en hashes; no agregues `'unsafe-inline'` para resolver bloqueos.
 - Los enlaces externos que abren otra pestaña deben conservar `rel="noopener noreferrer"`.
 - Las dependencias deben mantenerse actualizadas y revisarse periódicamente con `npm audit`.
 - La información de contacto publicada es deliberadamente pública; cualquier dato adicional debe evaluarse antes de exponerlo.

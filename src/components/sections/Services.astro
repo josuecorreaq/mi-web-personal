@@ -1,0 +1,39 @@
+---
+import type { Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n/translations';
+import Icon from '../common/Icon.astro';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale).services;
+const serviceIcons = ['scattered-data', 'jwt-security', 'traceability'] as const;
+---
+
+<section id="servicios" class="border-b border-line bg-canvas">
+	<div class="page-shell section-shell">
+		<p class="section-kicker" data-animate-text="whole">{t.kicker}</p>
+		<h2 class="section-title" data-animate-text="words" data-animate-delay="80">{t.title}</h2>
+		<p class="section-copy mt-7 max-w-2xl" data-animate-text="whole" data-animate-delay="160">{t.copy}</p>
+
+		<dl class="mt-14 grid gap-3 sm:grid-cols-3">
+			{t.items.map((item, index) => (
+				<div
+					class="border border-line bg-surface p-5 transition-colors hover:border-accent sm:p-6"
+					data-animate-reveal="up"
+					data-animate-reveal-delay={index * 90}
+				>
+					<span class="mb-5 inline-grid size-10 place-items-center border border-line bg-canvas text-accent" aria-hidden="true">
+						<Icon name={serviceIcons[index] ?? 'traceability'} class="size-5" />
+					</span>
+					<dt class="text-pretty font-display text-base font-semibold leading-snug text-ink sm:text-lg">
+						{item.problem}
+					</dt>
+					<dd class="mt-2 text-pretty text-sm leading-6 text-muted">{item.outcome}</dd>
+				</div>
+			))}
+		</dl>
+	</div>
+</section>

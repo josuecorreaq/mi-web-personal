@@ -24,7 +24,6 @@
 	const completeReveal = (element: HTMLElement, animation?: Animation) => {
 		element.dataset.revealAnimationState = 'complete';
 		animation?.cancel();
-		element.style.removeProperty('will-change');
 	};
 
 	const revealElement = (element: HTMLElement) => {
@@ -38,8 +37,6 @@
 		const delay = Number.isFinite(requestedDelay)
 			? Math.min(Math.max(requestedDelay, 0), 600)
 			: 0;
-
-		element.style.willChange = 'transform, opacity';
 
 		try {
 			const animation = element.animate(revealKeyframes[variant], {
@@ -106,5 +103,9 @@
 	html[data-reveal-animations='enabled']
 		[data-animate-reveal]:not([data-reveal-animation-state]) {
 		opacity: 0;
+	}
+
+	[data-animate-reveal][data-reveal-animation-state='running'] {
+		will-change: transform, opacity;
 	}
 </style>

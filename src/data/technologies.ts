@@ -14,10 +14,11 @@ type TechnologyCategory = {
 const categories = {
 	es: [
 		{
-			name: 'Backend',
+			name: 'Stack principal',
 			items: [
 				{ label: 'Laravel', icon: 'laravel' },
 				{ label: 'PHP', icon: 'php' },
+				{ label: 'MySQL', icon: 'mysql' },
 			],
 		},
 		{
@@ -25,9 +26,9 @@ const categories = {
 			items: [
 				{ label: 'React', icon: 'react' },
 				{ label: 'JavaScript', icon: 'javascript' },
+				{ label: 'Tailwind CSS', icon: 'tailwind' },
 			],
 		},
-		{ name: 'Base de datos', items: [{ label: 'MySQL', icon: 'mysql' }] },
 		{
 			name: 'Herramientas',
 			items: [
@@ -35,21 +36,14 @@ const categories = {
 				{ label: 'Docker', icon: 'docker' },
 			],
 		},
-		{
-			name: 'Buenas prácticas',
-			items: [
-				{ label: 'Clean Code', icon: 'clean-code' },
-				{ label: 'Arquitectura modular', icon: 'modular-architecture' },
-				{ label: 'Seguridad JWT', icon: 'jwt-security' },
-			],
-		},
 	],
 	en: [
 		{
-			name: 'Backend',
+			name: 'Core stack',
 			items: [
 				{ label: 'Laravel', icon: 'laravel' },
 				{ label: 'PHP', icon: 'php' },
+				{ label: 'MySQL', icon: 'mysql' },
 			],
 		},
 		{
@@ -57,22 +51,14 @@ const categories = {
 			items: [
 				{ label: 'React', icon: 'react' },
 				{ label: 'JavaScript', icon: 'javascript' },
+				{ label: 'Tailwind CSS', icon: 'tailwind' },
 			],
 		},
-		{ name: 'Database', items: [{ label: 'MySQL', icon: 'mysql' }] },
 		{
 			name: 'Tools',
 			items: [
 				{ label: 'Git', icon: 'git' },
 				{ label: 'Docker', icon: 'docker' },
-			],
-		},
-		{
-			name: 'Practices',
-			items: [
-				{ label: 'Clean Code', icon: 'clean-code' },
-				{ label: 'Modular architecture', icon: 'modular-architecture' },
-				{ label: 'JWT security', icon: 'jwt-security' },
 			],
 		},
 	],

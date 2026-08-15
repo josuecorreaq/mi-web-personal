@@ -21,14 +21,6 @@ type ContactModalType = 'success' | 'error';
 const TURNSTILE_API_URL = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 const TURNSTILE_PROXIMITY_MARGIN = '600px 0px';
 const DIGIT_PATTERN = /\p{N}/gu;
-const FOCUSABLE_SELECTOR = [
-	'a[href]',
-	'button:not([disabled])',
-	'input:not([disabled])',
-	'select:not([disabled])',
-	'textarea:not([disabled])',
-	'[tabindex]:not([tabindex="-1"])',
-].join(',');
 
 const getTurnstile = () => (window as Window & { turnstile?: TurnstileApi }).turnstile;
 
@@ -140,8 +132,7 @@ const bindContactForm = (form: HTMLFormElement) => {
 	const submitButton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
 	const submitText = form.querySelector<HTMLElement>('[data-submit-text]');
 	const status = form.querySelector<HTMLElement>('[data-contact-status]');
-	const modal = form.querySelector<HTMLElement>('[data-contact-modal]');
-	const modalPanel = form.querySelector<HTMLElement>('[data-contact-modal-panel]');
+	const modal = form.querySelector<HTMLDialogElement>('[data-contact-modal]');
 	const modalTitle = form.querySelector<HTMLElement>('[data-contact-modal-title]');
 	const modalMessage = form.querySelector<HTMLElement>('[data-contact-modal-message]');
 	const modalSuccessIcon = form.querySelector<HTMLElement>('[data-contact-modal-success-icon]');
@@ -150,25 +141,11 @@ const bindContactForm = (form: HTMLFormElement) => {
 	const submitLabel = form.dataset.submitLabel ?? submitText?.textContent ?? '';
 	const sendingLabel = form.dataset.sendingLabel ?? submitLabel;
 	const isTurnstileEnabled = form.dataset.turnstileEnabled === 'true';
-	let modalFocusReturn: HTMLElement | null = null;
 
 	const setStatus = (message = '') => {
 		if (!status) return;
 
 		status.textContent = message;
-	};
-
-	const getFocusableModalElements = () =>
-		Array.from(modal?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR) ?? []).filter(
-			(element) => !element.hasAttribute('hidden') && !element.getAttribute('aria-hidden'),
-		);
-
-	const closeModal = () => {
-		if (!modal) return;
-
-		modal.hidden = true;
-		modalFocusReturn?.focus();
-		modalFocusReturn = null;
 	};
 
 	const showStatus = (message: string | undefined, type: ContactModalType) => {
@@ -178,17 +155,14 @@ const bindContactForm = (form: HTMLFormElement) => {
 
 		if (!modal || !modalTitle || !modalMessage || !modalSuccessIcon || !modalErrorIcon) return;
 
-		modalFocusReturn = document.activeElement instanceof HTMLElement ? document.activeElement : submitButton;
 		modalTitle.textContent =
 			type === 'success' ? form.dataset.modalSuccessTitle ?? '' : form.dataset.modalErrorTitle ?? '';
 		modalMessage.textContent = safeMessage;
 		modalSuccessIcon.hidden = type !== 'success';
 		modalErrorIcon.hidden = type !== 'error';
-		modal.hidden = false;
-
-		requestAnimationFrame(() => {
-			(modalClose ?? modalPanel)?.focus();
-		});
+		setSubmitting(false);
+		submitButton?.focus();
+		modal.showModal();
 	};
 
 	const setSubmitting = (isSubmitting: boolean) => {
@@ -201,36 +175,12 @@ const bindContactForm = (form: HTMLFormElement) => {
 		}
 	};
 
-	modalClose?.addEventListener('click', closeModal);
+	// `showModal()` covers focus trapping, Escape and background inertness natively.
+	modalClose?.addEventListener('click', () => modal?.close());
 	modal?.addEventListener('click', (event) => {
+		// The panel is the dialog itself, so only backdrop clicks target it.
 		if (event.target === modal) {
-			closeModal();
-		}
-	});
-	modal?.addEventListener('keydown', (event) => {
-		if (event.key === 'Escape') {
-			event.preventDefault();
-			closeModal();
-			return;
-		}
-
-		if (event.key !== 'Tab') return;
-
-		const focusableElements = getFocusableModalElements();
-		const firstElement = focusableElements[0];
-		const lastElement = focusableElements[focusableElements.length - 1];
-
-		if (!firstElement || !lastElement) return;
-
-		if (event.shiftKey && document.activeElement === firstElement) {
-			event.preventDefault();
-			lastElement.focus();
-			return;
-		}
-
-		if (!event.shiftKey && document.activeElement === lastElement) {
-			event.preventDefault();
-			firstElement.focus();
+			modal.close();
 		}
 	});
 
@@ -257,7 +207,6 @@ const bindContactForm = (form: HTMLFormElement) => {
 		}
 
 		if (token) {
-			// Avoid browser autofill false positives on the hidden honeypot field.
 			formData.set('website', '');
 		}
 

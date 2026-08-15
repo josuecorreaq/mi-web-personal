@@ -1,5 +1,6 @@
 ---
 import Button from '../common/Button.astro';
+import Icon from '../common/Icon.astro';
 import type { Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
 
@@ -14,17 +15,22 @@ const t = useTranslations(locale);
 <section id="inicio" class="page-shell grid min-h-[calc(100svh-4.5rem)] items-center gap-14 py-16 lg:grid-cols-[1.08fr_0.92fr] lg:py-24">
 	<div>
 		<h1
-			class="max-w-3xl font-display text-[clamp(3rem,6vw,5.75rem)] font-semibold leading-[0.94] tracking-[-0.06em] text-balance"
+			class="ml-(--optical-inset) max-w-3xl font-display text-[clamp(3rem,6vw,5.75rem)] font-semibold leading-[0.94] tracking-[-0.06em] text-balance"
 			data-animate-text="characters"
 		>
 			{t.hero.name}
 		</h1>
 		<p
-			class="mt-5 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-accent md:text-base"
+			class="mt-5 flex flex-wrap items-center gap-3 font-mono text-sm font-semibold uppercase tracking-[0.14em] text-accent md:text-base"
 			data-animate-text="whole"
 			data-animate-delay="220"
 		>
 			{t.hero.role}
+			<span class="text-line" aria-hidden="true">|</span>
+			<span class="inline-flex items-center gap-1.5 text-muted">
+				<Icon name="location" class="size-4 shrink-0" />
+				{t.hero.location}
+			</span>
 		</p>
 		<p
 			class="mt-6 max-w-2xl text-lg leading-8 text-muted md:text-xl"
@@ -34,8 +40,8 @@ const t = useTranslations(locale);
 			{t.hero.description}
 		</p>
 		<div class="mt-9 flex flex-wrap gap-3" data-animate-reveal="up" data-animate-reveal-delay="360">
-			<Button href="#contacto" scrollTarget="contacto">{t.hero.secondaryCta}</Button>
-			<Button href="#proyectos" scrollTarget="proyectos" variant="secondary">{t.hero.primaryCta}</Button>
+			<Button href="#contacto" scrollTarget="contacto">{t.hero.contactCta}</Button>
+			<Button href="#proyectos" scrollTarget="proyectos" variant="secondary">{t.hero.projectsCta}</Button>
 		</div>
 	</div>
 

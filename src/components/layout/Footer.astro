@@ -7,10 +7,11 @@ interface Props {
 
 const { locale } = Astro.props;
 const name = locale === 'es' ? 'Josué Correa' : 'Josue Correa';
+const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-line">
-	<div class="page-shell py-8 text-center text-sm text-muted">
-		<p>© {new Date().getFullYear()} {name}</p>
+<footer class="border-t border-line bg-canvas">
+	<div class="page-shell py-8 text-center font-mono text-xs text-muted">
+		<p>© {year} {name}</p>
 	</div>
 </footer>

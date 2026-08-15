@@ -67,13 +67,6 @@
 		const kind = (element.dataset.animateText ?? 'whole') as AnimationKind;
 		const baseDelay = Number(element.dataset.animateDelay ?? 0);
 		const units = kind === 'whole' ? [element] : splitText(element, kind);
-		const willChange =
-			kind === 'characters' ? 'transform, opacity, filter' : 'transform, opacity';
-
-		// Promote layers only while WAAPI owns the animation.
-		units.forEach((unit) => {
-			unit.style.willChange = willChange;
-		});
 
 		let animations: Animation[];
 
@@ -123,7 +116,6 @@
 				);
 			});
 		} catch (error) {
-			units.forEach((unit) => unit.style.removeProperty('will-change'));
 			throw error;
 		}
 
@@ -132,7 +124,6 @@
 
 		Promise.allSettled(animations.map((animation) => animation.finished)).then(() => {
 			animations.forEach((animation) => animation.cancel());
-			units.forEach((unit) => unit.style.removeProperty('will-change'));
 			element.dataset.textAnimationState = 'complete';
 		});
 	};
@@ -210,6 +201,15 @@
 
 	[data-animate-text='words'] .text-animation-unit {
 		white-space: nowrap;
+	}
+
+	[data-animate-text='characters'][data-text-animation-state='running'] .text-animation-unit {
+		will-change: transform, opacity, filter;
+	}
+
+	[data-animate-text='words'][data-text-animation-state='running'] .text-animation-unit,
+	[data-animate-text='whole'][data-text-animation-state='running'] {
+		will-change: transform, opacity;
 	}
 
 </style>

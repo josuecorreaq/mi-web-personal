@@ -1,12 +1,18 @@
 ---
+import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
 import Blocks from '@lucide/astro/icons/blocks';
+import ChevronDown from '@lucide/astro/icons/chevron-down';
 import CircleAlert from '@lucide/astro/icons/circle-alert';
 import CircleCheck from '@lucide/astro/icons/circle-check';
 import CodeXml from '@lucide/astro/icons/code-xml';
 import ExternalLink from '@lucide/astro/icons/external-link';
+import FileSearch from '@lucide/astro/icons/file-search';
 import Mail from '@lucide/astro/icons/mail';
+import MapPin from '@lucide/astro/icons/map-pin';
 import Send from '@lucide/astro/icons/send';
 import ShieldCheck from '@lucide/astro/icons/shield-check';
+import Split from '@lucide/astro/icons/split';
+import X from '@lucide/astro/icons/x';
 import {
 	siDocker,
 	siGit,
@@ -16,6 +22,8 @@ import {
 	siMysql,
 	siPhp,
 	siReact,
+	siTailwindcss,
+	siX,
 } from 'simple-icons';
 
 const brandIcons = {
@@ -23,10 +31,13 @@ const brandIcons = {
 	php: siPhp,
 	react: siReact,
 	javascript: siJavascript,
+	tailwind: siTailwindcss,
 	mysql: siMysql,
 	git: siGit,
 	docker: siDocker,
 	github: siGithub,
+	// simple-icons carries no LinkedIn mark, so LinkedIn links reuse `external-link`.
+	x: siX,
 } as const;
 
 const genericIcons = {
@@ -35,9 +46,15 @@ const genericIcons = {
 	'clean-code': CodeXml,
 	'modular-architecture': Blocks,
 	'jwt-security': ShieldCheck,
+	'scattered-data': Split,
+	traceability: FileSearch,
 	email: Mail,
+	location: MapPin,
 	'external-link': ExternalLink,
+	'arrow-up-right': ArrowUpRight,
+	chevron: ChevronDown,
 	send: Send,
+	close: X,
 } as const;
 
 type BrandIconName = keyof typeof brandIcons;

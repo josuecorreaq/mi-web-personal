@@ -1,5 +1,6 @@
 ---
 import { getLocalePath, type Locale } from '../i18n/config';
+import { social, socialProfileUrls } from '../data/social';
 import '../styles/global.css';
 
 interface Props {
@@ -41,13 +42,9 @@ const schema = {
 			alternateName: 'Josue Correa',
 			jobTitle: locale === 'es' ? 'Desarrollador Backend' : 'Backend Developer',
 			url: profileUrl.toString(),
-			email: 'mailto:contacto@josuecorreaq.com',
+			email: `mailto:${social.email}`,
 			image: profileImage.toString(),
-			sameAs: [
-				'https://www.linkedin.com/in/josuecorreaqu',
-				'https://github.com/josuecorreaq',
-				'https://x.com/josuecorreaqu',
-			],
+			sameAs: socialProfileUrls,
 			knowsAbout: [
 				'Laravel',
 				'PHP',
@@ -113,7 +110,9 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 				}
 
 				document.documentElement.dataset.theme = theme;
-				document.documentElement.style.colorScheme = theme;
+				document
+					.querySelector('meta[name="theme-color"]')
+					?.setAttribute('content', theme === 'dark' ? '#09090b' : '#f4f4f0');
 
 				const canAnimateMotion =
 					'animate' in Element.prototype &&
@@ -123,6 +122,19 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 				if (canAnimateMotion) {
 					document.documentElement.dataset.textAnimations = 'enabled';
 					document.documentElement.dataset.revealAnimations = 'enabled';
+
+					setTimeout(() => {
+						const unclaimed = (target, state) =>
+							document.querySelector('[' + target + ']:not([' + state + '])') !== null;
+
+						if (unclaimed('data-animate-text', 'data-text-animation-state')) {
+							delete document.documentElement.dataset.textAnimations;
+						}
+
+						if (unclaimed('data-animate-reveal', 'data-reveal-animation-state')) {
+							delete document.documentElement.dataset.revealAnimations;
+						}
+					}, 2000);
 				}
 			})();
 		</script>
@@ -168,6 +180,13 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 		<link
 			rel="preload"
 			href="/fonts/space-grotesk-latin.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<link
+			rel="preload"
+			href="/fonts/jetbrains-mono-latin.woff2"
 			as="font"
 			type="font/woff2"
 			crossorigin

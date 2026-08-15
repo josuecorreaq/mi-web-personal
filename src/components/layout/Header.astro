@@ -29,17 +29,23 @@ const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
 			<span class="text-muted">{'{'}</span>jc<span class="text-muted">{'}'}</span>
 		</a>
 
-		<nav class="hidden items-center gap-7 md:flex" aria-label={t.nav.mainLabel}>
-			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('sobre-mi')} data-scroll-target={scrollTarget('sobre-mi')}>
+		<nav class="hidden items-center gap-7 lg:flex" aria-label={t.nav.mainLabel}>
+			<a class="nav-item inline-flex min-h-11 items-center font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('sobre-mi')} data-scroll-target={scrollTarget('sobre-mi')}>
 				<span class="nav-link-label">{t.nav.about}</span>
 			</a>
-			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('proyectos')} data-scroll-target={scrollTarget('proyectos')}>
+			<a class="nav-item inline-flex min-h-11 items-center font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('servicios')} data-scroll-target={scrollTarget('servicios')}>
+				<span class="nav-link-label">{t.nav.services}</span>
+			</a>
+			<a class="nav-item inline-flex min-h-11 items-center font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('experiencia')} data-scroll-target={scrollTarget('experiencia')}>
+				<span class="nav-link-label">{t.nav.experience}</span>
+			</a>
+			<a class="nav-item inline-flex min-h-11 items-center font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('proyectos')} data-scroll-target={scrollTarget('proyectos')}>
 				<span class="nav-link-label">{t.nav.projects}</span>
 			</a>
-			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('stack')} data-scroll-target={scrollTarget('stack')}>
+			<a class="nav-item inline-flex min-h-11 items-center font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('tecnologias')} data-scroll-target={scrollTarget('tecnologias')}>
 				<span class="nav-link-label">{t.nav.stack}</span>
 			</a>
-			<a class="nav-item font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('contacto')} data-scroll-target={scrollTarget('contacto')}>
+			<a class="nav-item inline-flex min-h-11 items-center font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('contacto')} data-scroll-target={scrollTarget('contacto')}>
 				<span class="nav-link-label">{t.nav.contact}</span>
 			</a>
 		</nav>
@@ -48,17 +54,19 @@ const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
 			<a
 				href={getAlternatePath(locale)}
 				data-language={locale === 'es' ? 'en' : 'es'}
-				class="inline-flex min-h-10 items-center border border-line px-3 py-2 font-mono text-xs font-bold text-ink transition-colors hover:border-accent hover:text-accent active:scale-[0.96]"
+				class="language-toggle"
 				lang={locale === 'es' ? 'en' : 'es'}
 				hreflang={locale === 'es' ? 'en' : 'es'}
+				aria-label={t.nav.languageLabel}
+				title={t.nav.languageLabel}
 			>
-				{locale === 'es' ? 'EN' : 'ES'}
-				<span class="text-muted"> / {locale.toUpperCase()}</span>
+				<span class="language-toggle-target">{locale === 'es' ? 'EN' : 'ES'}</span>
+				<span class="language-toggle-current" aria-hidden="true">{locale.toUpperCase()}</span>
 			</a>
 
 			<ThemeToggle locale={locale} />
 
-			<details class="relative md:hidden" data-mobile-menu>
+			<details class="relative lg:hidden" data-mobile-menu>
 				<summary
 					class="inline-flex size-10 cursor-pointer list-none items-center justify-center border border-line text-ink marker:content-none"
 					aria-label={t.nav.menu}
@@ -69,16 +77,22 @@ const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
 					class="absolute right-0 top-[calc(100%+0.75rem)] grid min-w-44 border border-line bg-surface p-2 shadow-2xl"
 					aria-label={t.nav.menu}
 				>
-					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('sobre-mi')} data-scroll-target={scrollTarget('sobre-mi')} data-mobile-menu-link>
+					<a class="nav-item inline-flex min-h-11 items-center px-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('sobre-mi')} data-scroll-target={scrollTarget('sobre-mi')} data-mobile-menu-link>
 						<span class="nav-link-label">{t.nav.about}</span>
 					</a>
-					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('proyectos')} data-scroll-target={scrollTarget('proyectos')} data-mobile-menu-link>
+					<a class="nav-item inline-flex min-h-11 items-center px-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('servicios')} data-scroll-target={scrollTarget('servicios')} data-mobile-menu-link>
+						<span class="nav-link-label">{t.nav.services}</span>
+					</a>
+					<a class="nav-item inline-flex min-h-11 items-center px-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('experiencia')} data-scroll-target={scrollTarget('experiencia')} data-mobile-menu-link>
+						<span class="nav-link-label">{t.nav.experience}</span>
+					</a>
+					<a class="nav-item inline-flex min-h-11 items-center px-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('proyectos')} data-scroll-target={scrollTarget('proyectos')} data-mobile-menu-link>
 						<span class="nav-link-label">{t.nav.projects}</span>
 					</a>
-					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('stack')} data-scroll-target={scrollTarget('stack')} data-mobile-menu-link>
+					<a class="nav-item inline-flex min-h-11 items-center px-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('tecnologias')} data-scroll-target={scrollTarget('tecnologias')} data-mobile-menu-link>
 						<span class="nav-link-label">{t.nav.stack}</span>
 					</a>
-					<a class="nav-item px-3 py-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('contacto')} data-scroll-target={scrollTarget('contacto')} data-mobile-menu-link>
+					<a class="nav-item inline-flex min-h-11 items-center px-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('contacto')} data-scroll-target={scrollTarget('contacto')} data-mobile-menu-link>
 						<span class="nav-link-label">{t.nav.contact}</span>
 					</a>
 				</nav>
