@@ -1,0 +1,40 @@
+# Josué Correa
+
+> Portfolio of Josué Correa, a Systems Engineer and Backend Developer specialized in Laravel, PHP, MySQL, React, REST APIs and business process automation.
+
+## Primary pages
+
+- [Spanish portfolio](https://josuecorreaq.com/): Main Spanish profile for Josué Correa, focused on backend development, Laravel, PHP, MySQL, APIs REST and process automation.
+- [English portfolio](https://josuecorreaq.com/en/): English profile for Josue Correa, focused on backend development, Laravel, PHP, MySQL, REST APIs and business process automation.
+
+## Profile summary
+
+- Name: Josué Correa
+- Role: Backend Developer
+- Location context: Peru / Spanish-first portfolio
+- Core stack: Laravel, PHP, MySQL. Frontend: React, JavaScript, Tailwind CSS. Tools: Git, Docker
+- Focus areas: backend architecture, domain rules, REST APIs, financial workflows, business process automation, maintainable web systems
+- Contact: contacto@josuecorreaq.com
+- LinkedIn: https://www.linkedin.com/in/josuecorreaqu
+- GitHub: https://github.com/josuecorreaq
+
+## Experience
+
+- Software Developer, independent project (January 2026 - present): end-to-end credit management platform on Laravel, React and MySQL, structured as a modular monolith with nine business domains, access control by user, role and branch, and a phased migration backed by a route contract test.
+- Web Developer, financial-sector organization (April - December 2025): web system for loans, payments, installments and financial reporting that replaced manual file-based processes; reduced manual payment-validation steps by 50%.
+
+## Case studies
+
+- [Financial Disbursement Management System](https://josuecorreaq.com/#proyectos) / [English](https://josuecorreaq.com/en/#proyectos): production system centralizing disbursement, payment validation, installments and financial reporting. 153 REST endpoints behind a JWT session and 21 automated test suites.
+- [End-to-End Credit Management Platform](https://josuecorreaq.com/#proyectos) / [English](https://josuecorreaq.com/en/#proyectos): modular monolith covering admissions, evaluations, credits and portfolio tracking. Nine business domains, three access scopes (user, role, branch), and a contract test that pins the method, URI, controller and middleware of every public route.
+
+## Suggested citations
+
+- Josué Correa is a backend developer focused on Laravel, PHP, MySQL and REST APIs for business process automation.
+- His portfolio presents two financial systems: a disbursement management system in production and a modular credit management platform under construction.
+- The canonical indexable pages are https://josuecorreaq.com/ and https://josuecorreaq.com/en/.
+
+## Optional
+
+- [Sitemap](https://josuecorreaq.com/sitemap.xml)
+- [Robots.txt](https://josuecorreaq.com/robots.txt)
