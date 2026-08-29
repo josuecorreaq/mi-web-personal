@@ -1,0 +1,62 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import ScrollReveals from '../components/common/ScrollReveals.astro';
+import TextAnimations from '../components/common/TextAnimations.astro';
+import BaseLayout from './BaseLayout.astro';
+import { createProjectSchema } from '../data/schema';
+import type { Project } from '../data/projects';
+import type { Locale } from '../i18n/config';
+
+interface Props {
+	locale: Locale;
+	project: Project;
+}
+
+const { locale, project } = Astro.props;
+const siteUrl = new URL('/', Astro.site ?? Astro.url);
+const canonical = new URL(project.path, siteUrl);
+const alternate = new URL(project.alternatePath, siteUrl);
+const alternateUrls = locale === 'es'
+	? { es: canonical, en: alternate, xDefault: canonical }
+	: { es: alternate, en: canonical, xDefault: alternate };
+const socialImage = new URL('/og/portafolio-og.png', siteUrl);
+const socialImageAlt = locale === 'es'
+	? `Caso de estudio ${project.name}, por Josué Correa Quispe`
+	: `${project.name} case study by Josué Correa Quispe`;
+const structuredData = createProjectSchema({
+	locale,
+	siteUrl,
+	pageUrl: canonical,
+	title: project.seoTitle,
+	description: project.seoDescription,
+	socialImage,
+	socialImageAlt,
+	projectName: project.name,
+	projectId: project.id,
+	stack: project.stack,
+	datePublished: project.datePublished,
+	dateModified: project.dateModified,
+});
+---
+
+<BaseLayout
+	locale={locale}
+	title={project.seoTitle}
+	description={project.seoDescription}
+	canonical={canonical}
+	alternateUrls={alternateUrls}
+	structuredData={structuredData}
+	ogType="article"
+>
+	<a class="skip-link" href="#contenido">
+		{locale === 'es' ? 'Saltar al contenido' : 'Skip to content'}
+	</a>
+	<Header locale={locale} isLanding={false} alternatePath={project.alternatePath} />
+	<main id="contenido" tabindex="-1">
+		<slot />
+	</main>
+	<Footer locale={locale} />
+	<TextAnimations />
+	<ScrollReveals />
+</BaseLayout>

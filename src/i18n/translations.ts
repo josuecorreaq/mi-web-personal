@@ -25,7 +25,7 @@ const translations = {
 			description:
 				'Desarrollador Backend especializado en Laravel, PHP y MySQL. Diseño APIs y sistemas web escalables para automatizar procesos de negocio.',
 			projectsCta: 'Ver proyectos',
-			contactCta: 'Contactar',
+			contactCta: 'Contáctame',
 			location: 'Perú',
 			flowLabel: 'Flujo backend',
 			flowStatus: '200 OK',
@@ -202,6 +202,7 @@ const translations = {
 				decision: 'Decisión técnica',
 				evidence: 'Evidencia técnica',
 				details: 'Ver detalle técnico',
+				caseStudy: 'Ver caso completo',
 			},
 			items: [
 				{
@@ -521,6 +522,7 @@ const translations = {
 				decision: 'Technical decision',
 				evidence: 'Technical evidence',
 				details: 'View technical detail',
+				caseStudy: 'View full case study',
 			},
 			items: [
 				{

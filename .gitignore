@@ -25,3 +25,5 @@ pnpm-debug.log*
 skills-lock.json
 .htaccess
 .env
+DESIGN.md
+PRODUCT.md

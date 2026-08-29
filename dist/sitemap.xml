@@ -5,16 +5,50 @@
 >
 	<url>
 		<loc>https://josuecorreaq.com/</loc>
-		<lastmod>2026-08-18</lastmod>
+		<lastmod>2026-08-28</lastmod>
+		<priority>1.0</priority>
 		<xhtml:link rel="alternate" hreflang="es" href="https://josuecorreaq.com/" />
 		<xhtml:link rel="alternate" hreflang="en" href="https://josuecorreaq.com/en/" />
 		<xhtml:link rel="alternate" hreflang="x-default" href="https://josuecorreaq.com/" />
 	</url>
 	<url>
 		<loc>https://josuecorreaq.com/en/</loc>
-		<lastmod>2026-08-18</lastmod>
+		<lastmod>2026-08-28</lastmod>
+		<priority>1.0</priority>
 		<xhtml:link rel="alternate" hreflang="es" href="https://josuecorreaq.com/" />
 		<xhtml:link rel="alternate" hreflang="en" href="https://josuecorreaq.com/en/" />
 		<xhtml:link rel="alternate" hreflang="x-default" href="https://josuecorreaq.com/" />
+	</url>
+	<url>
+		<loc>https://josuecorreaq.com/proyectos/sistema-gestion-desembolsos/</loc>
+		<lastmod>2026-08-28</lastmod>
+		<priority>0.8</priority>
+		<xhtml:link rel="alternate" hreflang="es" href="https://josuecorreaq.com/proyectos/sistema-gestion-desembolsos/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://josuecorreaq.com/en/projects/disbursement-management-system/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://josuecorreaq.com/proyectos/sistema-gestion-desembolsos/" />
+	</url>
+	<url>
+		<loc>https://josuecorreaq.com/en/projects/disbursement-management-system/</loc>
+		<lastmod>2026-08-28</lastmod>
+		<priority>0.8</priority>
+		<xhtml:link rel="alternate" hreflang="es" href="https://josuecorreaq.com/proyectos/sistema-gestion-desembolsos/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://josuecorreaq.com/en/projects/disbursement-management-system/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://josuecorreaq.com/proyectos/sistema-gestion-desembolsos/" />
+	</url>
+	<url>
+		<loc>https://josuecorreaq.com/proyectos/plataforma-gestion-crediticia/</loc>
+		<lastmod>2026-08-28</lastmod>
+		<priority>0.8</priority>
+		<xhtml:link rel="alternate" hreflang="es" href="https://josuecorreaq.com/proyectos/plataforma-gestion-crediticia/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://josuecorreaq.com/en/projects/credit-management-platform/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://josuecorreaq.com/proyectos/plataforma-gestion-crediticia/" />
+	</url>
+	<url>
+		<loc>https://josuecorreaq.com/en/projects/credit-management-platform/</loc>
+		<lastmod>2026-08-28</lastmod>
+		<priority>0.8</priority>
+		<xhtml:link rel="alternate" hreflang="es" href="https://josuecorreaq.com/proyectos/plataforma-gestion-crediticia/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://josuecorreaq.com/en/projects/credit-management-platform/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://josuecorreaq.com/proyectos/plataforma-gestion-crediticia/" />
 	</url>
 </urlset>
