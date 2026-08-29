@@ -1,6 +1,6 @@
-# Josué Correa
+# Josué Correa Quispe
 
-> Portfolio of Josué Correa, a Systems Engineer and Backend Developer specialized in Laravel, PHP, MySQL, React, REST APIs and business process automation.
+> Portfolio of Josué Correa Quispe, a Systems Engineer and Backend Developer based in Piura, Peru, specialized in Laravel, PHP, MySQL, React, REST APIs and business process automation.
 
 ## Primary pages
 
@@ -9,9 +9,10 @@
 
 ## Profile summary
 
-- Name: Josué Correa
+- Name: Josué Correa Quispe
+- Alternate names: Josué Correa, Josue Correa
 - Role: Backend Developer
-- Location context: Peru / Spanish-first portfolio
+- Location: Piura, Peru
 - Core stack: Laravel, PHP, MySQL. Frontend: React, JavaScript, Tailwind CSS. Tools: Git, Docker
 - Focus areas: backend architecture, domain rules, REST APIs, financial workflows, business process automation, maintainable web systems
 - Contact: contacto@josuecorreaq.com
@@ -25,12 +26,12 @@
 
 ## Case studies
 
-- [Financial Disbursement Management System](https://josuecorreaq.com/#proyectos) / [English](https://josuecorreaq.com/en/#proyectos): production system centralizing disbursement, payment validation, installments and financial reporting. 153 REST endpoints behind a JWT session and 21 automated test suites.
-- [End-to-End Credit Management Platform](https://josuecorreaq.com/#proyectos) / [English](https://josuecorreaq.com/en/#proyectos): modular monolith covering admissions, evaluations, credits and portfolio tracking. Nine business domains, three access scopes (user, role, branch), and a contract test that pins the method, URI, controller and middleware of every public route.
+- [Sistema de Gestión de Desembolsos Financieros](https://josuecorreaq.com/proyectos/sistema-gestion-desembolsos/) / [English](https://josuecorreaq.com/en/projects/disbursement-management-system/): production system centralizing disbursement, payment validation, installments and financial reporting. 153 REST endpoints behind a JWT session and 21 automated test suites.
+- [Plataforma Integral de Gestión Crediticia](https://josuecorreaq.com/proyectos/plataforma-gestion-crediticia/) / [English](https://josuecorreaq.com/en/projects/credit-management-platform/): modular monolith covering admissions, evaluations, credits and portfolio tracking. Nine business domains, three access scopes (user, role, branch), and a contract test that pins the method, URI, controller and middleware of every public route.
 
 ## Suggested citations
 
-- Josué Correa is a backend developer focused on Laravel, PHP, MySQL and REST APIs for business process automation.
+- Josué Correa Quispe is a backend developer based in Piura, Peru, focused on Laravel, PHP, MySQL and REST APIs for business process automation.
 - His portfolio presents two financial systems: a disbursement management system in production and a modular credit management platform under construction.
 - The canonical indexable pages are https://josuecorreaq.com/ and https://josuecorreaq.com/en/.
 

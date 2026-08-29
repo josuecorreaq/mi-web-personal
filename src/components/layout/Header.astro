@@ -8,9 +8,10 @@ import ThemeToggle from '../common/ThemeToggle.astro';
 interface Props {
 	locale: Locale;
 	isLanding?: boolean;
+	alternatePath?: string;
 }
 
-const { locale, isLanding = true } = Astro.props;
+const { locale, isLanding = true, alternatePath } = Astro.props;
 const t = useTranslations(locale);
 const basePath = getLocalePath(locale);
 const sectionHref = (targetId: string) =>
@@ -52,7 +53,7 @@ const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
 
 		<div class="flex items-center gap-2">
 			<a
-				href={getAlternatePath(locale)}
+				href={alternatePath ?? getAlternatePath(locale)}
 				data-language={locale === 'es' ? 'en' : 'es'}
 				class="language-toggle"
 				lang={locale === 'es' ? 'en' : 'es'}

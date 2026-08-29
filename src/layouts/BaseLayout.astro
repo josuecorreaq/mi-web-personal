@@ -1,7 +1,13 @@
 ---
 import { getLocalePath, type Locale } from '../i18n/config';
-import { social, socialProfileUrls } from '../data/social';
+import { createProfileSchema, type SchemaNode } from '../data/schema';
 import '../styles/global.css';
+
+interface AlternateUrls {
+	es: URL;
+	en: URL;
+	xDefault?: URL;
+}
 
 interface Props {
 	locale: Locale;
@@ -10,6 +16,9 @@ interface Props {
 	robots?: string;
 	canonical?: URL;
 	includeAlternates?: boolean;
+	alternateUrls?: AlternateUrls;
+	structuredData?: readonly SchemaNode[];
+	ogType?: 'website' | 'article';
 }
 
 const {
@@ -19,68 +28,37 @@ const {
 	robots,
 	canonical,
 	includeAlternates = false,
+	alternateUrls,
+	structuredData,
+	ogType = 'website',
 } = Astro.props;
 
 const socialImage = new URL('/og/portafolio-og.png', Astro.site ?? Astro.url);
-const profileImage = new URL('/images/profile.webp', Astro.site ?? Astro.url);
 const socialImageAlt =
 	locale === 'es'
-		? 'Josué Correa, Desarrollador Backend especializado en Laravel, PHP, MySQL y APIs REST'
-		: 'Josue Correa, Backend Developer specialized in Laravel, PHP, MySQL and REST APIs';
+		? 'Josué Correa Quispe, Desarrollador Backend especializado en Laravel, PHP, MySQL y APIs REST'
+		: 'Josué Correa Quispe, Backend Developer specialized in Laravel, PHP, MySQL and REST APIs';
 const siteUrl = new URL('/', Astro.site ?? Astro.url);
 const profileUrl = canonical ?? new URL(getLocalePath(locale), siteUrl);
-const personId = new URL('/#person', siteUrl).toString();
-const profilePageId = new URL(`${profileUrl.pathname}#profile`, siteUrl).toString();
-const websiteId = new URL('/#website', siteUrl).toString();
+const resolvedAlternates = alternateUrls ?? (includeAlternates
+	? {
+			es: new URL('/', siteUrl),
+			en: new URL('/en/', siteUrl),
+			xDefault: new URL('/', siteUrl),
+		}
+	: undefined);
+const schemaGraph = structuredData ?? createProfileSchema({
+	locale,
+	siteUrl,
+	pageUrl: profileUrl,
+	title,
+	description,
+	socialImage,
+	socialImageAlt,
+});
 const schema = {
 	'@context': 'https://schema.org',
-	'@graph': [
-		{
-			'@type': 'Person',
-			'@id': personId,
-			name: 'Josué Correa',
-			alternateName: 'Josue Correa',
-			jobTitle: locale === 'es' ? 'Desarrollador Backend' : 'Backend Developer',
-			url: profileUrl.toString(),
-			email: `mailto:${social.email}`,
-			image: profileImage.toString(),
-			sameAs: socialProfileUrls,
-			knowsAbout: [
-				'Laravel',
-				'PHP',
-				'MySQL',
-				'React',
-				'REST APIs',
-				'Backend architecture',
-				'Business process automation',
-			],
-		},
-		{
-			'@type': 'ProfilePage',
-			'@id': profilePageId,
-			url: profileUrl.toString(),
-			name: title,
-			description,
-			inLanguage: locale,
-			about: { '@id': personId },
-			mainEntity: { '@id': personId },
-			primaryImageOfPage: {
-				'@type': 'ImageObject',
-				url: socialImage.toString(),
-				width: 1200,
-				height: 630,
-				caption: socialImageAlt,
-			},
-		},
-		{
-			'@type': 'WebSite',
-			'@id': websiteId,
-			url: siteUrl.toString(),
-			name: 'Josué Correa',
-			inLanguage: ['es', 'en'],
-			author: { '@id': personId },
-		},
-	],
+	'@graph': schemaGraph,
 };
 const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 ---
@@ -139,7 +117,7 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 			})();
 		</script>
 
-		{description && <meta property="og:type" content="website" />}
+		{description && <meta property="og:type" content={ogType} />}
 		{description && <meta property="og:title" content={title} />}
 		{description && <meta property="og:description" content={description} />}
 		{description && <meta property="og:locale" content={locale === 'es' ? 'es_PE' : 'en_US'} />}
@@ -162,9 +140,9 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 		{description && <meta name="twitter:image:alt" content={socialImageAlt} />}
 
 		{canonical && <link rel="canonical" href={canonical} />}
-		{canonical && includeAlternates && <link rel="alternate" hreflang="es" href={new URL('/', canonical)} />}
-		{canonical && includeAlternates && <link rel="alternate" hreflang="en" href={new URL('/en/', canonical)} />}
-		{canonical && includeAlternates && <link rel="alternate" hreflang="x-default" href={new URL('/', canonical)} />}
+		{resolvedAlternates && <link rel="alternate" hreflang="es" href={resolvedAlternates.es} />}
+		{resolvedAlternates && <link rel="alternate" hreflang="en" href={resolvedAlternates.en} />}
+		{resolvedAlternates && <link rel="alternate" hreflang="x-default" href={resolvedAlternates.xDefault ?? resolvedAlternates.es} />}
 
 		<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
 		<link rel="icon" type="image/svg+xml" href="/logo.svg" />
