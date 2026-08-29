@@ -23,7 +23,6 @@ pnpm-debug.log*
 .agents/
 .codex/
 skills-lock.json
-.htaccess
 .env
 DESIGN.md
 PRODUCT.md
