@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.19.0"
   },
   "scripts": {
     "dev": "astro dev",
@@ -13,19 +13,20 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@lucide/astro": "^1.21.0",
-    "@tailwindcss/vite": "4.2.1",
-    "astro": "^6.4.7",
+    "@lucide/astro": "^1.37.0",
+    "@tailwindcss/vite": "4.3.3",
+    "astro": "^7.2.9",
     "simple-icons": "^16.24.0",
-    "tailwindcss": "4.2.1"
+    "tailwindcss": "4.3.3"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
+    "@astrojs/check": "^0.9.10",
     "@types/node": "^26.0.0",
     "typescript": "^6.0.3"
   },
   "overrides": {
     "esbuild": "0.28.1",
+    "fast-uri": "3.1.5",
     "yaml-language-server": "1.23.0"
   }
 }
