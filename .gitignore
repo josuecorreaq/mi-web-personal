@@ -26,3 +26,5 @@ pnpm-debug.log*
 .agents/
 .codex/
 skills-lock.json
+DESIGN.md
+PRODUCT.md
