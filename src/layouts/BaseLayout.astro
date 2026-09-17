@@ -1,6 +1,13 @@
 ---
-import type { Locale } from '../i18n/config';
+import { getLocalePath, type Locale } from '../i18n/config';
+import { createProfileSchema, type SchemaNode } from '../data/schema';
 import '../styles/global.css';
+
+interface AlternateUrls {
+	es: URL;
+	en: URL;
+	xDefault?: URL;
+}
 
 interface Props {
 	locale: Locale;
@@ -9,6 +16,9 @@ interface Props {
 	robots?: string;
 	canonical?: URL;
 	includeAlternates?: boolean;
+	alternateUrls?: AlternateUrls;
+	structuredData?: readonly SchemaNode[];
+	ogType?: 'website' | 'article';
 }
 
 const {
@@ -18,7 +28,39 @@ const {
 	robots,
 	canonical,
 	includeAlternates = false,
+	alternateUrls,
+	structuredData,
+	ogType = 'website',
 } = Astro.props;
+
+const socialImage = new URL('/og/portafolio-og.png', Astro.site ?? Astro.url);
+const socialImageAlt =
+	locale === 'es'
+		? 'Josué Correa Quispe, Desarrollador Backend especializado en Laravel, PHP, MySQL y APIs REST'
+		: 'Josué Correa Quispe, Backend Developer specialized in Laravel, PHP, MySQL and REST APIs';
+const siteUrl = new URL('/', Astro.site ?? Astro.url);
+const profileUrl = canonical ?? new URL(getLocalePath(locale), siteUrl);
+const resolvedAlternates = alternateUrls ?? (includeAlternates
+	? {
+			es: new URL('/', siteUrl),
+			en: new URL('/en/', siteUrl),
+			xDefault: new URL('/', siteUrl),
+		}
+	: undefined);
+const schemaGraph = structuredData ?? createProfileSchema({
+	locale,
+	siteUrl,
+	pageUrl: profileUrl,
+	title,
+	description,
+	socialImage,
+	socialImageAlt,
+});
+const schema = {
+	'@context': 'https://schema.org',
+	'@graph': schemaGraph,
+};
+const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
@@ -29,7 +71,7 @@ const {
 		<meta name="generator" content={Astro.generator} />
 		<meta name="theme-color" content="#09090b" />
 		{description && <meta name="description" content={description} />}
-		{robots && <meta name="robots" content={robots} />}
+		<meta name="robots" content={robots ?? 'index, follow, max-image-preview:large'} />
 
 		<script is:inline>
 			(() => {
@@ -46,30 +88,66 @@ const {
 				}
 
 				document.documentElement.dataset.theme = theme;
-				document.documentElement.style.colorScheme = theme;
+				document
+					.querySelector('meta[name="theme-color"]')
+					?.setAttribute('content', theme === 'dark' ? '#09090b' : '#f4f4f0');
 
-				const canAnimateText =
+				const canAnimateMotion =
 					'animate' in Element.prototype &&
 					'requestAnimationFrame' in window &&
 					!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-				if (canAnimateText) {
+				if (canAnimateMotion) {
 					document.documentElement.dataset.textAnimations = 'enabled';
+					document.documentElement.dataset.revealAnimations = 'enabled';
+
+					setTimeout(() => {
+						const unclaimed = (target, state) =>
+							document.querySelector('[' + target + ']:not([' + state + '])') !== null;
+
+						if (unclaimed('data-animate-text', 'data-text-animation-state')) {
+							delete document.documentElement.dataset.textAnimations;
+						}
+
+						if (unclaimed('data-animate-reveal', 'data-reveal-animation-state')) {
+							delete document.documentElement.dataset.revealAnimations;
+						}
+					}, 2000);
 				}
 			})();
 		</script>
 
-		{description && <meta property="og:type" content="website" />}
+		{description && <meta property="og:type" content={ogType} />}
 		{description && <meta property="og:title" content={title} />}
 		{description && <meta property="og:description" content={description} />}
 		{description && <meta property="og:locale" content={locale === 'es' ? 'es_PE' : 'en_US'} />}
+		{description && <meta property="og:locale:alternate" content={locale === 'es' ? 'en_US' : 'es_PE'} />}
+		{description && canonical && <meta property="og:url" content={canonical} />}
+		{description && <meta property="og:site_name" content="Josué Correa" />}
+		{description && <meta property="og:image" content={socialImage} />}
+		{description && <meta property="og:image:secure_url" content={socialImage} />}
+		{description && <meta property="og:image:type" content="image/png" />}
+		{description && <meta property="og:image:width" content="1200" />}
+		{description && <meta property="og:image:height" content="630" />}
+		{description && <meta property="og:image:alt" content={socialImageAlt} />}
+
+		{description && <meta name="twitter:card" content="summary_large_image" />}
+		{description && <meta name="twitter:site" content="@josuecorreaqu" />}
+		{description && <meta name="twitter:creator" content="@josuecorreaqu" />}
+		{description && <meta name="twitter:title" content={title} />}
+		{description && <meta name="twitter:description" content={description} />}
+		{description && <meta name="twitter:image" content={socialImage} />}
+		{description && <meta name="twitter:image:alt" content={socialImageAlt} />}
 
 		{canonical && <link rel="canonical" href={canonical} />}
-		{canonical && includeAlternates && <link rel="alternate" hreflang="es" href={new URL('/es/', canonical)} />}
-		{canonical && includeAlternates && <link rel="alternate" hreflang="en" href={new URL('/en/', canonical)} />}
-		{canonical && includeAlternates && <link rel="alternate" hreflang="x-default" href={new URL('/es/', canonical)} />}
+		{resolvedAlternates && <link rel="alternate" hreflang="es" href={resolvedAlternates.es} />}
+		{resolvedAlternates && <link rel="alternate" hreflang="en" href={resolvedAlternates.en} />}
+		{resolvedAlternates && <link rel="alternate" hreflang="x-default" href={resolvedAlternates.xDefault ?? resolvedAlternates.es} />}
 
+		<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
 		<link rel="icon" type="image/svg+xml" href="/logo.svg" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
 		<link
 			rel="preload"
 			href="/fonts/inter-latin.woff2"
@@ -84,7 +162,15 @@ const {
 			type="font/woff2"
 			crossorigin
 		/>
+		<link
+			rel="preload"
+			href="/fonts/jetbrains-mono-latin.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
 		<title>{title}</title>
+		{description && <script is:inline type="application/ld+json" set:html={schemaJson} />}
 		<slot name="head" />
 	</head>
 	<body>

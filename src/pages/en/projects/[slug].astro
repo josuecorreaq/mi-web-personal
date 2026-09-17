@@ -1,0 +1,17 @@
+---
+import ProjectCaseStudy from '../../../components/projects/ProjectCaseStudy.astro';
+import { getProjectStaticPaths, type Project } from '../../../data/projects';
+import ProjectLayout from '../../../layouts/ProjectLayout.astro';
+
+export const getStaticPaths = () => getProjectStaticPaths('en');
+
+interface Props {
+	project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<ProjectLayout locale="en" project={project}>
+	<ProjectCaseStudy locale="en" project={project} />
+</ProjectLayout>

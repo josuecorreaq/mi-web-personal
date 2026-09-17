@@ -5,13 +5,14 @@ Portafolio de **Josué Correa**, Ingeniero de Sistemas y Desarrollador Backend e
 ## Características
 
 - Contenido completo en español e inglés.
-- Selección automática de idioma en la ruta raíz.
+- Español en la ruta raíz e inglés en `/en/`.
 - Cambio manual de idioma con persistencia de la preferencia.
 - Temas claro y oscuro con detección de la preferencia del sistema.
 - Diseño responsive para escritorio y dispositivos móviles.
 - Animaciones de texto con Web Animations API.
 - Compatibilidad con `prefers-reduced-motion`.
 - Navegación accesible por teclado y enlace para saltar al contenido.
+- Formulario de contacto conectado a un endpoint configurable.
 - Metadatos SEO, URL canónica y etiquetas `hreflang`.
 - Página 404 localizada.
 - Fuentes servidas localmente, sin dependencias de terceros en tiempo de ejecución.
@@ -65,16 +66,37 @@ npm run build
 npm run preview
 ```
 
+## Formulario de contacto
+
+El formulario de contacto envía JSON al endpoint configurado en `PUBLIC_CONTACT_API_URL`.
+
+Para desarrollo local:
+
+```bash
+PUBLIC_CONTACT_API_URL=http://127.0.0.1:8000/api/contact
+PUBLIC_TURNSTILE_SITE_KEY=
+```
+
+Contrato esperado:
+
+- `POST /api/contact`
+- Campos: `name`, `email`, `message`, `website`, `turnstile_token`
+- `website` funciona como honeypot y debe permanecer vacío
+- `turnstile_token` sale del campo generado por Cloudflare `cf-turnstile-response`
+- Respuesta publica exitosa: `202 Accepted` con `{"message":"Mensaje recibido."}`
+- `422 Unprocessable Entity` indica validacion o Turnstile invalido; el frontend resetea el widget
+
+La implementación Laravel viva está en `C:\api-josuecorreaq`; su contrato completo está en `C:\api-josuecorreaq\docs\contact-backend-laravel.md`.
+
 ## Rutas
 
 | Ruta | Función |
 | --- | --- |
-| `/` | Detecta la preferencia guardada o el idioma del navegador y redirige a una versión localizada. |
-| `/es/` | Portafolio en español. |
+| `/` | Portafolio en español y URL canónica principal. |
 | `/en/` | Portafolio en inglés. |
 | `/404.html` | Página de error localizada según el idioma del usuario. |
 
-La detección automática solo ocurre en `/`. Las rutas explícitas `/es/` y `/en/` permanecen estables.
+El selector de idioma enlaza directamente entre `/` y `/en/`.
 
 ## Estructura del proyecto
 
@@ -130,7 +152,7 @@ export default defineConfig({
 
 Si el sitio se publica en otro dominio, actualiza `site` antes de compilar. Astro utiliza este valor para generar las URL canónicas y las referencias `hreflang`.
 
-La ruta `/` incluye `noindex, follow` porque funciona únicamente como selector y redirección de idioma. Las páginas localizadas son las URL indexables.
+Las URL indexables son `/` para español y `/en/` para inglés. Ambas publican canonical propio y etiquetas `hreflang` recíprocas.
 
 ## Despliegue
 
@@ -152,10 +174,21 @@ Node version: 22.12.0 o superior
 
 El hosting debe servir `404.html` como página de error personalizada y respetar las rutas con barra final.
 
+### CSP en cPanel/LiteSpeed
+
+`npm run build` compila Astro y después ejecuta `scripts/generate-csp.mjs`. El generador calcula hashes SHA-256 para cada script y estilo inline del HTML final y reemplaza el marcador de `public/.htaccess` dentro de `dist/.htaccess`.
+
+- Despliega juntos el contenido de `dist/` y su `.htaccess`; los hashes pertenecen exactamente a ese build.
+- Si cPanel administra `.htaccess`, conserva sus bloques y copia únicamente la línea `Content-Security-Policy` generada.
+- No publiques `public/.htaccess` directamente: contiene el marcador, no la política final.
+- Evita dejar HTML antiguo en `/es/`. La ruta española canónica actual es `/`; elimina el artefacto obsoleto durante un despliegue limpio o configúralo como redirección permanente a `/`.
+
 ## Seguridad y privacidad
 
-- No se requieren variables de entorno ni secretos para compilar el proyecto.
+- `PUBLIC_CONTACT_API_URL` es una variable pública; no debe contener secretos.
 - No deben agregarse credenciales, tokens o información privada al código fuente.
+- Los secretos SMTP y credenciales del backend deben vivir solo en Laravel `.env`.
+- La CSP debe permanecer basada en hashes; no agregues `'unsafe-inline'` para resolver bloqueos.
 - Los enlaces externos que abren otra pestaña deben conservar `rel="noopener noreferrer"`.
 - Las dependencias deben mantenerse actualizadas y revisarse periódicamente con `npm audit`.
 - La información de contacto publicada es deliberadamente pública; cualquier dato adicional debe evaluarse antes de exponerlo.

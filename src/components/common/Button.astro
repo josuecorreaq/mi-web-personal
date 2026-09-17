@@ -1,4 +1,6 @@
 ---
+import Icon from './Icon.astro';
+
 interface Props {
 	href: string;
 	scrollTarget?: string;
@@ -19,5 +21,5 @@ const { href, scrollTarget, variant = 'primary' } = Astro.props;
 	]}
 >
 	<slot />
-	<span aria-hidden="true">↗</span>
+	<Icon name="arrow-up-right" class="size-4 shrink-0" />
 </a>

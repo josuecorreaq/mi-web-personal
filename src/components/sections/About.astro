@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
+import Icon from '../common/Icon.astro';
 
 interface Props {
 	locale: Locale;
@@ -8,26 +9,53 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
+const aboutValueIcons = ['modular-architecture', 'jwt-security', 'clean-code'] as const;
 ---
 
-<section id="sobre-mi" class="border-y border-line bg-surface/55">
-	<div class="page-shell section-shell grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
-		<div>
-			<p class="section-kicker" data-animate-text="whole">{t.about.kicker}</p>
-			<h2 class="section-title" data-animate-text="words" data-animate-delay="80">{t.about.title}</h2>
+<section id="sobre-mi" class="border-y border-line bg-canvas">
+	<div class="page-shell section-shell">
+		<div class="grid overflow-hidden border border-line bg-surface lg:grid-cols-[minmax(14rem,0.32fr)_1fr]">
+			<figure
+				class="flex items-end justify-center border-b border-line bg-surface lg:border-b-0 lg:border-r"
+				data-animate-reveal="left"
+			>
+				<img
+					src="/images/profile.webp"
+					width="600"
+					height="600"
+					alt={t.about.profileAlt}
+					loading="lazy"
+					decoding="async"
+					class="block h-auto w-full"
+				/>
+			</figure>
+			<div class="flex items-center p-6 sm:p-8 lg:p-10">
+				<div class="max-w-3xl">
+					<p class="section-kicker mb-3" data-animate-text="whole">{t.about.kicker}</p>
+					<h2 class="ml-(--optical-inset) text-balance font-display text-2xl font-semibold leading-tight text-ink sm:text-3xl" data-animate-text="words" data-animate-delay="80">
+						{t.about.title}
+					</h2>
+					<p class="mt-4 max-w-2xl text-pretty text-sm leading-7 text-muted sm:text-base" data-animate-text="whole" data-animate-delay="140">{t.about.copy}</p>
+				</div>
+			</div>
 		</div>
-		<div>
-			<p class="section-copy max-w-2xl" data-animate-text="whole" data-animate-delay="140">{t.about.copy}</p>
-			<ul class="mt-10 grid gap-px border border-line bg-line sm:grid-cols-3">
-				{t.about.values.map((value, index) => (
-					<li class="bg-canvas p-5">
-						<span class="mb-8 block font-mono text-[0.65rem] text-accent">0{index + 1}</span>
-						<span class="font-display text-lg font-medium" data-animate-text="whole" data-animate-delay={180 + index * 90}>
-							{value}
-						</span>
-					</li>
-				))}
-			</ul>
-		</div>
+
+		<ul class="mt-4 grid gap-3 sm:grid-cols-3">
+			{t.about.values.map((value, index) => (
+				<li
+					class="relative overflow-hidden border border-line bg-surface p-5 transition-colors hover:border-accent sm:p-6"
+					data-animate-reveal="up"
+					data-animate-reveal-delay={index * 90}
+				>
+					<span class="mb-5 inline-grid size-10 place-items-center border border-line bg-canvas text-accent" aria-hidden="true">
+						<Icon name={aboutValueIcons[index] ?? 'clean-code'} class="size-5" />
+					</span>
+					<h3 class="text-pretty font-display text-base font-semibold text-ink sm:text-lg">
+						{value.title}
+					</h3>
+					<p class="mt-2 text-pretty text-sm leading-6 text-muted">{value.description}</p>
+				</li>
+			))}
+		</ul>
 	</div>
 </section>

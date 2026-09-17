@@ -1,49 +1,20 @@
 ---
-const canonical = new URL('/es/', Astro.site ?? Astro.url);
+import MainLayout from '../layouts/MainLayout.astro';
+import Hero from '../components/sections/Hero.astro';
+import About from '../components/sections/About.astro';
+import Services from '../components/sections/Services.astro';
+import Experience from '../components/sections/Experience.astro';
+import TechStack from '../components/sections/TechStack.astro';
+import FeaturedProjects from '../components/sections/FeaturedProjects.astro';
+import Contact from '../components/sections/Contact.astro';
 ---
 
-<!doctype html>
-<html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="robots" content="noindex, follow" />
-		<link rel="canonical" href={canonical} />
-		<link rel="alternate" hreflang="es" href={new URL('/es/', canonical)} />
-		<link rel="alternate" hreflang="en" href={new URL('/en/', canonical)} />
-		<link rel="alternate" hreflang="x-default" href={canonical} />
-		<link rel="icon" type="image/svg+xml" href="/logo.svg" />
-		<title>Josué Correa | Backend Developer</title>
-		<script is:inline>
-			(() => {
-				const supportedLanguages = ['es', 'en'];
-				let savedLanguage = null;
-
-				try {
-					savedLanguage = localStorage.getItem('language');
-				} catch {
-					// Continue with browser preference when storage is unavailable.
-				}
-
-				const preferredLanguage = navigator.languages?.[0] ?? navigator.language ?? '';
-				const browserLanguage = preferredLanguage.toLowerCase().split('-')[0];
-				const language = supportedLanguages.includes(savedLanguage)
-					? savedLanguage
-					: supportedLanguages.includes(browserLanguage)
-						? browserLanguage
-						: 'es';
-
-				window.location.replace(`/${language}/`);
-			})();
-		</script>
-	</head>
-	<body>
-		<main>
-			<p>Selecciona un idioma:</p>
-			<nav aria-label="Seleccionar idioma">
-				<a href="/es/" lang="es">Español</a>
-				<a href="/en/" lang="en">English</a>
-			</nav>
-		</main>
-	</body>
-</html>
+<MainLayout locale="es">
+	<Hero locale="es" />
+	<About locale="es" />
+	<Services locale="es" />
+	<Experience locale="es" />
+	<FeaturedProjects locale="es" />
+	<TechStack locale="es" />
+	<Contact locale="es" />
+</MainLayout>

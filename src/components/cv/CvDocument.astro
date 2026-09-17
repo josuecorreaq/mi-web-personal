@@ -1,0 +1,153 @@
+---
+import type { Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n/translations';
+import Icon from '../common/Icon.astro';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const cv = useTranslations(locale).cv;
+const sectionTitleClass =
+	'border-b border-line pb-2 font-mono text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-accent';
+---
+
+<article class="grid gap-10">
+	<header>
+		<h2 class="font-display text-2xl font-semibold tracking-[-0.03em] text-ink sm:text-3xl">
+			{cv.name}
+		</h2>
+		<p class="mt-2 font-mono text-xs uppercase tracking-[0.12em] text-accent">{cv.role}</p>
+
+		<ul class="mt-3 flex flex-wrap gap-x-5 gap-y-2 font-mono text-xs text-muted">
+			<li class="w-full">
+				<span class="inline-flex items-center gap-1.5">
+					<Icon name="location" class="size-3.5 shrink-0 text-accent" />
+					<span>{cv.location}</span>
+				</span>
+			</li>
+			<li>
+				<a class="inline-flex items-center gap-1.5 transition-colors hover:text-accent" href={`mailto:${cv.email}`}>
+					<Icon name="email" class="size-3.5 shrink-0 text-accent" />
+					<span class="break-all">{cv.email}</span>
+				</a>
+			</li>
+			<li>
+				<a
+					class="inline-flex items-center gap-1.5 transition-colors hover:text-accent"
+					href={`https://www.${cv.linkedin}`}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<Icon name="external-link" class="size-3.5 shrink-0 text-accent" />
+					<span class="break-all">{cv.linkedin}</span>
+				</a>
+			</li>
+			<li>
+				<a
+					class="inline-flex items-center gap-1.5 transition-colors hover:text-accent"
+					href={`https://${cv.github}`}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<Icon name="github" class="size-3.5 shrink-0 text-accent" />
+					<span class="break-all">{cv.github}</span>
+				</a>
+			</li>
+		</ul>
+
+		<p class="mt-6 max-w-3xl text-pretty text-sm leading-7 text-muted">{cv.summary}</p>
+	</header>
+
+	<section>
+		<h3 class={sectionTitleClass}>{cv.sections.experience}</h3>
+		{
+			cv.experience.map((entry) => (
+				<div class="mt-5">
+					<div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+						<h4 class="font-display text-base font-semibold text-ink sm:text-lg">
+							{entry.role}
+						</h4>
+						<p class="font-mono text-[0.65rem] uppercase tracking-[0.1em] text-muted">{entry.period}</p>
+					</div>
+					<p class="mt-1 text-sm text-muted">
+						{entry.organization} <span class="text-line">·</span> {entry.location}
+					</p>
+					<ul class="mt-4 grid gap-3">
+						{entry.bullets.map((bullet) => (
+							<li class="flex gap-3 text-sm leading-6 text-muted">
+								<span class="mt-2.5 size-1 shrink-0 bg-accent" aria-hidden="true" />
+								<span class="text-pretty">{bullet}</span>
+							</li>
+						))}
+					</ul>
+				</div>
+			))
+		}
+	</section>
+
+	<section>
+		<h3 class={sectionTitleClass}>{cv.sections.education}</h3>
+		<ul class="mt-5 grid gap-4">
+			{
+				cv.education.map((entry) => (
+					<li>
+						<div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+							<p class="text-sm font-semibold text-ink">{entry.degree}</p>
+							<p class="font-mono text-[0.65rem] uppercase tracking-[0.1em] text-muted">{entry.period}</p>
+						</div>
+						<p class="mt-1 text-sm text-muted">
+							{entry.institution} <span class="text-line">·</span> {entry.location}
+						</p>
+					</li>
+				))
+			}
+		</ul>
+		<p class="mt-4 text-xs leading-5 text-muted">{cv.educationNote}</p>
+	</section>
+
+	<section>
+		<h3 class={sectionTitleClass}>{cv.sections.skills}</h3>
+		<dl class="mt-5 grid gap-4">
+			{
+				cv.skills.map((skill) => (
+					<div class="grid gap-1 sm:grid-cols-[minmax(0,0.32fr)_minmax(0,1fr)] sm:gap-6">
+						<dt class="font-mono text-[0.65rem] uppercase tracking-[0.1em] text-accent">{skill.label}</dt>
+						<dd class="text-pretty text-sm leading-6 text-muted">{skill.value}</dd>
+					</div>
+				))
+			}
+		</dl>
+	</section>
+
+	<div class="grid gap-10 sm:grid-cols-2">
+		<section>
+			<h3 class={sectionTitleClass}>{cv.sections.languages}</h3>
+			<dl class="mt-5 grid border-b border-line">
+				{
+					cv.languages.map((language) => (
+						<div class="flex items-baseline justify-between gap-4 border-t border-line py-2.5 text-sm first:border-t-0 first:pt-0">
+							<dt class="text-ink">{language.label}</dt>
+							<dd class="font-mono text-xs text-muted">{language.value}</dd>
+						</div>
+					))
+				}
+			</dl>
+		</section>
+
+		<section>
+			<h3 class={sectionTitleClass}>{cv.sections.competencies}</h3>
+			<ul class="mt-5 grid border-b border-line">
+				{
+					cv.competencies.map((competency) => (
+						<li class="flex items-center gap-3 border-t border-line py-2.5 text-sm leading-6 text-muted first:border-t-0 first:pt-0">
+							<span class="size-1 shrink-0 bg-accent" aria-hidden="true" />
+							<span class="text-pretty">{competency}</span>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+	</div>
+</article>

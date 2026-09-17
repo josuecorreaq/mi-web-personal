@@ -67,13 +67,6 @@
 		const kind = (element.dataset.animateText ?? 'whole') as AnimationKind;
 		const baseDelay = Number(element.dataset.animateDelay ?? 0);
 		const units = kind === 'whole' ? [element] : splitText(element, kind);
-		const willChange =
-			kind === 'characters' ? 'transform, opacity, filter' : 'transform, opacity';
-
-		// Promote layers only while WAAPI owns the animation.
-		units.forEach((unit) => {
-			unit.style.willChange = willChange;
-		});
 
 		let animations: Animation[];
 
@@ -123,7 +116,6 @@
 				);
 			});
 		} catch (error) {
-			units.forEach((unit) => unit.style.removeProperty('will-change'));
 			throw error;
 		}
 
@@ -132,7 +124,6 @@
 
 		Promise.allSettled(animations.map((animation) => animation.finished)).then(() => {
 			animations.forEach((animation) => animation.cancel());
-			units.forEach((unit) => unit.style.removeProperty('will-change'));
 			element.dataset.textAnimationState = 'complete';
 		});
 	};
@@ -148,50 +139,33 @@
 			element.dataset.textAnimationState = 'pending';
 		});
 
-		const pendingElements = new Set(elements);
-		let animationFrame = 0;
+		if (!('IntersectionObserver' in window)) {
+			elements.forEach(animateElement);
+			return;
+		}
 
-		const stopWatching = () => {
-			window.removeEventListener('scroll', scheduleCheck);
-			window.removeEventListener('resize', scheduleCheck);
-		};
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (!entry.isIntersecting) return;
 
-		const checkVisibility = () => {
-			animationFrame = 0;
-			const activationLine = window.innerHeight * 0.92;
-			const elementsToAnimate: HTMLElement[] = [];
+					const element = entry.target as HTMLElement;
+					observer.unobserve(element);
+					animateElement(element);
+				});
+			},
+			{
+				rootMargin: '0px 0px -8% 0px',
+				threshold: 0,
+			},
+		);
 
-			// Read all geometry before splitText/WAAPI mutate the DOM.
-			pendingElements.forEach((element) => {
-				const bounds = element.getBoundingClientRect();
-				const isApproachingViewport =
-					bounds.top <= activationLine && bounds.bottom >= 0;
-
-				if (!isApproachingViewport) return;
-
-				pendingElements.delete(element);
-				elementsToAnimate.push(element);
-			});
-
-			elementsToAnimate.forEach(animateElement);
-
-			if (pendingElements.size === 0) stopWatching();
-		};
-
-		const scheduleCheck = () => {
-			if (animationFrame) return;
-			animationFrame = window.requestAnimationFrame(checkVisibility);
-		};
-
-		window.addEventListener('scroll', scheduleCheck, { passive: true });
-		window.addEventListener('resize', scheduleCheck, { passive: true });
-		scheduleCheck();
+		elements.forEach((element) => observer.observe(element));
 	};
 
 	try {
 		initializeTextAnimations();
 	} catch {
-		// Never leave readable content hidden if animation initialization fails.
 		delete document.documentElement.dataset.textAnimations;
 	}
 </script>
@@ -227,6 +201,15 @@
 
 	[data-animate-text='words'] .text-animation-unit {
 		white-space: nowrap;
+	}
+
+	[data-animate-text='characters'][data-text-animation-state='running'] .text-animation-unit {
+		will-change: transform, opacity, filter;
+	}
+
+	[data-animate-text='words'][data-text-animation-state='running'] .text-animation-unit,
+	[data-animate-text='whole'][data-text-animation-state='running'] {
+		will-change: transform, opacity;
 	}
 
 </style>
