@@ -305,9 +305,9 @@ const translations = {
 			notFound: {
 				metaTitle: 'Página no encontrada | Josué Correa',
 				title: 'Página no encontrada',
-				description:
-					'¡Hola! Lo sentimos, pero no pudimos encontrar lo que buscabas. Verifica que la dirección URL sea correcta.',
-				action: 'Ir a inicio',
+				description: 'La dirección que buscas no existe o cambió de lugar.',
+				action: 'Volver al inicio',
+				projects: 'Ver proyectos',
 			},
 		},
 	},
@@ -615,9 +615,9 @@ const translations = {
 			notFound: {
 				metaTitle: 'Page not found | Josue Correa',
 				title: 'Page not found',
-				description:
-					'Hello! We could not find what you were looking for. Check that the URL is correct and try again.',
-				action: 'Go home',
+				description: 'The address you are looking for does not exist or has moved.',
+				action: 'Back to home',
+				projects: 'View projects',
 			},
 		},
 	},
