@@ -23,7 +23,6 @@ pnpm-debug.log*
 .agents/
 .codex/
 skills-lock.json
-.env
 DESIGN.md
 PRODUCT.md
 .claude
