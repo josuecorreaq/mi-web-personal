@@ -1,0 +1,24 @@
+---
+interface Props {
+	items: readonly string[];
+	class?: string;
+	emphasizeFirst?: boolean;
+}
+
+const { items, class: className, emphasizeFirst = false } = Astro.props;
+---
+
+<p class:list={['overflow-hidden', className]}>
+	<span class="-ml-[calc(1.5rem+1px)] flex flex-wrap items-center gap-y-1">
+		{items.map((item, index) => (
+			<span
+				class:list={[
+					'inline-flex items-center before:mx-3 before:h-3 before:w-px before:shrink-0 before:bg-muted/50',
+					emphasizeFirst && index === 0 && 'text-ink',
+				]}
+			>
+				{item}
+			</span>
+		))}
+	</span>
+</p>

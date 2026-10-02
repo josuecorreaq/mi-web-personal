@@ -1,5 +1,6 @@
 ---
 import ErrorPage from '../components/errors/ErrorPage.astro';
+import CvModal from '../components/cv/CvModal.astro';
 import Footer from '../components/layout/Footer.astro';
 import Header from '../components/layout/Header.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -50,6 +51,7 @@ const english = useTranslations('en').errors.notFound;
 			homePath="/"
 		/>
 		<Footer locale="es" />
+		<CvModal locale="es" />
 	</div>
 
 	<div class="error-shell" data-error-content="en" lang="en">
@@ -63,7 +65,10 @@ const english = useTranslations('en').errors.notFound;
 			homePath="/en/"
 		/>
 		<Footer locale="en" />
+		<CvModal locale="en" />
 	</div>
+
+	<script src="../scripts/cv-modal.ts"></script>
 
 	<script is:inline define:vars={{ spanishTitle: spanish.metaTitle, englishTitle: english.metaTitle }}>
 		document.title = document.documentElement.dataset.errorLocale === 'en' ? englishTitle : spanishTitle;

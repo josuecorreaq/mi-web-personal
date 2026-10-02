@@ -1,5 +1,5 @@
 ---
-import ProjectCard from '../projects/ProjectCard.astro';
+import ProjectFeature from '../projects/ProjectFeature.astro';
 import type { Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
 import { getProjects } from '../../data/projects';
@@ -9,18 +9,26 @@ interface Props {
 }
 
 const { locale } = Astro.props;
-const t = useTranslations(locale);
+const t = useTranslations(locale).projects;
 const projects = getProjects(locale);
 ---
 
-<section id="proyectos" class="border-b border-line bg-canvas">
-	<div class="page-shell py-16 sm:py-20 lg:py-24">
-		<p class="section-kicker" data-animate-text="whole">{t.projects.kicker}</p>
-		<h2 class="section-title" data-animate-text="words" data-animate-delay="80">{t.projects.title}</h2>
-		<div class="mt-10 grid gap-4 lg:gap-5">
-			{projects.map((project, index) => (
-				<ProjectCard project={project} labels={t.projects.labels} index={index} href={project.path} />
-			))}
-		</div>
+<section id="proyectos" class="page-shell border-t border-line py-section">
+	<div class="flex flex-wrap items-center justify-between gap-x-12 gap-y-3">
+		<h2 class="font-display text-[clamp(2rem,4vw,3.25rem)] font-medium leading-[1.05] tracking-[-0.03em]">
+			{t.title}
+		</h2>
+		<p class="max-w-[28em] text-pretty text-muted">{t.copy}</p>
+	</div>
+
+	<div class="mt-block grid gap-block">
+		{projects.map((project, index) => (
+			<ProjectFeature
+				project={project}
+				labels={t.labels}
+				reversed={index % 2 === 1}
+				divided={index > 0}
+			/>
+		))}
 	</div>
 </section>

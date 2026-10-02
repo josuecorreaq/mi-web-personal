@@ -1,7 +1,7 @@
 import type { Locale } from '../i18n/config';
 import type { IconName } from '../components/common/Icon.astro';
 
-type Technology = {
+export type Technology = {
 	label: string;
 	icon: IconName;
 };
@@ -64,4 +64,4 @@ const categories = {
 	],
 } as const satisfies Record<Locale, TechnologyCategory[]>;
 
-export const getTechnologies = (locale: Locale) => categories[locale];
+export const getTechnologies = (locale: Locale): readonly TechnologyCategory[] => categories[locale];

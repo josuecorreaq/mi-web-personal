@@ -1,0 +1,46 @@
+---
+interface Props {
+	layers: readonly string[];
+	coreLayer: number;
+	caption: string;
+	labels: {
+		readonly architecture: string;
+		readonly layers: string;
+	};
+	class?: string;
+}
+
+const { layers, coreLayer, caption, labels, class: className } = Astro.props;
+const rows = layers.map((layer, index) => {
+	const [name, detail] = layer.split(' · ');
+	return { name, detail, isCore: index === coreLayer };
+});
+---
+
+<figure class:list={['m-0 min-w-0 border border-line', className]}>
+	<div class="flex justify-between gap-3 border-b border-line px-4 py-3 font-mono text-[0.78rem] text-muted">
+		<span>{labels.architecture}</span>
+		<span>{rows.length} {labels.layers}</span>
+	</div>
+	<ol class="p-[clamp(1rem,2.4vw,1.75rem)]">
+		{rows.map((row, index) => (
+			<li
+				class:list={[
+					'flex min-h-13 flex-wrap items-center justify-between gap-x-4 gap-y-0.5 border px-4 py-2 font-mono text-[0.84rem]',
+					index > 0 && 'relative mt-3.5 before:absolute before:-top-3.5 before:left-7 before:h-3.5 before:w-px before:bg-line',
+					row.isCore ? 'border-brand bg-brand font-semibold text-on-brand' : 'border-line',
+				]}
+				data-animate-reveal="up"
+				data-animate-reveal-delay={index * 90}
+			>
+				<span>{row.name}</span>
+				{row.detail && (
+					<span class:list={['text-[0.78rem]', row.isCore ? 'font-normal' : 'text-muted']}>{row.detail}</span>
+				)}
+			</li>
+		))}
+	</ol>
+	<figcaption class="border-t border-line px-4 py-3.5 text-sm leading-relaxed text-pretty text-muted">
+		{caption}
+	</figcaption>
+</figure>

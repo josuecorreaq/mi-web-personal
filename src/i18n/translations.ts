@@ -9,82 +9,75 @@ const translations = {
 		},
 		nav: {
 			projects: 'Proyectos',
-			about: 'Sobre mí',
-			experience: 'Experiencia',
-			services: 'Servicios',
-			stack: 'Tecnologías',
+			approach: 'Enfoque',
+			trajectory: 'Trayectoria',
 			contact: 'Contacto',
+			cv: 'CV',
+			cvLabel: 'Ver CV',
 			menu: 'Menú',
 			mainLabel: 'Navegación principal',
 			languageLabel: 'Ver esta página en inglés',
 			homeLabel: 'Josué Correa, inicio',
 		},
 		hero: {
-			name: 'Josué Correa',
-			role: 'Desarrollador Backend',
-			description:
-				'Desarrollador Backend especializado en Laravel, PHP y MySQL. Diseño APIs y sistemas web escalables para automatizar procesos de negocio.',
-			projectsCta: 'Ver proyectos',
+			lead: 'Soy Josué Correa, desarrollador backend.',
+			statement: 'Convierto procesos desordenados en sistemas claros que crecen',
+			statementMark: 'sin romperse',
 			contactCta: 'Contáctame',
-			location: 'Perú',
-			flowLabel: 'Flujo backend',
-			flowStatus: '200 OK',
-			flowMethod: 'POST',
-			flowEndpoint: '/api/v1/proceso-negocio',
-			flow: ['Validar solicitud', 'Aplicar reglas de dominio', 'Persistir datos', 'Devolver una respuesta confiable'],
+			projectsCta: 'Ver proyectos',
+			profileAlt: 'Retrato de Josué Correa',
+			facts: [
+				{ label: 'Ubicación', value: 'Piura, Perú', icon: 'location' },
+				{ label: 'Trabajo con', value: 'Laravel · PHP · MySQL', icon: 'stack' },
+			],
 		},
-		about: {
-			kicker: 'Sobre mí',
-			title: 'Código que sostiene procesos reales',
-			copy:
-				'Ingeniero de Sistemas con experiencia construyendo soluciones financieras con Laravel, React y MySQL. Trabajo desde las reglas del negocio hacia APIs, permisos y flujos operativos confiables, con una estructura preparada para evolucionar sin perder trazabilidad.',
-			profileAlt: 'Josué Correa, desarrollador backend especializado en Laravel, PHP y MySQL',
-			values: [
+		approach: {
+			titleLead: 'El problema casi nunca es la tecnología.',
+			titleRest: 'Es que nadie sabe cuál es el dato bueno.',
+			changesLabel: 'Qué cambia en el día a día',
+			changes: [
+				{
+					from: 'De datos repartidos entre Excel, correo y mensajería',
+					to: 'a un solo sistema donde cada registro tiene fecha y responsable.',
+				},
+				{
+					from: 'De una versión de la información por área',
+					to: 'a una única fuente de datos, con permisos por rol.',
+				},
+				{
+					from: 'De preguntar quién cambió qué',
+					to: 'a un historial consultable de cada operación.',
+				},
+			],
+			principlesLabel: 'Cómo lo construyo',
+			principles: [
 				{
 					title: 'Separación por dominios',
 					description: 'Cada área del negocio vive en su propio módulo, con una frontera pública explícita.',
 				},
 				{
 					title: 'Acceso controlado en el servidor',
-					description: 'Sesión, permiso por acción y alcance por sede se validan en el backend, nunca en la interfaz.',
+					description: 'Sesión, permiso por acción y alcance se validan en el backend, nunca en la interfaz.',
 				},
 				{
 					title: 'Cambios verificados',
 					description: 'Las rutas públicas están cubiertas por pruebas: una migración interna no rompe a quien ya consume la API.',
 				},
 			],
-		},
-		services: {
-			kicker: 'Qué resuelvo',
-			title: 'Problemas de operación, no solo de código',
-			copy:
-				'Cuando el día a día se sostiene con archivos sueltos y mensajes, el problema no es de tecnología: es que nadie sabe cuál es el dato bueno. Ahí es donde entro.',
-			items: [
-				{
-					problem: 'El equipo mueve datos entre Excel, correo y mensajería',
-					outcome: 'Un solo sistema donde cada registro queda guardado con fecha y responsable.',
-				},
-				{
-					problem: 'Cada área trabaja con su propia versión de la información',
-					outcome: 'Una única fuente de datos, con permisos por rol y por sede.',
-				},
-				{
-					problem: 'Saber qué pasó con un pago obliga a preguntar',
-					outcome: 'Historial consultable de cada operación, sin depender de quién estaba de turno.',
-				},
-			],
+			toolsLabel: 'Herramientas',
 		},
 		experience: {
-			kicker: 'Experiencia',
-			title: 'Trabajo aplicado a operaciones financieras reales',
-			cvCta: 'Ver CV',
+			title: 'Trayectoria',
+			copy: 'De un sistema en producción a una arquitectura que crece por fases.',
+			currentLabel: 'En curso',
 			items: [
 				{
-					organization: 'Proyecto independiente',
-					role: 'Desarrollador de software',
-					period: 'Enero de 2026 — Actualidad',
+					year: '2026',
+					range: 'De enero a hoy',
 					current: true,
-					description: 'Plataforma Integral de Gestión Crediticia',
+					role: 'Desarrollador de software',
+					organization: 'Proyecto independiente',
+					project: 'Plataforma Integral de Gestión Crediticia',
 					highlights: [
 						'Arquitectura modular de nueve dominios.',
 						'Control de accesos por usuario, rol y sede.',
@@ -92,11 +85,12 @@ const translations = {
 					],
 				},
 				{
-					organization: 'Entidad del sector financiero',
-					role: 'Desarrollador web',
-					period: 'Abril — diciembre de 2025',
+					year: '2025',
+					range: 'De abril a diciembre',
 					current: false,
-					description: 'Sistema de Gestión de Desembolsos Financieros',
+					role: 'Desarrollador web',
+					organization: 'Entidad del sector financiero',
+					project: 'Sistema de Gestión de Desembolsos',
 					highlights: [
 						'APIs REST con Laravel y frontend en React.',
 						'Operación centralizada y trazable, sin archivos locales.',
@@ -128,7 +122,7 @@ const translations = {
 					organization: 'Proyecto independiente',
 					location: 'Piura, Perú',
 					role: 'Desarrollador de software',
-					period: 'Enero de 2026 — Actualidad',
+					period: 'Enero de 2026 a la actualidad',
 					bullets: [
 						'Desarrollo una plataforma integral de gestión crediticia con Laravel, React y MySQL, cubriendo admisiones, evaluaciones, créditos y seguimiento de cartera.',
 						'Diseñé la arquitectura como monolito modular: nueve dominios con frontera pública propia y dependencias en una sola dirección, migrando cada módulo a las capas Http, Application, Domain e Infrastructure.',
@@ -140,7 +134,7 @@ const translations = {
 					organization: 'Entidad del sector financiero',
 					location: 'Piura, Perú',
 					role: 'Desarrollador web',
-					period: 'Abril — diciembre de 2025',
+					period: 'Abril a diciembre de 2025',
 					bullets: [
 						'Implementé un sistema web para la gestión de préstamos, pagos y reportería financiera, migrando procesos operativos manuales hacia una plataforma centralizada y trazable.',
 						'Digitalicé el flujo de desembolso, validación de pagos y seguimiento de cuotas, eliminando la dependencia de archivos locales y mejorando el acceso a la información para caja, asesores, operadores y administradores.',
@@ -188,25 +182,20 @@ const translations = {
 				'Mejora continua',
 			],
 		},
-		stack: {
-			kicker: 'Tecnologías y herramientas',
-			title: 'Mi stack de desarrollo',
-		},
 		projects: {
-			kicker: 'Proyectos',
-			title: 'Dos sistemas financieros: uno en producción, otro en construcción',
+			title: 'Proyectos',
+			copy: 'Dos sistemas en operación real. Uno en producción, otro en construcción.',
 			labels: {
-				context: 'Contexto',
-				solution: 'Solución',
-				role: 'Rol',
-				decision: 'Decisión técnica',
-				evidence: 'Evidencia técnica',
-				details: 'Ver detalle técnico',
-				caseStudy: 'Ver caso completo',
+				architecture: 'Arquitectura',
+				layers: 'capas',
+				readCase: 'Leer el caso completo',
 			},
 			items: [
 				{
 					name: 'Sistema de Gestión de Desembolsos Financieros',
+					year: '2025',
+					client: 'Sector financiero',
+					coreLayer: 2,
 					objective: 'Centralizar el desembolso, la validación de pagos, las cuotas y los reportes financieros.',
 					context: 'Operación financiera sostenida por archivos y validaciones manuales, con información dispersa entre distintos responsables.',
 					solution: 'Sistema web que ordena el flujo operativo, centraliza la información y mejora la trazabilidad de pagos y desembolsos.',
@@ -236,7 +225,10 @@ const translations = {
 				},
 				{
 					name: 'Plataforma Integral de Gestión Crediticia',
-					objective: 'Cubrir el ciclo crediticio completo —admisiones, evaluaciones, créditos y seguimiento de cartera— sobre una base modular que crece por fases.',
+					year: '2026',
+					client: 'Proyecto independiente',
+					coreLayer: 2,
+					objective: 'Cubrir el ciclo crediticio completo, de la admisión y la evaluación hasta los créditos y el seguimiento de cartera, sobre una base modular que crece por fases.',
 					context: 'Nueve dominios de negocio con reglas propias, evaluación diferenciada por tipo de cliente y accesos delimitados por usuario, rol y sede.',
 					solution: 'Monolito modular: cada dominio es un módulo con frontera pública propia y dependencias en una sola dirección; las capas internas se completan módulo a módulo.',
 					role: 'Desarrollo full stack',
@@ -281,10 +273,8 @@ const translations = {
 			],
 		},
 		contact: {
-			kicker: 'Contacto',
-			title: 'Construyamos una solución que pueda crecer',
-			copy:
-				'¿Tienes un proyecto, propuesta o necesitas apoyo técnico? Puedes escribirme y revisamos cómo puedo ayudarte.',
+			title: 'Hablemos de tu próximo proyecto.',
+			channelsLabel: 'Escríbeme o encuéntrame en',
 			form: {
 				name: 'Nombre',
 				email: 'Email',
@@ -327,84 +317,77 @@ const translations = {
 			description:
 				'Portfolio of Josue Correa, a Backend Developer specialized in Laravel, PHP, REST APIs and modular financial systems.',
 		},
-			nav: {
+		nav: {
 			projects: 'Projects',
-			about: 'About',
-			experience: 'Experience',
-			services: 'Services',
-			stack: 'Technologies',
+			approach: 'Approach',
+			trajectory: 'Experience',
 			contact: 'Contact',
+			cv: 'CV',
+			cvLabel: 'View CV',
 			menu: 'Menu',
 			mainLabel: 'Main navigation',
 			languageLabel: 'Ver esta página en español',
 			homeLabel: 'Josue Correa, home',
 		},
 		hero: {
-			name: 'Josue Correa',
-			role: 'Backend Developer',
-			description:
-				'Backend Developer specialized in Laravel, PHP and MySQL. I design APIs and scalable web systems to automate business processes.',
-			projectsCta: 'View projects',
+			lead: 'I’m Josue Correa, a backend developer.',
+			statement: 'I turn messy processes into clear systems that grow',
+			statementMark: 'without breaking',
 			contactCta: 'Get in touch',
-			location: 'Peru',
-			flowLabel: 'Backend flow',
-			flowStatus: '200 OK',
-			flowMethod: 'POST',
-			flowEndpoint: '/api/v1/business-process',
-			flow: ['Validate request', 'Apply domain rules', 'Persist data', 'Return reliable response'],
+			projectsCta: 'View projects',
+			profileAlt: 'Portrait of Josue Correa',
+			facts: [
+				{ label: 'Location', value: 'Piura, Peru', icon: 'location' },
+				{ label: 'Works with', value: 'Laravel · PHP · MySQL', icon: 'stack' },
+			],
 		},
-		about: {
-			kicker: 'About',
-			title: 'Code that powers real-world processes',
-			copy:
-				'Systems Engineer experienced in building financial solutions with Laravel, React and MySQL. I work from business rules toward reliable APIs, permissions and operational workflows, using structures designed to evolve without losing traceability.',
-			profileAlt: 'Josue Correa, backend developer specialized in Laravel, PHP and MySQL',
-			values: [
+		approach: {
+			titleLead: 'The problem is rarely the technology.',
+			titleRest: 'It’s that nobody knows which data is the right one.',
+			changesLabel: 'What changes day to day',
+			changes: [
+				{
+					from: 'From data scattered across spreadsheets, email and chat',
+					to: 'to one system where every record has a date and an owner.',
+				},
+				{
+					from: 'From a different version of the truth in each area',
+					to: 'to a single source of data, with role-based permissions.',
+				},
+				{
+					from: 'From asking who changed what',
+					to: 'to a searchable history of every operation.',
+				},
+			],
+			principlesLabel: 'How I build it',
+			principles: [
 				{
 					title: 'Separation by domain',
 					description: 'Every business area lives in its own module, behind an explicit public boundary.',
 				},
 				{
 					title: 'Access enforced on the server',
-					description: 'Session, per-action permission and branch scope are checked in the backend, never in the interface.',
+					description: 'Session, per-action permission and scope are checked in the backend, never in the interface.',
 				},
 				{
 					title: 'Verified changes',
 					description: 'Public routes are covered by tests: an internal migration never breaks an existing API consumer.',
 				},
 			],
-		},
-		services: {
-			kicker: 'What I solve',
-			title: 'Operational problems, not just code',
-			copy:
-				'When daily work runs on loose files and messages, the problem is not technology: nobody knows which copy of the data is the good one. That is where I come in.',
-			items: [
-				{
-					problem: 'The team moves data between spreadsheets, email and chat',
-					outcome: 'One system where every record is stored with a date and an owner.',
-				},
-				{
-					problem: 'Each area works from its own version of the information',
-					outcome: 'A single source of data, with permissions by role and by branch.',
-				},
-				{
-					problem: 'Finding out what happened to a payment means asking around',
-					outcome: 'A searchable history of every operation, independent of who was on shift.',
-				},
-			],
+			toolsLabel: 'Tools',
 		},
 		experience: {
-			kicker: 'Experience',
-			title: 'Engineering applied to real financial operations',
-			cvCta: 'View CV',
+			title: 'Experience',
+			copy: 'From a system in production to an architecture that grows in phases.',
+			currentLabel: 'Ongoing',
 			items: [
 				{
-					organization: 'Independent project',
-					role: 'Software Developer',
-					period: 'January 2026 — Present',
+					year: '2026',
+					range: 'January to now',
 					current: true,
-					description: 'End-to-End Credit Management Platform',
+					role: 'Software Developer',
+					organization: 'Independent project',
+					project: 'End-to-End Credit Management Platform',
 					highlights: [
 						'Modular architecture across nine domains.',
 						'Access control by user, role and branch.',
@@ -412,11 +395,12 @@ const translations = {
 					],
 				},
 				{
-					organization: 'Financial-sector organization',
-					role: 'Web Developer',
-					period: 'April — December 2025',
+					year: '2025',
+					range: 'April to December',
 					current: false,
-					description: 'Financial Disbursement Management System',
+					role: 'Web Developer',
+					organization: 'Financial-sector organization',
+					project: 'Disbursement Management System',
 					highlights: [
 						'REST APIs with Laravel and a React frontend.',
 						'Centralized, traceable operation with no local files.',
@@ -448,7 +432,7 @@ const translations = {
 					organization: 'Independent project',
 					location: 'Piura, Peru',
 					role: 'Software Developer',
-					period: 'January 2026 — Present',
+					period: 'January 2026 to present',
 					bullets: [
 						'Building an end-to-end credit management platform with Laravel, React and MySQL, covering admissions, evaluations, credits and portfolio tracking.',
 						'Designed the architecture as a modular monolith: nine domains with their own public boundary and dependencies running one way, migrating each module to the Http, Application, Domain and Infrastructure layers.',
@@ -460,7 +444,7 @@ const translations = {
 					organization: 'Financial-sector organization',
 					location: 'Piura, Peru',
 					role: 'Web Developer',
-					period: 'April — December 2025',
+					period: 'April to December 2025',
 					bullets: [
 						'Built a web system for loan, payment and financial reporting management, migrating manual operational processes to a centralized and traceable platform.',
 						'Digitized the disbursement, payment-validation and installment-tracking flow, removing the dependency on local files and improving information access for cashiers, advisors, operators and administrators.',
@@ -508,25 +492,20 @@ const translations = {
 				'Continuous improvement',
 			],
 		},
-		stack: {
-			kicker: 'Technologies and tools',
-			title: 'My development stack',
-		},
 		projects: {
-			kicker: 'Projects',
-			title: 'Two financial systems: one in production, one being built',
+			title: 'Projects',
+			copy: 'Two systems in real operation. One in production, one being built.',
 			labels: {
-				context: 'Context',
-				solution: 'Solution',
-				role: 'Role',
-				decision: 'Technical decision',
-				evidence: 'Technical evidence',
-				details: 'View technical detail',
-				caseStudy: 'View full case study',
+				architecture: 'Architecture',
+				layers: 'layers',
+				readCase: 'Read the full case study',
 			},
 			items: [
 				{
 					name: 'Financial Disbursement Management System',
+					year: '2025',
+					client: 'Financial sector',
+					coreLayer: 2,
 					objective: 'Centralize disbursements, payment validation, installments and financial reporting.',
 					context: 'A financial operation supported by local files and manual checks, with information scattered across different roles.',
 					solution: 'A web system that structures the operational flow, centralizes information and improves payment and disbursement traceability.',
@@ -556,7 +535,10 @@ const translations = {
 				},
 				{
 					name: 'End-to-End Credit Management Platform',
-					objective: 'Cover the full credit lifecycle — admissions, evaluations, credits and portfolio tracking — on a modular base that grows in phases.',
+					year: '2026',
+					client: 'Independent project',
+					coreLayer: 2,
+					objective: 'Cover the full credit lifecycle, from admission and evaluation to credits and portfolio tracking, on a modular base that grows in phases.',
 					context: 'Nine business domains with their own rules, evaluation that differs by client type, and access scoped by user, role and branch.',
 					solution: 'A modular monolith: each domain is a module with its own public boundary and dependencies running one way; the internal layers land module by module.',
 					role: 'Full-stack development',
@@ -601,10 +583,8 @@ const translations = {
 			],
 		},
 		contact: {
-			kicker: 'Contact',
-			title: 'Let’s build a solution ready to grow',
-			copy:
-				'Have a project, a proposal or need technical support? Send me a message and we can review how I can help.',
+			title: 'Let’s talk about your next project.',
+			channelsLabel: 'Write to me or find me on',
 			form: {
 				name: 'Name',
 				email: 'Email',

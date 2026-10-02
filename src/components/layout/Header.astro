@@ -1,9 +1,14 @@
 ---
-import Menu from '@lucide/astro/icons/menu';
 import type { Locale } from '../../i18n/config';
-import { getAlternatePath, getLocalePath } from '../../i18n/config';
+import { getLocalePath } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
 import ThemeToggle from '../common/ThemeToggle.astro';
+import BrandMark from './header/BrandMark.astro';
+import CvButton from './header/CvButton.astro';
+import HeaderNav from './header/HeaderNav.astro';
+import LanguageSwitch from './header/LanguageSwitch.astro';
+import MobileMenu from './header/MobileMenu.astro';
+import type { NavItem } from './header/types';
 
 interface Props {
 	locale: Locale;
@@ -17,113 +22,155 @@ const basePath = getLocalePath(locale);
 const sectionHref = (targetId: string) =>
 	isLanding ? `#${targetId}` : `${basePath}#${targetId}`;
 const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
+const navItems: NavItem[] = [
+	{ id: 'proyectos', label: t.nav.projects },
+	{ id: 'enfoque', label: t.nav.approach },
+	{ id: 'trayectoria', label: t.nav.trajectory },
+	{ id: 'contacto', label: t.nav.contact },
+].map((item) => ({ ...item, href: sectionHref(item.id), scrollTarget: scrollTarget(item.id) }));
 ---
 
-<header class="sticky top-0 z-50 border-b border-line/70 bg-canvas/90 backdrop-blur-xl">
-	<div class="page-shell flex min-h-18 items-center justify-between gap-6">
-		<a
+<header
+	class="site-header sticky top-0 z-50 border-b border-line bg-canvas"
+	data-site-header
+	data-scroll-spy={isLanding ? 'true' : undefined}
+>
+	<div class="page-shell grid min-h-18 grid-cols-[1fr_auto] items-center gap-3 sm:gap-5 lg:grid-cols-[1fr_auto_1fr]">
+		<BrandMark
+			locale={locale}
 			href={isLanding ? '#inicio' : basePath}
-			data-scroll-target={scrollTarget('inicio')}
-			class="font-mono text-xl font-extrabold tracking-[-0.08em] text-accent"
-			aria-label={t.nav.homeLabel}
-		>
-			<span class="text-muted">{'{'}</span>jc<span class="text-muted">{'}'}</span>
-		</a>
+			scrollTarget={scrollTarget('inicio')}
+		/>
 
-		<nav class="hidden items-center gap-7 lg:flex" aria-label={t.nav.mainLabel}>
-			<a class="nav-item inline-flex min-h-11 items-center font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('sobre-mi')} data-scroll-target={scrollTarget('sobre-mi')}>
-				<span class="nav-link-label">{t.nav.about}</span>
-			</a>
-			<a class="nav-item inline-flex min-h-11 items-center font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('servicios')} data-scroll-target={scrollTarget('servicios')}>
-				<span class="nav-link-label">{t.nav.services}</span>
-			</a>
-			<a class="nav-item inline-flex min-h-11 items-center font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('experiencia')} data-scroll-target={scrollTarget('experiencia')}>
-				<span class="nav-link-label">{t.nav.experience}</span>
-			</a>
-			<a class="nav-item inline-flex min-h-11 items-center font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('proyectos')} data-scroll-target={scrollTarget('proyectos')}>
-				<span class="nav-link-label">{t.nav.projects}</span>
-			</a>
-			<a class="nav-item inline-flex min-h-11 items-center font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('tecnologias')} data-scroll-target={scrollTarget('tecnologias')}>
-				<span class="nav-link-label">{t.nav.stack}</span>
-			</a>
-			<a class="nav-item inline-flex min-h-11 items-center font-mono text-xs text-muted transition-colors hover:text-ink" href={sectionHref('contacto')} data-scroll-target={scrollTarget('contacto')}>
-				<span class="nav-link-label">{t.nav.contact}</span>
-			</a>
-		</nav>
+		<HeaderNav locale={locale} items={navItems} />
 
-		<div class="flex items-center gap-2">
-			<a
-				href={alternatePath ?? getAlternatePath(locale)}
-				data-language={locale === 'es' ? 'en' : 'es'}
-				class="language-toggle"
-				lang={locale === 'es' ? 'en' : 'es'}
-				hreflang={locale === 'es' ? 'en' : 'es'}
-				aria-label={t.nav.languageLabel}
-				title={t.nav.languageLabel}
-			>
-				<span class="language-toggle-target">{locale === 'es' ? 'EN' : 'ES'}</span>
-				<span class="language-toggle-current" aria-hidden="true">{locale.toUpperCase()}</span>
-			</a>
+		<div class="col-start-2 flex items-center gap-1.5 justify-self-end sm:gap-2 lg:col-start-3">
+			<div class="flex h-11 items-stretch border border-line">
+				<LanguageSwitch locale={locale} alternatePath={alternatePath} />
+				<span class="w-px bg-line" aria-hidden="true"></span>
+				<ThemeToggle locale={locale} />
+			</div>
 
-			<ThemeToggle locale={locale} />
+			<CvButton locale={locale} />
 
-			<details class="relative lg:hidden" data-mobile-menu>
-				<summary
-					class="inline-flex size-10 cursor-pointer list-none items-center justify-center border border-line text-ink marker:content-none"
-					aria-label={t.nav.menu}
-				>
-					<Menu class="size-4" aria-hidden="true" stroke-width={2} />
-				</summary>
-				<nav
-					class="absolute right-0 top-[calc(100%+0.75rem)] grid min-w-44 border border-line bg-surface p-2 shadow-2xl"
-					aria-label={t.nav.menu}
-				>
-					<a class="nav-item inline-flex min-h-11 items-center px-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('sobre-mi')} data-scroll-target={scrollTarget('sobre-mi')} data-mobile-menu-link>
-						<span class="nav-link-label">{t.nav.about}</span>
-					</a>
-					<a class="nav-item inline-flex min-h-11 items-center px-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('servicios')} data-scroll-target={scrollTarget('servicios')} data-mobile-menu-link>
-						<span class="nav-link-label">{t.nav.services}</span>
-					</a>
-					<a class="nav-item inline-flex min-h-11 items-center px-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('experiencia')} data-scroll-target={scrollTarget('experiencia')} data-mobile-menu-link>
-						<span class="nav-link-label">{t.nav.experience}</span>
-					</a>
-					<a class="nav-item inline-flex min-h-11 items-center px-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('proyectos')} data-scroll-target={scrollTarget('proyectos')} data-mobile-menu-link>
-						<span class="nav-link-label">{t.nav.projects}</span>
-					</a>
-					<a class="nav-item inline-flex min-h-11 items-center px-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('tecnologias')} data-scroll-target={scrollTarget('tecnologias')} data-mobile-menu-link>
-						<span class="nav-link-label">{t.nav.stack}</span>
-					</a>
-					<a class="nav-item inline-flex min-h-11 items-center px-3 font-mono text-xs text-muted hover:bg-elevated hover:text-ink" href={sectionHref('contacto')} data-scroll-target={scrollTarget('contacto')} data-mobile-menu-link>
-						<span class="nav-link-label">{t.nav.contact}</span>
-					</a>
-				</nav>
-			</details>
+			<MobileMenu locale={locale} items={navItems} />
 		</div>
 	</div>
 </header>
 
 <script>
-	const languageLinks = document.querySelectorAll<HTMLAnchorElement>('[data-language]');
+	// Marks the section being read. The CSP build forbids inline style mutations, so the
+	// header only toggles aria-current and data-direction; CSS draws and animates the marks.
+	document.querySelectorAll<HTMLElement>('[data-site-header][data-scroll-spy]').forEach((header) => {
+		const nav = header.querySelector<HTMLElement>('[data-nav]');
+		const links = [...header.querySelectorAll<HTMLAnchorElement>('[data-nav-link]')];
+		const order = [...new Set(links.map((link) => link.dataset.navLink ?? ''))];
+		const sections = order
+			.map((id) => document.getElementById(id))
+			.filter((section): section is HTMLElement => section !== null);
 
-	languageLinks.forEach((languageLink) => {
-		languageLink.addEventListener('click', () => {
-			const language = languageLink.dataset.language;
+		if (sections.length === 0) return;
 
-			if (!language) return;
+		let activeId: string | null = null;
+		let frame = 0;
+		let settleTimer = 0;
+		let followingClick = false;
 
-			try {
-				localStorage.setItem('language', language);
-			} catch {
-				// Navigation still works when storage is unavailable.
+		const setActive = (id: string | null) => {
+			if (id === activeId) return;
+
+			const from = activeId ? order.indexOf(activeId) : -1;
+			const to = id ? order.indexOf(id) : -1;
+
+			if (nav && from !== -1 && to !== -1) {
+				nav.dataset.direction = to > from ? 'forward' : 'backward';
 			}
-		});
-	});
 
-	const mobileMenuLinks = document.querySelectorAll<HTMLAnchorElement>('[data-mobile-menu-link]');
+			activeId = id;
+			links.forEach((link) => {
+				if (link.dataset.navLink === id) {
+					link.setAttribute('aria-current', 'location');
+				} else {
+					link.removeAttribute('aria-current');
+				}
+			});
+		};
 
-	mobileMenuLinks.forEach((mobileMenuLink) => {
-		mobileMenuLink.addEventListener('click', () => {
-			mobileMenuLink.closest<HTMLDetailsElement>('[data-mobile-menu]')?.removeAttribute('open');
+		const readActive = () => {
+			const scrolledToEnd =
+				window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+
+			if (scrolledToEnd) return sections.at(-1)?.id ?? null;
+
+			const readingLine = window.innerHeight * 0.35;
+			let current: string | null = null;
+
+			sections.forEach((section) => {
+				if (section.getBoundingClientRect().top <= readingLine) current = section.id;
+			});
+
+			return current;
+		};
+
+		const sync = () => {
+			frame = 0;
+			setActive(readActive());
+		};
+
+		const requestSync = () => {
+			if (!frame) frame = requestAnimationFrame(sync);
+		};
+
+		// A click jumps the mark straight to its target instead of sweeping across
+		// every section the smooth scroll passes; spying resumes once scrolling settles.
+		const releaseAfterScroll = () => {
+			window.clearTimeout(settleTimer);
+			settleTimer = window.setTimeout(() => {
+				followingClick = false;
+				requestSync();
+			}, 160);
+		};
+
+		links.forEach((link) => {
+			link.addEventListener('click', () => {
+				const id = link.dataset.navLink;
+
+				if (!id || !link.dataset.scrollTarget || !document.getElementById(id)) return;
+
+				followingClick = true;
+				setActive(id);
+				releaseAfterScroll();
+			});
 		});
+
+		window.addEventListener(
+			'scroll',
+			() => {
+				if (followingClick) {
+					releaseAfterScroll();
+				} else {
+					requestSync();
+				}
+			},
+			{ passive: true },
+		);
+		window.addEventListener('resize', requestSync);
+		sync();
 	});
 </script>
+
+<style>
+	/* Shared by every header control; the subcomponents in ./header read them by inheritance. */
+	.site-header {
+		--nav-hover-tint: color-mix(in oklab, var(--color-ink) 8%, transparent);
+		--nav-ease: cubic-bezier(0.2, 0, 0, 1);
+		/* Tooltips hang just below the header rule instead of crossing it. */
+		--tooltip-offset: 1.25rem;
+	}
+
+	.site-header :global(a),
+	.site-header :global(button),
+	.site-header :global(summary) {
+		touch-action: manipulation;
+	}
+</style>

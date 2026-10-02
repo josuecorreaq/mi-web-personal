@@ -1,17 +1,49 @@
 ---
 import type { Locale } from '../../i18n/config';
+import { social } from '../../data/social';
 
 interface Props {
 	locale: Locale;
+	/** `drench` continues the landing's yellow contact block; case studies keep the plain canvas. */
+	tone?: 'drench' | 'plain';
 }
 
-const { locale } = Astro.props;
+const { locale, tone = 'plain' } = Astro.props;
 const name = locale === 'es' ? 'Josué Correa' : 'Josue Correa';
 const year = new Date().getFullYear();
+const newTabLabel = locale === 'es' ? 'se abre en otra pestaña' : 'opens in a new tab';
+const links = [
+	{ label: 'GitHub', href: social.github.url },
+	{ label: 'LinkedIn', href: social.linkedin.url },
+	{ label: 'X', href: social.x.url },
+];
 ---
 
-<footer class="border-t border-line bg-canvas">
-	<div class="page-shell py-8 text-center font-mono text-xs text-muted">
-		<p>© {year} {name}</p>
+<footer class:list={[tone === 'drench' ? 'drench bg-drench text-on-drench' : 'border-t border-line bg-canvas text-muted']}>
+	<div class="page-shell">
+		<div
+			class:list={[
+				'flex flex-wrap items-center justify-between gap-x-6 gap-y-1 pb-6 pt-4 font-mono text-[0.8125rem]',
+				tone === 'drench' && 'border-t border-on-drench/30',
+			]}
+		>
+			<p>© {year} {name}</p>
+			<nav class="flex flex-wrap gap-x-1" aria-label={locale === 'es' ? 'Redes' : 'Social'}>
+				{links.map((link) => (
+					<a
+						href={link.href}
+						target="_blank"
+						rel="noopener noreferrer"
+						class:list={[
+							'inline-flex min-h-11 items-center px-2.5 underline-offset-4 transition-colors hover:underline',
+							tone === 'plain' && 'hover:text-ink',
+						]}
+					>
+						{link.label}
+						<span class="sr-only">, {newTabLabel}</span>
+					</a>
+				))}
+			</nav>
+		</div>
 	</div>
 </footer>
