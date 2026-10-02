@@ -1,0 +1,72 @@
+---
+import ArchitectureFigure from './ArchitectureFigure.astro';
+import Icon from '../common/Icon.astro';
+import MetaList from '../common/MetaList.astro';
+import type { Project } from '../../data/projects';
+
+interface Labels {
+	readonly architecture: string;
+	readonly layers: string;
+	readonly readCase: string;
+}
+
+interface Props {
+	project: Project;
+	labels: Labels;
+	reversed?: boolean;
+	divided?: boolean;
+}
+
+const { project, labels, reversed = false, divided = false } = Astro.props;
+---
+
+<article
+	class:list={[
+		'flex flex-wrap items-start gap-x-18 gap-y-10',
+		divided && 'border-t border-line pt-block',
+		reversed && 'flex-row-reverse',
+	]}
+>
+	<div class="min-w-0 flex-[1_1_25rem]">
+		<MetaList
+			items={[project.year, project.architecture.version, project.client]}
+			class="font-mono text-[0.8125rem] text-muted"
+			emphasizeFirst
+		/>
+		<h3
+			class="mt-4.5 text-balance font-display text-[clamp(1.875rem,3.4vw,2.75rem)] font-medium leading-[1.08] tracking-[-0.025em]"
+			data-animate-text="words"
+		>
+			{project.name}
+		</h3>
+		<p class="mt-4 max-w-[32em] text-pretty leading-relaxed text-muted">{project.objective}</p>
+
+		<dl class="mt-7 border-t border-line">
+			{project.metrics.map((metric) => (
+				<div class="flex items-baseline gap-5 border-b border-line py-3">
+					<dt class="order-2 text-[0.9375rem] text-muted">{metric.label}</dt>
+					<dd class="order-1 w-24 shrink-0 font-display text-[1.625rem] font-medium leading-tight tabular-nums">
+						{metric.value}
+					</dd>
+				</div>
+			))}
+		</dl>
+
+		<a
+			href={project.path}
+			class="mt-6 inline-flex min-h-11 items-center gap-2 font-mono text-sm font-semibold text-ink underline decoration-accent decoration-2 underline-offset-[6px] transition-colors hover:text-accent"
+			aria-label={`${labels.readCase}: ${project.name}`}
+		>
+			{labels.readCase}
+			<Icon name="arrow-right" class="size-4 shrink-0" />
+		</a>
+	</div>
+
+	<ArchitectureFigure
+		layers={project.architecture.layers}
+		coreLayer={project.coreLayer}
+		caption={project.decision}
+		labels={labels}
+		class="flex-[1_1_26rem]"
+	/>
+</article>

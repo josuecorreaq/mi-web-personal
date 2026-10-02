@@ -1,0 +1,112 @@
+---
+import type { Locale } from '../../../i18n/config';
+import { useTranslations } from '../../../i18n/translations';
+import type { NavItem } from './types';
+
+interface Props {
+	locale: Locale;
+	items: NavItem[];
+}
+
+const { locale, items } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<nav class="hidden self-stretch lg:flex" aria-label={t.nav.mainLabel} data-nav>
+	<ul class="flex">
+		{items.map((item) => (
+			<li class="flex">
+				<a
+					class="nav-link"
+					href={item.href}
+					data-scroll-target={item.scrollTarget}
+					data-nav-link={item.id}
+				>
+					<span class="nav-link-label">{item.label}</span>
+				</a>
+			</li>
+		))}
+	</ul>
+</nav>
+
+<style>
+	/* Section links. Both marks sit on the header's bottom rule. The scroll spy in
+	   Header.astro sets aria-current on the links and data-direction on the nav. */
+	.nav-link {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		padding-inline: 0.75rem;
+		color: var(--color-muted);
+		font-family: var(--font-mono);
+		font-size: 0.8125rem;
+		transition: color 160ms ease;
+	}
+
+	.nav-link::before,
+	.nav-link::after {
+		position: absolute;
+		right: 0.75rem;
+		bottom: -1px;
+		left: 0.75rem;
+		height: 2px;
+		content: '';
+	}
+
+	/* Hover preview: a neutral mark. */
+	.nav-link::before {
+		background: var(--color-muted);
+		opacity: 0;
+		transform: scaleX(0.4);
+		transition:
+			opacity 160ms ease,
+			transform 200ms var(--nav-ease);
+	}
+
+	/* Current section: the accent mark hands off between links in the scroll direction. */
+	.nav-link::after {
+		background: var(--color-accent);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 280ms var(--nav-ease);
+	}
+
+	.nav-link[aria-current] {
+		color: var(--color-ink);
+	}
+
+	.nav-link[aria-current]::after {
+		transform: scaleX(1);
+		transition-delay: 60ms;
+	}
+
+	[data-direction='forward'] .nav-link:not([aria-current])::after,
+	[data-direction='backward'] .nav-link[aria-current]::after {
+		transform-origin: right;
+	}
+
+	.nav-link:focus-visible {
+		outline: none;
+	}
+
+	.nav-link:focus-visible::before {
+		opacity: 1;
+		transform: none;
+	}
+
+	.nav-link:focus-visible .nav-link-label {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 6px;
+	}
+
+	@media (hover: hover) {
+		.nav-link:hover {
+			color: var(--color-ink);
+		}
+
+		.nav-link:hover::before {
+			opacity: 1;
+			transform: none;
+		}
+	}
+</style>

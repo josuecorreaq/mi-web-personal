@@ -5,6 +5,9 @@ export const PROJECT_LAST_MODIFIED = '2026-08-28';
 
 interface ProjectTranslation {
 	readonly name: string;
+	readonly year: string;
+	readonly client: string;
+	readonly coreLayer: number;
 	readonly objective: string;
 	readonly context: string;
 	readonly solution: string;
@@ -83,16 +86,13 @@ const projectDefinitions = [
 
 export const projectPageCopy = {
 	es: {
-		kicker: 'Caso de estudio',
 		back: 'Volver a proyectos',
-		status: 'Estado',
 		role: 'Rol',
 		stack: 'Tecnologías',
 		context: 'Contexto operativo',
 		solution: 'Solución construida',
-		decision: 'Decisión de arquitectura',
 		architecture: 'Arquitectura del sistema',
-		architectureCopy: 'El flujo muestra cómo se separan las responsabilidades desde la entrada HTTP hasta la persistencia.',
+		architectureCopy: 'El flujo muestra cómo se separan las responsabilidades desde la entrada HTTP hasta la persistencia. En amarillo, la capa que concentra las reglas del negocio.',
 		evidence: 'Evidencia verificable',
 		result: 'Resultado',
 		resultCopy: 'El valor del proyecto está en convertir reglas operativas dispersas en un sistema trazable, probado y mantenible.',
@@ -101,19 +101,15 @@ export const projectPageCopy = {
 		contact: '¿Necesitas resolver un proceso similar?',
 		contactCopy: 'Conversemos sobre el flujo, las reglas y la arquitectura que necesita tu sistema.',
 		contactAction: 'Contáctame',
-		caseStudyAction: 'Ver caso completo',
 	},
 	en: {
-		kicker: 'Case study',
 		back: 'Back to projects',
-		status: 'Status',
 		role: 'Role',
 		stack: 'Technologies',
 		context: 'Operational context',
 		solution: 'Solution delivered',
-		decision: 'Architecture decision',
 		architecture: 'System architecture',
-		architectureCopy: 'The flow shows how responsibilities are separated from the HTTP entry point through persistence.',
+		architectureCopy: 'The flow shows how responsibilities are separated from the HTTP entry point through persistence. The yellow layer holds the business rules.',
 		evidence: 'Verifiable evidence',
 		result: 'Outcome',
 		resultCopy: 'The project turns scattered operational rules into a traceable, tested, and maintainable system.',
@@ -121,8 +117,7 @@ export const projectPageCopy = {
 		next: 'Next project',
 		contact: 'Need to solve a similar process?',
 		contactCopy: 'Let’s discuss the workflow, rules, and architecture your system needs.',
-		contactAction: 'Contact me',
-		caseStudyAction: 'View full case study',
+		contactAction: 'Get in touch',
 	},
 } as const;
 

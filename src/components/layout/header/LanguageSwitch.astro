@@ -1,0 +1,119 @@
+---
+import type { Locale } from '../../../i18n/config';
+import { getAlternatePath } from '../../../i18n/config';
+import { useTranslations } from '../../../i18n/translations';
+
+interface Props {
+	locale: Locale;
+	alternatePath?: string;
+}
+
+const { locale, alternatePath } = Astro.props;
+const t = useTranslations(locale);
+const alternateLocale = locale === 'es' ? 'en' : 'es';
+const languages = ['es', 'en'] as const;
+---
+
+<a
+	href={alternatePath ?? getAlternatePath(locale)}
+	class="language-switch"
+	data-language={alternateLocale}
+	data-current={locale}
+	lang={alternateLocale}
+	hreflang={alternateLocale}
+	aria-label={t.nav.languageLabel}
+	data-tooltip={t.nav.languageLabel}
+>
+	<span class="language-switch-thumb" aria-hidden="true"></span>
+	{languages.map((language) => (
+		<span class="language-switch-option" data-state={language === locale ? 'current' : 'target'}>
+			{language.toUpperCase()}
+		</span>
+	))}
+</a>
+
+<script>
+	document.querySelectorAll<HTMLAnchorElement>('[data-language]').forEach((languageLink) => {
+		languageLink.addEventListener('click', () => {
+			const language = languageLink.dataset.language;
+
+			if (!language) return;
+
+			try {
+				localStorage.setItem('language', language);
+			} catch {
+				// Navigation still works when storage is unavailable.
+			}
+		});
+	});
+</script>
+
+<style>
+	/* A two-way switch whose thumb marks the page language. */
+	.language-switch {
+		position: relative;
+		display: grid;
+		grid-template-columns: repeat(2, 2.25rem);
+		align-items: center;
+		padding: 0.25rem;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		font-weight: 700;
+	}
+
+	.language-switch-thumb {
+		position: absolute;
+		top: 0.25rem;
+		bottom: 0.25rem;
+		left: 0.25rem;
+		width: 2.25rem;
+		border: 1px solid var(--color-line);
+		background: var(--color-elevated);
+		transition: transform 200ms var(--nav-ease);
+	}
+
+	:global(:root[data-theme='light']) .language-switch-thumb {
+		background: var(--color-surface);
+	}
+
+	.language-switch[data-current='en'] .language-switch-thumb {
+		transform: translateX(100%);
+	}
+
+	.language-switch-option {
+		position: relative;
+		text-align: center;
+		transition: color 160ms ease;
+	}
+
+	.language-switch-option[data-state='current'] {
+		color: var(--color-ink);
+	}
+
+	.language-switch-option[data-state='target'] {
+		color: var(--color-muted);
+	}
+
+	.language-switch:active {
+		translate: 0 1px;
+	}
+
+	@media (hover: hover) {
+		/* The thumb previews the switch before the click. */
+		.language-switch[data-current='es']:hover .language-switch-thumb {
+			transform: translateX(100%);
+		}
+
+		.language-switch[data-current='en']:hover .language-switch-thumb {
+			transform: none;
+		}
+
+		.language-switch:hover .language-switch-option[data-state='current'] {
+			color: var(--color-muted);
+		}
+
+		.language-switch:hover .language-switch-option[data-state='target'] {
+			color: var(--color-ink);
+		}
+	}
+</style>

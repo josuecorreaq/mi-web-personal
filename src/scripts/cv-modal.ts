@@ -1,7 +1,7 @@
 
-const modal = document.querySelector<HTMLDialogElement>('[data-cv-modal]');
+const modals = document.querySelectorAll<HTMLDialogElement>('[data-cv-modal]');
 
-if (modal) {
+modals.forEach((modal) => {
 	const closeButton = modal.querySelector<HTMLButtonElement>('[data-cv-modal-close]');
 
 	closeButton?.addEventListener('click', () => modal.close());
@@ -11,12 +11,15 @@ if (modal) {
 			modal.close();
 		}
 	});
+});
 
-	document.querySelectorAll<HTMLElement>('[data-cv-open]').forEach((trigger) => {
-		trigger.addEventListener('click', () => {
-			if (!modal.open) {
-				modal.showModal();
-			}
-		});
+document.querySelectorAll<HTMLElement>('[data-cv-open]').forEach((trigger) => {
+	trigger.addEventListener('click', () => {
+		const modal =
+			trigger.closest('[lang]')?.querySelector<HTMLDialogElement>('[data-cv-modal]') ?? modals[0];
+
+		if (modal && !modal.open) {
+			modal.showModal();
+		}
 	});
-}
+});

@@ -1,6 +1,7 @@
 ---
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
+import CvModal from '../components/cv/CvModal.astro';
 import ScrollReveals from '../components/common/ScrollReveals.astro';
 import TextAnimations from '../components/common/TextAnimations.astro';
 import BaseLayout from './BaseLayout.astro';
@@ -56,7 +57,9 @@ const structuredData = createProjectSchema({
 	<main id="contenido" tabindex="-1">
 		<slot />
 	</main>
-	<Footer locale={locale} />
+	<Footer locale={locale} tone="drench" />
+	<CvModal locale={locale} />
 	<TextAnimations />
 	<ScrollReveals />
+	<script src="../scripts/cv-modal.ts"></script>
 </BaseLayout>

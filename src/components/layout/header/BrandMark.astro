@@ -1,0 +1,58 @@
+---
+import type { Locale } from '../../../i18n/config';
+import { useTranslations } from '../../../i18n/translations';
+
+interface Props {
+	locale: Locale;
+	href: string;
+	scrollTarget?: string;
+}
+
+const { locale, href, scrollTarget } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<a
+	href={href}
+	data-scroll-target={scrollTarget}
+	class="brand-mark inline-flex min-h-11 items-center justify-self-start font-mono text-xl font-extrabold tracking-[-0.04em] text-accent"
+	aria-label={t.nav.homeLabel}
+>
+	<span class="brand-brace text-muted" data-side="open">{'{'}</span>jc<span class="brand-brace text-muted" data-side="close">{'}'}</span>
+</a>
+
+<style>
+	/* The braces open around the initials. */
+	.brand-brace {
+		display: inline-block;
+		transition:
+			color 160ms ease,
+			transform 200ms var(--nav-ease);
+	}
+
+	.brand-mark:focus-visible .brand-brace {
+		color: var(--color-ink);
+	}
+
+	.brand-mark:focus-visible .brand-brace[data-side='open'] {
+		transform: translateX(-0.1875rem);
+	}
+
+	.brand-mark:focus-visible .brand-brace[data-side='close'] {
+		transform: translateX(0.1875rem);
+	}
+
+	@media (hover: hover) {
+		.brand-mark:hover .brand-brace {
+			color: var(--color-ink);
+		}
+
+		.brand-mark:hover .brand-brace[data-side='open'] {
+			transform: translateX(-0.1875rem);
+		}
+
+		.brand-mark:hover .brand-brace[data-side='close'] {
+			transform: translateX(0.1875rem);
+		}
+	}
+</style>
