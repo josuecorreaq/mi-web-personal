@@ -26,8 +26,8 @@
 
 ## Case studies
 
-- [Sistema de Gestión de Desembolsos Financieros](https://josuecorreaq.com/proyectos/sistema-gestion-desembolsos/) / [English](https://josuecorreaq.com/en/projects/disbursement-management-system/): production system centralizing disbursement, payment validation, installments and financial reporting. 153 REST endpoints behind a JWT session and 21 automated test suites.
-- [Plataforma Integral de Gestión Crediticia](https://josuecorreaq.com/proyectos/plataforma-gestion-crediticia/) / [English](https://josuecorreaq.com/en/projects/credit-management-platform/): modular monolith covering admissions, evaluations, credits and portfolio tracking. Nine business domains, three access scopes (user, role, branch), and a contract test that pins the method, URI, controller and middleware of every public route.
+- [Sistema de Gestión de Desembolsos Financieros](https://josuecorreaq.com/proyectos/sistema-gestion-desembolsos/) / [English](https://josuecorreaq.com/en/projects/disbursement-management-system/): production system centralizing disbursement, payment validation, installments and financial reporting. 147 REST endpoints behind a JWT session and 21 automated test suites.
+- [Plataforma Integral de Gestión Crediticia](https://josuecorreaq.com/proyectos/plataforma-gestion-crediticia/) / [English](https://josuecorreaq.com/en/projects/credit-management-platform/): modular monolith covering admissions, evaluations, credits and portfolio tracking. Nine business domains, three access scopes (user, role, branch), a contract test that pins the method, URI, controller and middleware of 143 of its 152 API routes, and 110 architecture tests that guard the boundaries between modules.
 
 ## Suggested citations
 

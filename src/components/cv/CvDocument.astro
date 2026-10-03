@@ -12,7 +12,7 @@ const { locale } = Astro.props;
 const cv = useTranslations(locale).cv;
 const contacts = [
 	{ icon: 'email', label: cv.email, href: `mailto:${cv.email}`, external: false },
-	{ icon: 'briefcase', label: cv.linkedin.replace('linkedin.com/', ''), href: `https://www.${cv.linkedin}`, external: true },
+	{ icon: 'linkedin', label: cv.linkedin.replace('linkedin.com/', ''), href: `https://www.${cv.linkedin}`, external: true },
 	{ icon: 'github', label: `@${cv.github.replace('github.com/', '')}`, href: `https://${cv.github}`, external: true },
 ] as const;
 const sectionTitleClass =

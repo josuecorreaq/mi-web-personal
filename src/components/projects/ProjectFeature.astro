@@ -8,6 +8,9 @@ interface Labels {
 	readonly architecture: string;
 	readonly layers: string;
 	readonly readCase: string;
+	readonly inspectHint: string;
+	readonly dependsOn: string;
+	readonly noDependencies: string;
 }
 
 interface Props {
@@ -43,8 +46,8 @@ const { project, labels, reversed = false, divided = false } = Astro.props;
 
 		<dl class="mt-7 border-t border-line">
 			{project.metrics.map((metric) => (
-				<div class="flex items-baseline gap-5 border-b border-line py-3">
-					<dt class="order-2 text-[0.9375rem] text-muted">{metric.label}</dt>
+				<div class="flex items-center gap-5 border-b border-line py-3 sm:items-baseline">
+					<dt class="order-2 min-w-0 text-pretty text-[0.9375rem] leading-snug text-muted">{metric.label}</dt>
 					<dd class="order-1 w-24 shrink-0 font-display text-[1.625rem] font-medium leading-tight tabular-nums">
 						{metric.value}
 					</dd>

@@ -1,8 +1,6 @@
 ---
-import Icon from '../common/Icon.astro';
 import type { Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
-import { getTechnologies } from '../../data/technologies';
 
 interface Props {
 	locale: Locale;
@@ -10,7 +8,6 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale).approach;
-const tools = getTechnologies(locale).flatMap((category) => category.items);
 const labelClass = 'font-mono text-[0.8125rem] font-normal text-muted';
 ---
 
@@ -47,14 +44,4 @@ const labelClass = 'font-mono text-[0.8125rem] font-normal text-muted';
 			</ul>
 		</div>
 	</div>
-
-	<h3 class:list={[labelClass, 'mt-block']}>{t.toolsLabel}</h3>
-	<ul class="mt-4 flex flex-wrap gap-px border border-line bg-line">
-		{tools.map((tool) => (
-			<li class="flex min-w-0 flex-[1_1_8rem] flex-col gap-3.5 bg-canvas px-4.5 py-5.5 transition-colors hover:text-accent">
-				<Icon name={tool.icon} class="size-7" />
-				<span class="text-[0.9375rem]">{tool.label}</span>
-			</li>
-		))}
-	</ul>
 </section>
