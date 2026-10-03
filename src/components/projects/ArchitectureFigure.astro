@@ -18,8 +18,8 @@ interface Props {
 const { layers, coreLayer, caption, labels, class: className } = Astro.props;
 // Build-time id so each figure's buttons point at their own rule panels.
 const uid = `arch-${Math.random().toString(36).slice(2, 8)}`;
-// Every dependency here sits between adjacent layers, so the connector above each row
-// shows its direction: down when the upper layer depends on the lower one, up for the reverse.
+// A dependency between adjacent layers is drawn by the connector above the lower row:
+// down when the upper layer depends on the lower one, up for the reverse.
 const rows = layers.map((layer, index) => {
 	const previous = layers[index - 1];
 	const edge = !previous
@@ -36,6 +36,15 @@ const rows = layers.map((layer, index) => {
 		dependencyNames: layer.dependsOn.map((dependency) => layers[dependency]?.name).filter(Boolean),
 	};
 });
+// A dependency that skips layers is drawn as a bracket in the right gutter, bypassing the rows in between.
+const bypasses = layers.flatMap((layer, from) =>
+	layer.dependsOn
+		.filter((to) => Math.abs(to - from) > 1)
+		.map((to) => ({ from, start: Math.min(from, to), end: Math.max(from, to), direction: to > from ? 'down' : 'up' })),
+);
+// Grid placement has to be literal class names so Tailwind can see them.
+const rowStart = ['row-start-1', 'row-start-2', 'row-start-3', 'row-start-4', 'row-start-5', 'row-start-6', 'row-start-7', 'row-start-8'];
+const rowEnd = ['row-end-1', 'row-end-2', 'row-end-3', 'row-end-4', 'row-end-5', 'row-end-6', 'row-end-7', 'row-end-8', 'row-end-9'];
 const ease = 'ease-[cubic-bezier(0.25,1,0.5,1)] motion-reduce:transition-none';
 ---
 
@@ -44,10 +53,10 @@ const ease = 'ease-[cubic-bezier(0.25,1,0.5,1)] motion-reduce:transition-none';
 		<span>{labels.architecture}</span>
 		<span>{rows.length} {labels.layers}</span>
 	</div>
-	<ol class="p-[clamp(1rem,2.4vw,1.75rem)]" data-architecture-layers>
+	<ol class="grid gap-y-5 p-[clamp(1rem,2.4vw,1.75rem)]" data-architecture-layers>
 		{rows.map((row, index) => (
 			<li
-				class:list={['relative', index > 0 && 'mt-5']}
+				class:list={['relative col-start-1', rowStart[index]]}
 				data-animate-reveal="up"
 				data-animate-reveal-delay={index * 90}
 			>
@@ -91,6 +100,31 @@ const ease = 'ease-[cubic-bezier(0.25,1,0.5,1)] motion-reduce:transition-none';
 					)}
 				</button>
 			</li>
+		))}
+		{bypasses.map((bypass) => (
+			<span
+				class:list={[
+					'pointer-events-none relative col-start-1 my-[1.625rem] w-3 translate-x-full justify-self-end border-y border-r border-current text-field transition-[color,opacity] duration-200',
+					'data-[state=active]:text-accent data-[state=dimmed]:opacity-35',
+					rowStart[bypass.start],
+					rowEnd[bypass.end + 1],
+					ease,
+				]}
+				data-edge-from={bypass.from}
+				data-state="idle"
+				aria-hidden="true"
+			>
+				<svg
+					class:list={['absolute -left-px h-2 w-1.5', bypass.direction === 'down' ? '-bottom-[4.5px]' : '-top-[4.5px]']}
+					viewBox="0 0 6 8"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.25"
+					stroke-linecap="square"
+				>
+					<path d="M5 1 1.5 4 5 7" />
+				</svg>
+			</span>
 		))}
 	</ol>
 	<figcaption class="grid border-t border-line px-4 py-3.5 text-sm leading-relaxed text-pretty">

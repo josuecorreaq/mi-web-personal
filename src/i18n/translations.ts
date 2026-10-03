@@ -28,7 +28,7 @@ const translations = {
 			profileAlt: 'Retrato de Josué Correa',
 			facts: [
 				{ label: 'Ubicación', value: 'Piura, Perú', icon: 'location' },
-				{ label: 'Trabajo con', value: 'Laravel · PHP · MySQL', icon: 'stack' },
+				{ label: 'Disponibilidad', value: 'Presencial o remoto', icon: 'circle-check' },
 			],
 		},
 		approach: {
@@ -64,7 +64,6 @@ const translations = {
 					description: 'Las rutas públicas están cubiertas por pruebas: una migración interna no rompe a quien ya consume la API.',
 				},
 			],
-			toolsLabel: 'Herramientas',
 		},
 		experience: {
 			title: 'Trayectoria',
@@ -206,12 +205,12 @@ const translations = {
 					decision: 'Separación de responsabilidades entre API, reglas de negocio, interfaz y persistencia para reducir acoplamiento y facilitar mantenimiento.',
 					metrics: [
 						{ value: '−50 %', label: 'Pasos manuales en validación de pagos' },
-						{ value: '153', label: 'Endpoints REST en producción' },
+						{ value: '147', label: 'Endpoints REST en producción' },
 						{ value: '21', label: 'Suites de pruebas automatizadas' },
 					],
 					evidence: [
-						'153 endpoints REST sobre sesión JWT: préstamos, pagos, cuotas, cartera, moras y reprogramación.',
-						'21 suites de pruebas de funcionalidad, una por controlador crítico: autenticación, clientes, cartera, moras, reprogramación y calculadora.',
+						'147 endpoints REST sobre sesión JWT: préstamos, pagos, cuotas, cartera, moras y reprogramación.',
+						'21 suites de pruebas unitarias y de funcionalidad sobre las reglas críticas: autenticación, pagos, moras, cartera, reprogramación y calculadora.',
 						'Reducción del 50 % en pasos manuales de validación de pagos, medida contra el proceso anterior.',
 						'Reportes financieros generados desde los registros del sistema, no desde hojas de cálculo paralelas.',
 					],
@@ -220,7 +219,7 @@ const translations = {
 						layers: [
 							{
 								name: 'HTTP / API',
-								rule: 'Expone los 153 endpoints REST sobre sesión JWT y entrega cada petición a un caso de uso, sin decidir nada del negocio.',
+								rule: 'Expone los 147 endpoints REST sobre sesión JWT y entrega cada petición a un caso de uso, sin decidir nada del negocio.',
 								dependsOn: [1],
 							},
 							{
@@ -258,56 +257,76 @@ const translations = {
 					decision: 'La capa Domain no depende del framework, y ningún módulo entra a las tablas ni a las clases internas de otro: solo consume sus Actions y Queries públicas.',
 					metrics: [
 						{ value: '9', label: 'Dominios de negocio modulares' },
-						{ value: '100 %', label: 'De la API verificada en cada cambio' },
+						{ value: '110', label: 'Tests que vigilan las fronteras entre módulos' },
 						{ value: '3', label: 'Niveles de acceso: usuario, rol y sede' },
 					],
 					evidence: [
-						'118 rutas públicas congeladas en un test de contrato que fija método, URI, controlador y middleware de cada una.',
-						'Nueve dominios definidos, cada uno como módulo independiente con su propia frontera pública.',
+						'143 de las 152 rutas de la API congeladas en un test de contrato que fija método, URI, controlador y middleware de cada una.',
+						'110 tests de arquitectura: ningún módulo importa la infraestructura de otro ni toca sus tablas con consultas crudas, y el grafo de dependencias entre módulos no tiene ciclos.',
 						'Autorización en tres niveles: sesión JWT, permiso granular por acción y alcance por sede.',
-						'Capa Domain sin dependencias del framework; entre módulos solo hay Actions y Queries públicas.',
+						'Capa Domain sin HTTP, DB, Auth ni Eloquent; entre módulos solo hay Actions y Queries públicas.',
 					],
-					apiSample: {
-						label: 'Extracto del test de contrato',
-						caption:
-							'Cada fila fija método, URI, controlador y middleware. Si una migración los cambia, el test falla antes que el frontend.',
-						rows: [
-							'// RouteContractTest.php',
-							'',
-							"['GET', 'api/v1/proceso-negocio',",
-							'  ProcesoNegocioController@index,',
-							"  ['jwt', 'permiso:proceso.listar']],",
-							'',
-							"['PATCH', 'api/v1/proceso-negocio/{id}',",
-							'  ProcesoNegocioController@update,',
-							"  ['jwt', 'permiso:proceso.editar']],",
-						],
-					},
+					samples: [
+						{
+							label: 'Extracto del test de contrato',
+							caption:
+								'Cada fila fija método, URI, controlador y middleware. Si una migración los cambia, el test falla antes que el frontend.',
+							rows: [
+								'// RouteContractTest.php',
+								'',
+								"['GET', 'api/v1/proceso-negocio',",
+								'  ProcesoNegocioController@index,',
+								"  ['jwt', 'permiso:proceso.listar']],",
+								'',
+								"['PATCH', 'api/v1/proceso-negocio/{id}',",
+								'  ProcesoNegocioController@update,',
+								"  ['jwt', 'permiso:proceso.editar']],",
+							],
+						},
+						{
+							label: 'Extracto de los tests de arquitectura',
+							caption:
+								'Las fronteras entre módulos no dependen de la disciplina: 110 tests fallan si un módulo importa la infraestructura de otro o toca sus tablas.',
+							rows: [
+								'// ModuleDependencyBoundaryTest.php',
+								'test_credit_flow_module_dependency_graph_is_acyclic',
+								'test_cross_module_dependency_inventory_stays_fixed',
+								'',
+								'// ControllerHttpBoundaryTest.php',
+								'test_http_layer_does_not_execute_unallowlisted_persistence_operations',
+								'test_http_layer_does_not_use_the_service_locator',
+								'',
+								'// TableOwnershipBoundaryTest.php',
+								'test_ninguna_consulta_cruda_toca_una_tabla_de_otro_owner',
+								'test_la_lista_de_excepciones_sigue_vacia',
+							],
+						},
+					],
 					architecture: {
 						version: 'En desarrollo',
 						layers: [
 							{
 								name: 'Http',
 								detail: 'controllers, requests, resources',
-								rule: 'Valida la entrada con requests, responde con resources y delega en un caso de uso. Aquí no vive ninguna regla de negocio.',
+								rule: 'Valida la entrada con requests, responde con resources y delega en un caso de uso, sin reglas de negocio profundas.',
 								dependsOn: [1],
 							},
 							{
 								name: 'Application',
 								detail: 'casos de uso y transacciones',
-								rule: 'Ejecuta cada caso de uso dentro de su transacción. Otros módulos solo entran por sus Actions y Queries públicas.',
-								dependsOn: [2],
+								rule: 'Ejecuta cada caso de uso dentro de su transacción y persiste a través de Infrastructure. Otros módulos solo entran por sus Actions y Queries públicas.',
+								dependsOn: [2, 3],
 							},
 							{
 								name: 'Domain',
 								detail: 'reglas de negocio',
-								rule: 'Tampoco depende del framework: las demás capas dependen de ella, nunca al revés.',
+								rule: 'Sin HTTP, DB, Auth ni Eloquent: las demás capas dependen de ella, nunca al revés.',
 								dependsOn: [],
 							},
 							{
 								name: 'Infrastructure',
 								detail: 'persistencia y adapters',
-								rule: 'Implementa la persistencia y los adapters que pide el dominio. Su dependencia apunta hacia arriba, hacia Domain.',
+								rule: 'Eloquent, consultas optimizadas y adapters. Conoce el dominio; el dominio no la conoce a ella.',
 								dependsOn: [2],
 							},
 						],
@@ -381,7 +400,7 @@ const translations = {
 			profileAlt: 'Portrait of Josue Correa',
 			facts: [
 				{ label: 'Location', value: 'Piura, Peru', icon: 'location' },
-				{ label: 'Works with', value: 'Laravel · PHP · MySQL', icon: 'stack' },
+				{ label: 'Availability', value: 'On-site or remote', icon: 'circle-check' },
 			],
 		},
 		approach: {
@@ -417,7 +436,6 @@ const translations = {
 					description: 'Public routes are covered by tests: an internal migration never breaks an existing API consumer.',
 				},
 			],
-			toolsLabel: 'Tools',
 		},
 		experience: {
 			title: 'Experience',
@@ -559,12 +577,12 @@ const translations = {
 					decision: 'Separated the API, business rules, interface and persistence responsibilities to reduce coupling and simplify maintenance.',
 					metrics: [
 						{ value: '−50%', label: 'Manual steps in payment validation' },
-						{ value: '153', label: 'REST endpoints in production' },
+						{ value: '147', label: 'REST endpoints in production' },
 						{ value: '21', label: 'Automated test suites' },
 					],
 					evidence: [
-						'153 REST endpoints behind a JWT session: loans, payments, installments, portfolio, arrears and rescheduling.',
-						'21 feature test suites, one per critical controller: authentication, clients, portfolio, arrears, rescheduling and calculator.',
+						'147 REST endpoints behind a JWT session: loans, payments, installments, portfolio, arrears and rescheduling.',
+						'21 unit and feature test suites over the critical rules: authentication, payments, arrears, portfolio, rescheduling and calculator.',
 						'Manual payment-validation steps cut by 50%, measured against the previous process.',
 						'Financial reports generated from system records instead of parallel spreadsheets.',
 					],
@@ -573,7 +591,7 @@ const translations = {
 						layers: [
 							{
 								name: 'HTTP / API',
-								rule: 'Exposes the 153 REST endpoints behind a JWT session and hands each request to a use case, without making any business decision.',
+								rule: 'Exposes the 147 REST endpoints behind a JWT session and hands each request to a use case, without making any business decision.',
 								dependsOn: [1],
 							},
 							{
@@ -611,56 +629,76 @@ const translations = {
 					decision: 'The Domain layer does not depend on the framework, and no module reaches into another module’s tables or internal classes: it only consumes its public Actions and Queries.',
 					metrics: [
 						{ value: '9', label: 'Modular business domains' },
-						{ value: '100%', label: 'Of the API verified on every change' },
+						{ value: '110', label: 'Tests guarding the boundaries between modules' },
 						{ value: '3', label: 'Access scopes: user, role and branch' },
 					],
 					evidence: [
-						'118 public routes frozen in a contract test that pins the method, URI, controller and middleware of each one.',
-						'Nine domains defined, each an independent module with its own public boundary.',
+						'143 of the 152 API routes frozen in a contract test that pins the method, URI, controller and middleware of each one.',
+						'110 architecture tests: no module imports another one’s infrastructure or touches its tables with raw queries, and the dependency graph between modules has no cycles.',
 						'Authorization at three levels: JWT session, granular per-action permission and branch scope.',
-						'Domain layer free of framework dependencies; modules talk only through public Actions and Queries.',
+						'Domain layer free of HTTP, DB, Auth and Eloquent; modules talk only through public Actions and Queries.',
 					],
-					apiSample: {
-						label: 'Contract test excerpt',
-						caption:
-							'Each row pins the method, URI, controller and middleware. If a migration changes them, the test fails before the frontend does.',
-						rows: [
-							'// RouteContractTest.php',
-							'',
-							"['GET', 'api/v1/business-process',",
-							'  BusinessProcessController@index,',
-							"  ['jwt', 'permission:process.list']],",
-							'',
-							"['PATCH', 'api/v1/business-process/{id}',",
-							'  BusinessProcessController@update,',
-							"  ['jwt', 'permission:process.edit']],",
-						],
-					},
+					samples: [
+						{
+							label: 'Contract test excerpt',
+							caption:
+								'Each row pins the method, URI, controller and middleware. If a migration changes them, the test fails before the frontend does.',
+							rows: [
+								'// RouteContractTest.php',
+								'',
+								"['GET', 'api/v1/business-process',",
+								'  BusinessProcessController@index,',
+								"  ['jwt', 'permission:process.list']],",
+								'',
+								"['PATCH', 'api/v1/business-process/{id}',",
+								'  BusinessProcessController@update,',
+								"  ['jwt', 'permission:process.edit']],",
+							],
+						},
+						{
+							label: 'Architecture test excerpt',
+							caption:
+								'Module boundaries do not rely on discipline: 110 tests fail if a module imports another one’s infrastructure or touches its tables.',
+							rows: [
+								'// ModuleDependencyBoundaryTest.php',
+								'test_credit_flow_module_dependency_graph_is_acyclic',
+								'test_cross_module_dependency_inventory_stays_fixed',
+								'',
+								'// ControllerHttpBoundaryTest.php',
+								'test_http_layer_does_not_execute_unallowlisted_persistence_operations',
+								'test_http_layer_does_not_use_the_service_locator',
+								'',
+								'// TableOwnershipBoundaryTest.php',
+								'test_ninguna_consulta_cruda_toca_una_tabla_de_otro_owner',
+								'test_la_lista_de_excepciones_sigue_vacia',
+							],
+						},
+					],
 					architecture: {
 						version: 'In development',
 						layers: [
 							{
 								name: 'Http',
 								detail: 'controllers, requests, resources',
-								rule: 'Validates input with requests, responds with resources and delegates to a use case. No business rule lives here.',
+								rule: 'Validates input with requests, responds with resources and delegates to a use case, with no deep business rules.',
 								dependsOn: [1],
 							},
 							{
 								name: 'Application',
 								detail: 'use cases and transactions',
-								rule: 'Runs each use case inside its transaction. Other modules only come in through its public Actions and Queries.',
-								dependsOn: [2],
+								rule: 'Runs each use case inside its transaction and persists through Infrastructure. Other modules only come in through its public Actions and Queries.',
+								dependsOn: [2, 3],
 							},
 							{
 								name: 'Domain',
 								detail: 'business rules',
-								rule: 'Not on the framework either: the other layers depend on it, never the other way around.',
+								rule: 'No HTTP, DB, Auth or Eloquent: the other layers depend on it, never the other way around.',
 								dependsOn: [],
 							},
 							{
 								name: 'Infrastructure',
 								detail: 'persistence and adapters',
-								rule: 'Implements the persistence and adapters the domain asks for. Its dependency points up, toward Domain.',
+								rule: 'Eloquent, optimized queries and adapters. It knows the domain; the domain does not know it.',
 								dependsOn: [2],
 							},
 						],

@@ -15,6 +15,7 @@ const year = new Date().getFullYear();
 const newTabLabel = locale === 'es' ? 'se abre en otra pestaña' : 'opens in a new tab';
 const links: { label: string; href: string; icon: IconName; external: boolean }[] = [
 	{ label: 'GitHub', href: social.github.url, icon: 'github', external: true },
+	{ label: 'LinkedIn', href: social.linkedin.url, icon: 'linkedin', external: true },
 	{ label: 'Email', href: `mailto:${social.email}`, icon: 'email', external: false },
 	{ label: 'X', href: social.x.url, icon: 'x', external: true },
 ];

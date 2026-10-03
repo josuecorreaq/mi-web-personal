@@ -27,11 +27,11 @@ interface ProjectTranslation {
 		readonly label: string;
 	}[];
 	readonly evidence: readonly string[];
-	readonly apiSample?: {
+	readonly samples?: readonly {
 		readonly label: string;
 		readonly caption: string;
 		readonly rows: readonly string[];
-	};
+	}[];
 	readonly architecture: {
 		readonly version: string;
 		readonly layers: readonly ArchitectureLayer[];
@@ -66,10 +66,13 @@ const projectDefinitions = [
 			en: 'Disbursement Management System | Josue Correa',
 		},
 		seoDescription: {
-			es: 'Caso de estudio de un sistema financiero con 153 endpoints REST, 21 suites automatizadas y 50 % menos pasos manuales al validar pagos.',
-			en: 'Case study of a financial system with 153 REST endpoints, 21 automated suites, and 50% fewer manual steps in payment validation.',
+			es: 'Caso de estudio de un sistema financiero con 147 endpoints REST, 21 suites automatizadas y 50 % menos pasos manuales al validar pagos.',
+			en: 'Case study of a financial system with 147 REST endpoints, 21 automated suites, and 50% fewer manual steps in payment validation.',
 		},
-		stack: ['Laravel', 'PHP', 'React', 'MySQL', 'REST APIs'],
+		stack: {
+			es: ['Laravel', 'PHP', 'React', 'MySQL', 'APIs REST'],
+			en: ['Laravel', 'PHP', 'React', 'MySQL', 'REST APIs'],
+		},
 	},
 	{
 		id: 'credit-management-platform',
@@ -86,10 +89,13 @@ const projectDefinitions = [
 			en: 'Credit Management Platform | Josue Correa',
 		},
 		seoDescription: {
-			es: 'Caso de estudio de una plataforma crediticia modular con nueve dominios, autorización por tres alcances y contratos para toda la API.',
-			en: 'Case study of a modular credit platform with nine domains, three authorization scopes, and contract coverage for the entire API.',
+			es: 'Caso de estudio de una plataforma crediticia modular con nueve dominios, autorización por tres alcances, contrato de rutas y 110 tests de arquitectura.',
+			en: 'Case study of a modular credit platform with nine domains, three authorization scopes, a route contract, and 110 architecture tests.',
 		},
-		stack: ['Laravel', 'PHP', 'React', 'MySQL', 'Modular monolith'],
+		stack: {
+			es: ['Laravel', 'PHP', 'React', 'MySQL', 'Monolito modular'],
+			en: ['Laravel', 'PHP', 'React', 'MySQL', 'Modular monolith'],
+		},
 	},
 ] as const;
 
@@ -105,7 +111,7 @@ export const projectPageCopy = {
 		evidence: 'Evidencia verificable',
 		result: 'Resultado',
 		resultCopy: 'El valor del proyecto está en convertir reglas operativas dispersas en un sistema trazable, probado y mantenible.',
-		api: 'Contrato técnico',
+		sample: 'Del repositorio',
 		next: 'Siguiente proyecto',
 		contact: '¿Necesitas resolver un proceso similar?',
 		contactCopy: 'Conversemos sobre el flujo, las reglas y la arquitectura que necesita tu sistema.',
@@ -122,7 +128,7 @@ export const projectPageCopy = {
 		evidence: 'Verifiable evidence',
 		result: 'Outcome',
 		resultCopy: 'The project turns scattered operational rules into a traceable, tested, and maintainable system.',
-		api: 'Technical contract',
+		sample: 'From the repository',
 		next: 'Next project',
 		contact: 'Need to solve a similar process?',
 		contactCopy: 'Let’s discuss the workflow, rules, and architecture your system needs.',
@@ -141,7 +147,7 @@ export const getProjects = (locale: Locale): Project[] => {
 		alternatePath: definition.paths[locale === 'es' ? 'en' : 'es'],
 		seoTitle: definition.seoTitle[locale],
 		seoDescription: definition.seoDescription[locale],
-		stack: definition.stack,
+		stack: definition.stack[locale],
 		datePublished: PROJECT_LAST_MODIFIED,
 		dateModified: PROJECT_LAST_MODIFIED,
 	}));

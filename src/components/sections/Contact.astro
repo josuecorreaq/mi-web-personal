@@ -16,12 +16,12 @@ const fieldId = (name: string) => `${locale}-contact-${name}`;
 const statusId = fieldId('status');
 const channels = [
 	{ label: t.contact.email, value: social.email, href: `mailto:${social.email}`, icon: 'email', external: false },
-	{ label: t.contact.linkedin, value: social.linkedin.handle.replace('linkedin.com/', ''), href: social.linkedin.url, icon: 'briefcase', external: true },
+	{ label: t.contact.linkedin, value: social.linkedin.handle.replace('linkedin.com/', ''), href: social.linkedin.url, icon: 'linkedin', external: true },
 	{ label: t.contact.github, value: `@${social.github.handle.replace('github.com/', '')}`, href: social.github.url, icon: 'github', external: true },
+	{ label: t.contact.x, value: `@${social.x.handle.replace('x.com/', '')}`, href: social.x.url, icon: 'x', external: true },
 ] as const;
 const channelLinkClass = 'group flex min-h-22 min-w-0 flex-auto items-center gap-3.5 py-3.5 sm:gap-4.5';
-const channelIconClass =
-	'grid size-10 flex-none place-items-center sm:size-12 border border-on-drench transition-colors duration-200 group-hover:bg-on-drench group-hover:text-drench';
+const channelIconClass = 'grid size-8 flex-none place-items-center sm:size-10';
 const channelValueClass =
 	'block font-display text-[clamp(1rem,1.8vw,1.375rem)] font-medium leading-[1.3] [overflow-wrap:anywhere]';
 const fieldClass =
