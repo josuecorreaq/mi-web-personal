@@ -1,46 +1,211 @@
 ---
+import type { ArchitectureLayer } from '../../data/projects';
+
 interface Props {
-	layers: readonly string[];
+	layers: readonly ArchitectureLayer[];
 	coreLayer: number;
 	caption: string;
 	labels: {
 		readonly architecture: string;
 		readonly layers: string;
+		readonly inspectHint: string;
+		readonly dependsOn: string;
+		readonly noDependencies: string;
 	};
 	class?: string;
 }
 
 const { layers, coreLayer, caption, labels, class: className } = Astro.props;
+// Build-time id so each figure's buttons point at their own rule panels.
+const uid = `arch-${Math.random().toString(36).slice(2, 8)}`;
+// Every dependency here sits between adjacent layers, so the connector above each row
+// shows its direction: down when the upper layer depends on the lower one, up for the reverse.
 const rows = layers.map((layer, index) => {
-	const [name, detail] = layer.split(' · ');
-	return { name, detail, isCore: index === coreLayer };
+	const previous = layers[index - 1];
+	const edge = !previous
+		? null
+		: previous.dependsOn.includes(index)
+			? { from: index - 1, direction: 'down' as const }
+			: layer.dependsOn.includes(index - 1)
+				? { from: index, direction: 'up' as const }
+				: { from: null, direction: null };
+	return {
+		...layer,
+		isCore: index === coreLayer,
+		edge,
+		dependencyNames: layer.dependsOn.map((dependency) => layers[dependency]?.name).filter(Boolean),
+	};
 });
+const ease = 'ease-[cubic-bezier(0.25,1,0.5,1)] motion-reduce:transition-none';
 ---
 
-<figure class:list={['m-0 min-w-0 border border-line', className]}>
+<figure class:list={['m-0 min-w-0 border border-line', className]} data-architecture>
 	<div class="flex justify-between gap-3 border-b border-line px-4 py-3 font-mono text-[0.78rem] text-muted">
 		<span>{labels.architecture}</span>
 		<span>{rows.length} {labels.layers}</span>
 	</div>
-	<ol class="p-[clamp(1rem,2.4vw,1.75rem)]">
+	<ol class="p-[clamp(1rem,2.4vw,1.75rem)]" data-architecture-layers>
 		{rows.map((row, index) => (
 			<li
-				class:list={[
-					'flex min-h-13 flex-wrap items-center justify-between gap-x-4 gap-y-0.5 border px-4 py-2 font-mono text-[0.84rem]',
-					index > 0 && 'relative mt-3.5 before:absolute before:-top-3.5 before:left-7 before:h-3.5 before:w-px before:bg-line',
-					row.isCore ? 'border-brand bg-brand font-semibold text-on-brand' : 'border-line',
-				]}
+				class:list={['relative', index > 0 && 'mt-5']}
 				data-animate-reveal="up"
 				data-animate-reveal-delay={index * 90}
 			>
-				<span>{row.name}</span>
-				{row.detail && (
-					<span class:list={['text-[0.78rem]', row.isCore ? 'font-normal' : 'text-muted']}>{row.detail}</span>
+				{row.edge && (
+					<span
+						class:list={[
+							'absolute -top-5 left-7 flex h-5 w-3 -translate-x-1/2 text-field transition-[color,opacity] duration-200',
+							'data-[state=active]:text-accent data-[state=dimmed]:opacity-35',
+							ease,
+						]}
+						data-edge-from={row.edge.from ?? ''}
+						data-state="idle"
+						aria-hidden="true"
+					>
+						<svg class="size-full overflow-visible" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square">
+							<path d="M6 0v20" />
+							{row.edge.direction === 'down' && <path d="M2.5 15.5 6 19l3.5-3.5" />}
+							{row.edge.direction === 'up' && <path d="M2.5 4.5 6 1l3.5 3.5" />}
+						</svg>
+					</span>
 				)}
+				<button
+					type="button"
+					class:list={[
+						'flex min-h-13 w-full touch-manipulation flex-wrap items-center justify-between gap-x-4 gap-y-0.5 border px-4 py-2 text-left font-mono text-[0.84rem]',
+						'transition-[background-color,border-color,opacity] duration-200 data-[state=dimmed]:opacity-40',
+						row.isCore
+							? 'border-brand bg-brand font-semibold text-on-brand hover:bg-brand-hover data-[state=dependency]:border-accent'
+							: 'border-line hover:border-field data-[state=active]:border-ink data-[state=dependency]:border-accent',
+						ease,
+					]}
+					data-layer={index}
+					data-depends-on={row.dependsOn.join(',')}
+					data-state="idle"
+					aria-pressed="false"
+					aria-describedby={`${uid}-rule-${index}`}
+				>
+					<span>{row.name}</span>
+					{row.detail && (
+						<span class:list={['text-[0.78rem]', row.isCore ? 'font-normal' : 'text-muted']}>{row.detail}</span>
+					)}
+				</button>
 			</li>
 		))}
 	</ol>
-	<figcaption class="border-t border-line px-4 py-3.5 text-sm leading-relaxed text-pretty text-muted">
-		{caption}
+	<figcaption class="grid border-t border-line px-4 py-3.5 text-sm leading-relaxed text-pretty">
+		<div
+			class:list={['col-start-1 row-start-1 invisible opacity-0 transition-[opacity,visibility] duration-200 data-[visible=true]:visible data-[visible=true]:opacity-100', ease]}
+			data-panel="default"
+			data-visible="true"
+		>
+			<p class="mb-1.5 font-mono text-[0.78rem] text-muted" data-architecture-hint hidden>{labels.inspectHint}</p>
+			<p class="text-muted">{caption}</p>
+		</div>
+		{rows.map((row, index) => (
+			<div
+				id={`${uid}-rule-${index}`}
+				class:list={['col-start-1 row-start-1 invisible opacity-0 transition-[opacity,visibility] duration-200 data-[visible=true]:visible data-[visible=true]:opacity-100', ease]}
+				data-panel={index}
+				data-visible="false"
+			>
+				<p class="font-mono text-[0.78rem] text-muted">
+					{row.dependencyNames.length > 0 ? (
+						<>
+							{labels.dependsOn} <span class="text-accent">{row.dependencyNames.join(', ')}</span>
+						</>
+					) : (
+						<span class="text-accent">{labels.noDependencies}</span>
+					)}
+				</p>
+				<p class="mt-1.5">{row.rule}</p>
+			</div>
+		))}
 	</figcaption>
 </figure>
+
+<script>
+	const initializeArchitectureFigures = () => {
+		document.querySelectorAll<HTMLElement>('[data-architecture]').forEach((figure) => {
+			const list = figure.querySelector<HTMLElement>('[data-architecture-layers]');
+			const layers = Array.from(figure.querySelectorAll<HTMLButtonElement>('[data-layer]'));
+			const edges = Array.from(figure.querySelectorAll<HTMLElement>('[data-edge-from]'));
+			const panels = Array.from(figure.querySelectorAll<HTMLElement>('[data-panel]'));
+			if (!list || layers.length === 0) return;
+
+			// The hint only makes sense once the layers actually respond.
+			figure.querySelector<HTMLElement>('[data-architecture-hint]')?.removeAttribute('hidden');
+
+			// `pinned` survives until the visitor taps the layer again; `preview` follows hover and keyboard focus.
+			let pinned: number | null = null;
+			let preview: number | null = null;
+
+			const render = () => {
+				const active = preview ?? pinned;
+				const dependencies = active === null
+					? []
+					: (layers[active].dataset.dependsOn ?? '').split(',').filter(Boolean).map(Number);
+
+				layers.forEach((layer, index) => {
+					layer.dataset.state = active === null
+						? 'idle'
+						: index === active
+							? 'active'
+							: dependencies.includes(index) ? 'dependency' : 'dimmed';
+					layer.setAttribute('aria-pressed', String(index === pinned));
+				});
+				edges.forEach((edge) => {
+					edge.dataset.state = active === null
+						? 'idle'
+						: edge.dataset.edgeFrom === String(active) ? 'active' : 'dimmed';
+				});
+				const visiblePanel = active === null ? 'default' : String(active);
+				panels.forEach((panel) => {
+					panel.dataset.visible = String(panel.dataset.panel === visiblePanel);
+				});
+			};
+
+			layers.forEach((layer, index) => {
+				layer.addEventListener('pointerenter', (event) => {
+					if (event.pointerType === 'touch') return;
+					preview = index;
+					render();
+				});
+				layer.addEventListener('focus', () => {
+					// Touch taps also focus the button; only keyboard focus should preview.
+					if (!layer.matches(':focus-visible')) return;
+					preview = index;
+					render();
+				});
+				layer.addEventListener('click', () => {
+					pinned = pinned === index ? null : index;
+					render();
+				});
+				layer.addEventListener('keydown', (event) => {
+					if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+					event.preventDefault();
+					const step = event.key === 'ArrowDown' ? 1 : -1;
+					layers[(index + step + layers.length) % layers.length].focus();
+				});
+			});
+
+			list.addEventListener('pointerleave', () => {
+				preview = null;
+				render();
+			});
+			list.addEventListener('focusout', (event) => {
+				if (list.contains(event.relatedTarget as Node | null)) return;
+				preview = null;
+				render();
+			});
+			figure.addEventListener('keydown', (event) => {
+				if (event.key !== 'Escape' || (preview === null && pinned === null)) return;
+				pinned = null;
+				preview = null;
+				render();
+			});
+		});
+	};
+
+	initializeArchitectureFigures();
+</script>

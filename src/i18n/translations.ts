@@ -189,6 +189,9 @@ const translations = {
 				architecture: 'Arquitectura',
 				layers: 'capas',
 				readCase: 'Leer el caso completo',
+				inspectHint: 'Selecciona una capa para ver de qué depende.',
+				dependsOn: 'Depende de',
+				noDependencies: 'No depende de ninguna capa',
 			},
 			items: [
 				{
@@ -215,11 +218,31 @@ const translations = {
 					architecture: {
 						version: 'Producción',
 						layers: [
-							'HTTP / API',
-							'Casos de uso',
-							'Dominio de desembolsos',
-							'Reglas de negocio',
-							'Persistencia y auditoría',
+							{
+								name: 'HTTP / API',
+								rule: 'Expone los 153 endpoints REST sobre sesión JWT y entrega cada petición a un caso de uso, sin decidir nada del negocio.',
+								dependsOn: [1],
+							},
+							{
+								name: 'Casos de uso',
+								rule: 'Coordina cada operación de principio a fin (desembolso, pago, cuota, reprogramación) apoyándose en el dominio.',
+								dependsOn: [2],
+							},
+							{
+								name: 'Dominio de desembolsos',
+								rule: 'Modela préstamos, pagos, cuotas, cartera y moras: el centro que el resto del sistema rodea.',
+								dependsOn: [3],
+							},
+							{
+								name: 'Reglas de negocio',
+								rule: 'Reúne las validaciones de pagos que antes se hacían a mano, para que se apliquen siempre igual.',
+								dependsOn: [4],
+							},
+							{
+								name: 'Persistencia y auditoría',
+								rule: 'Guarda cada operación con fecha y responsable; los reportes financieros salen de estos registros.',
+								dependsOn: [],
+							},
 						],
 					},
 				},
@@ -263,10 +286,30 @@ const translations = {
 					architecture: {
 						version: 'En desarrollo',
 						layers: [
-							'Http · controllers, requests, resources',
-							'Application · casos de uso y transacciones',
-							'Domain · reglas de negocio',
-							'Infrastructure · persistencia y adapters',
+							{
+								name: 'Http',
+								detail: 'controllers, requests, resources',
+								rule: 'Valida la entrada con requests, responde con resources y delega en un caso de uso. Aquí no vive ninguna regla de negocio.',
+								dependsOn: [1],
+							},
+							{
+								name: 'Application',
+								detail: 'casos de uso y transacciones',
+								rule: 'Ejecuta cada caso de uso dentro de su transacción. Otros módulos solo entran por sus Actions y Queries públicas.',
+								dependsOn: [2],
+							},
+							{
+								name: 'Domain',
+								detail: 'reglas de negocio',
+								rule: 'Tampoco depende del framework: las demás capas dependen de ella, nunca al revés.',
+								dependsOn: [],
+							},
+							{
+								name: 'Infrastructure',
+								detail: 'persistencia y adapters',
+								rule: 'Implementa la persistencia y los adapters que pide el dominio. Su dependencia apunta hacia arriba, hacia Domain.',
+								dependsOn: [2],
+							},
 						],
 					},
 				},
@@ -499,6 +542,9 @@ const translations = {
 				architecture: 'Architecture',
 				layers: 'layers',
 				readCase: 'Read the full case study',
+				inspectHint: 'Select a layer to see what it depends on.',
+				dependsOn: 'Depends on',
+				noDependencies: 'Depends on no other layer',
 			},
 			items: [
 				{
@@ -525,11 +571,31 @@ const translations = {
 					architecture: {
 						version: 'Production',
 						layers: [
-							'HTTP / API',
-							'Use cases',
-							'Disbursements domain',
-							'Business rules',
-							'Persistence and audit',
+							{
+								name: 'HTTP / API',
+								rule: 'Exposes the 153 REST endpoints behind a JWT session and hands each request to a use case, without making any business decision.',
+								dependsOn: [1],
+							},
+							{
+								name: 'Use cases',
+								rule: 'Coordinates each operation end to end (disbursement, payment, installment, rescheduling) on top of the domain.',
+								dependsOn: [2],
+							},
+							{
+								name: 'Disbursements domain',
+								rule: 'Models loans, payments, installments, portfolio and arrears: the core the rest of the system wraps around.',
+								dependsOn: [3],
+							},
+							{
+								name: 'Business rules',
+								rule: 'Gathers the payment checks that used to be done by hand, so they are always applied the same way.',
+								dependsOn: [4],
+							},
+							{
+								name: 'Persistence and audit',
+								rule: 'Stores every operation with its date and owner; financial reports are built from these records.',
+								dependsOn: [],
+							},
 						],
 					},
 				},
@@ -573,10 +639,30 @@ const translations = {
 					architecture: {
 						version: 'In development',
 						layers: [
-							'Http · controllers, requests, resources',
-							'Application · use cases and transactions',
-							'Domain · business rules',
-							'Infrastructure · persistence and adapters',
+							{
+								name: 'Http',
+								detail: 'controllers, requests, resources',
+								rule: 'Validates input with requests, responds with resources and delegates to a use case. No business rule lives here.',
+								dependsOn: [1],
+							},
+							{
+								name: 'Application',
+								detail: 'use cases and transactions',
+								rule: 'Runs each use case inside its transaction. Other modules only come in through its public Actions and Queries.',
+								dependsOn: [2],
+							},
+							{
+								name: 'Domain',
+								detail: 'business rules',
+								rule: 'Not on the framework either: the other layers depend on it, never the other way around.',
+								dependsOn: [],
+							},
+							{
+								name: 'Infrastructure',
+								detail: 'persistence and adapters',
+								rule: 'Implements the persistence and adapters the domain asks for. Its dependency points up, toward Domain.',
+								dependsOn: [2],
+							},
 						],
 					},
 				},

@@ -3,6 +3,15 @@ import { useTranslations } from '../i18n/translations';
 
 export const PROJECT_LAST_MODIFIED = '2026-08-28';
 
+export interface ArchitectureLayer {
+	readonly name: string;
+	readonly detail?: string;
+	/** What the layer owns, shown when a visitor inspects it in the diagram. */
+	readonly rule: string;
+	/** Indexes of the layers this one depends on. */
+	readonly dependsOn: readonly number[];
+}
+
 interface ProjectTranslation {
 	readonly name: string;
 	readonly year: string;
@@ -25,7 +34,7 @@ interface ProjectTranslation {
 	};
 	readonly architecture: {
 		readonly version: string;
-		readonly layers: readonly string[];
+		readonly layers: readonly ArchitectureLayer[];
 	};
 }
 
