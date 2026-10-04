@@ -10,9 +10,9 @@ interface Props {
 const { locale } = Astro.props;
 const t = useTranslations(locale).hero;
 const leadClass =
-	'ml-(--optical-inset) max-w-[14em] font-display text-[length:clamp(2rem,min(5.2vw,7.8svh),4.75rem)] font-medium leading-[1.06] tracking-[-0.03em] text-balance';
+	'ml-(--optical-inset) max-w-[14em] font-display text-[length:clamp(2rem,min(5.2vw,7.8svh),4.75rem)] font-heading leading-[1.06] tracking-[-0.03em] text-balance';
 const statementClass =
-	'ml-(--optical-inset) mt-[clamp(0.75rem,2svh,1.25rem)] max-w-[19em] font-display text-[length:clamp(1.625rem,min(3.8vw,5.8svh),3.5rem)] font-medium leading-[1.12] tracking-[-0.025em] text-balance text-muted';
+	'ml-(--optical-inset) mt-[clamp(0.75rem,2svh,1.25rem)] max-w-[19em] font-display text-[length:clamp(1.625rem,min(3.8vw,5.8svh),3.5rem)] font-heading leading-[1.12] tracking-[-0.025em] text-balance text-muted';
 ---
 
 <section id="inicio" class="page-shell flex flex-col justify-center lg:min-h-[calc(100svh-7.5rem)]">
@@ -40,7 +40,7 @@ const statementClass =
 				{t.lead}
 			</h1>
 			<p class={statementClass} data-animate-reveal="up" data-animate-reveal-delay="260">
-				{t.statement}{' '}<mark class="whitespace-nowrap bg-transparent px-[0.06em] text-accent light:bg-brand light:text-on-brand">{t.statementMark}</mark>.
+				{t.statement}{' '}<mark class="whitespace-nowrap bg-transparent px-[0.06em] text-accent">{t.statementMark}</mark>.
 			</p>
 		</div>
 	</div>
