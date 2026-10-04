@@ -24,6 +24,7 @@ const { project, labels, reversed = false, divided = false } = Astro.props;
 ---
 
 <article
+	id={project.slug}
 	class:list={[
 		'flex flex-wrap items-start gap-x-18 gap-y-10',
 		divided && 'border-t border-line pt-block',
@@ -37,8 +38,9 @@ const { project, labels, reversed = false, divided = false } = Astro.props;
 			emphasizeFirst
 		/>
 		<h3
-			class="mt-4.5 text-balance font-display text-[clamp(1.875rem,3.4vw,2.75rem)] font-medium leading-[1.08] tracking-[-0.025em]"
+			class="mt-4.5 text-balance font-display text-[clamp(1.875rem,3.4vw,2.75rem)] font-heading leading-[1.08] tracking-[-0.025em]"
 			data-animate-text="words"
+			data-project-path={project.path}
 		>
 			{project.name}
 		</h3>
@@ -48,7 +50,7 @@ const { project, labels, reversed = false, divided = false } = Astro.props;
 			{project.metrics.map((metric) => (
 				<div class="flex items-center gap-5 border-b border-line py-3 sm:items-baseline">
 					<dt class="order-2 min-w-0 text-pretty text-[0.9375rem] leading-snug text-muted">{metric.label}</dt>
-					<dd class="order-1 w-24 shrink-0 font-display text-[1.625rem] font-medium leading-tight tabular-nums">
+					<dd class="order-1 w-24 shrink-0 font-display text-[1.625rem] font-heading leading-tight tabular-nums">
 						{metric.value}
 					</dd>
 				</div>
@@ -57,11 +59,14 @@ const { project, labels, reversed = false, divided = false } = Astro.props;
 
 		<a
 			href={project.path}
-			class="mt-6 inline-flex min-h-11 items-center gap-2 font-mono text-sm font-semibold text-ink underline decoration-accent decoration-2 underline-offset-[6px] transition-colors hover:text-accent"
+			class="group mt-6 inline-flex min-h-11 items-center gap-2 font-mono text-sm font-semibold text-ink transition-colors hover:text-accent"
 			aria-label={`${labels.readCase}: ${project.name}`}
 		>
-			{labels.readCase}
-			<Icon name="arrow-right" class="size-4 shrink-0" />
+			{/* Same drawn rule as the contact channels: it runs toward the arrow on hover. */}
+			<span class="link-rule">
+				{labels.readCase}
+			</span>
+			<Icon name="arrow-right" class="size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-[3px]" />
 		</a>
 	</div>
 

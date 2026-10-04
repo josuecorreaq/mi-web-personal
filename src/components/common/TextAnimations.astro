@@ -8,10 +8,18 @@
 
 		if (!text) return [];
 
-		const accessibleText = document.createElement('span');
-		accessibleText.className = 'text-animation-accessible';
-		accessibleText.textContent = text;
-		element.replaceChildren(accessibleText);
+		// Headings take their accessible name from aria-label, so the text stays in the page once, in the
+		// units below; a hidden copy would repeat it for search engines and find-in-page. Other elements
+		// can't be named that way and keep a visually hidden copy.
+		if (/^H[1-6]$/.test(element.tagName)) {
+			element.setAttribute('aria-label', text);
+			element.replaceChildren();
+		} else {
+			const accessibleText = document.createElement('span');
+			accessibleText.className = 'text-animation-accessible';
+			accessibleText.textContent = text;
+			element.replaceChildren(accessibleText);
+		}
 
 		let animatedIndex = 0;
 		const units: HTMLElement[] = [];
@@ -131,9 +139,10 @@
 	const initializeTextAnimations = () => {
 		if (reduceMotion.matches) return;
 
+		// A page transition may already have settled a title in place (see BaseLayout).
 		const elements = Array.from(
 			document.querySelectorAll<HTMLElement>('[data-animate-text]'),
-		);
+		).filter((element) => element.dataset.textAnimationState !== 'complete');
 
 		elements.forEach((element) => {
 			element.dataset.textAnimationState = 'pending';

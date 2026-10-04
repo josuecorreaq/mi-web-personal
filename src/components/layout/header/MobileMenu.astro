@@ -27,14 +27,15 @@ const t = useTranslations(locale);
 			{items.map((item) => (
 				<li>
 					<a
-						class="mobile-menu-link"
+						class="mobile-menu-link group"
 						href={item.href}
 						data-scroll-target={item.scrollTarget}
 						data-nav-link={item.id}
 						data-mobile-menu-link
+						aria-current={item.current ? 'true' : undefined}
 					>
 						{item.label}
-						<Icon name="arrow-right" class="size-4 shrink-0 text-muted" />
+						<Icon name="arrow-right" class="size-4 shrink-0 text-muted transition-transform duration-200 group-hover:translate-x-[3px]" />
 					</a>
 				</li>
 			))}
@@ -164,7 +165,7 @@ const t = useTranslations(locale);
 		color: var(--color-muted);
 		font-family: var(--font-display);
 		font-size: 1.375rem;
-		font-weight: 500;
+		font-weight: var(--font-weight-heading);
 		transition:
 			background-color 160ms ease,
 			color 160ms ease;
@@ -207,6 +208,25 @@ const t = useTranslations(locale);
 
 		.mobile-menu-link:hover {
 			color: var(--color-ink);
+		}
+	}
+
+	/* The links follow the panel down one after another, 30ms apart. */
+	@media (prefers-reduced-motion: no-preference) {
+		.mobile-menu-panel li {
+			animation: mobile-menu-in 200ms var(--nav-ease) backwards;
+		}
+
+		.mobile-menu-panel li:nth-child(n + 2) {
+			animation-delay: 30ms;
+		}
+
+		.mobile-menu-panel li:nth-child(n + 3) {
+			animation-delay: 60ms;
+		}
+
+		.mobile-menu-panel li:nth-child(n + 4) {
+			animation-delay: 90ms;
 		}
 	}
 

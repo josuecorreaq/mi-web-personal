@@ -14,9 +14,9 @@ const name = locale === 'es' ? 'Josué Correa' : 'Josue Correa';
 const year = new Date().getFullYear();
 const newTabLabel = locale === 'es' ? 'se abre en otra pestaña' : 'opens in a new tab';
 const links: { label: string; href: string; icon: IconName; external: boolean }[] = [
+	{ label: 'Email', href: `mailto:${social.email}`, icon: 'email', external: false },
 	{ label: 'GitHub', href: social.github.url, icon: 'github', external: true },
 	{ label: 'LinkedIn', href: social.linkedin.url, icon: 'linkedin', external: true },
-	{ label: 'Email', href: `mailto:${social.email}`, icon: 'email', external: false },
 	{ label: 'X', href: social.x.url, icon: 'x', external: true },
 ];
 ---
@@ -38,11 +38,12 @@ const links: { label: string; href: string; icon: IconName; external: boolean }[
 						rel={link.external ? 'noopener noreferrer' : undefined}
 						title={link.label}
 						class:list={[
-							'inline-flex size-11 items-center justify-center transition-[color,opacity]',
+							'group inline-flex size-11 items-center justify-center transition-[color,opacity]',
 							tone === 'plain' ? 'hover:text-ink' : 'hover:opacity-70',
 						]}
 					>
-						<Icon name={link.icon} class="size-[1.125rem]" />
+						{/* The mark lifts by the same 3px the arrow links nudge. */}
+						<Icon name={link.icon} class="size-[1.125rem] transition-transform duration-200 group-hover:-translate-y-[3px]" />
 						<span class="sr-only">
 							{link.label}
 							{link.external && `, ${newTabLabel}`}

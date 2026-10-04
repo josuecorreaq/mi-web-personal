@@ -24,18 +24,19 @@ const nextProject = getNextProject(locale, project.id);
 // Each block below reads like a row of the landing's experience list: title on the left, content on the right.
 const rowClass = 'flex flex-wrap items-start gap-x-16 gap-y-5';
 const rowTitleClass =
-	'min-w-0 flex-[0_1_20rem] text-balance font-display text-[clamp(1.5rem,2.4vw,1.875rem)] font-medium leading-[1.15] tracking-[-0.02em]';
+	'min-w-0 flex-[0_1_20rem] text-balance font-display text-[clamp(1.5rem,2.4vw,1.875rem)] font-heading leading-[1.15] tracking-[-0.02em]';
 const rowBodyClass = 'min-w-0 flex-[1_1_32rem]';
 const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
 ---
 
 <article>
 	<header class="page-shell pb-section pt-[clamp(1.5rem,4vw,3rem)]">
+		{/* Back to this project's own entry, so the title has a card to return to. */}
 		<a
-			href={`${homePath}#proyectos`}
-			class="inline-flex min-h-11 items-center gap-2 font-mono text-[0.8125rem] text-muted transition-colors hover:text-accent"
+			href={`${homePath}#${project.slug}`}
+			class="group inline-flex min-h-11 items-center gap-2 font-mono text-[0.8125rem] text-muted transition-colors hover:text-accent"
 		>
-			<ArrowLeft class="size-4" aria-hidden="true" stroke-width={1.8} />
+			<ArrowLeft class="size-4 transition-transform duration-200 group-hover:-translate-x-[3px]" aria-hidden="true" stroke-width={1.8} />
 			{copy.back}
 		</a>
 
@@ -45,13 +46,14 @@ const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
 			emphasizeFirst
 		/>
 		<h1
-			class="ml-(--optical-inset) mt-4.5 max-w-[16em] text-balance font-display text-[clamp(2.25rem,5vw,4.25rem)] font-medium leading-[1.06] tracking-[-0.03em]"
+			class="ml-(--optical-inset) mt-4.5 max-w-[16em] text-balance font-display text-[clamp(2.25rem,5vw,4.25rem)] font-heading leading-[1.06] tracking-[-0.03em]"
 			data-animate-text="words"
+			data-project-path={project.path}
 		>
 			{project.name}
 		</h1>
 		<p
-			class="mt-[clamp(0.75rem,2vw,1.25rem)] max-w-[32em] text-pretty font-display text-[clamp(1.25rem,2.2vw,1.75rem)] font-medium leading-[1.3] tracking-[-0.015em] text-muted"
+			class="mt-[clamp(0.75rem,2vw,1.25rem)] max-w-[32em] text-pretty font-display text-[clamp(1.25rem,2.2vw,1.75rem)] font-heading leading-[1.3] tracking-[-0.015em] text-muted"
 			data-animate-reveal="up"
 			data-animate-reveal-delay="200"
 		>
@@ -77,7 +79,7 @@ const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
 			{project.metrics.map((metric) => (
 				<div class="flex min-w-0 flex-[1_1_14rem] flex-col gap-2 bg-canvas px-5 py-5.5">
 					<dt class="order-2 max-w-[18em] text-pretty text-[0.9375rem] leading-snug text-muted">{metric.label}</dt>
-					<dd class="order-1 font-display text-[clamp(2rem,3.4vw,2.75rem)] font-medium leading-none tracking-[-0.02em] tabular-nums">
+					<dd class="order-1 font-display text-[clamp(2rem,3.4vw,2.75rem)] font-heading leading-none tracking-[-0.02em] tabular-nums">
 						{metric.value}
 					</dd>
 				</div>
@@ -159,7 +161,10 @@ const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
 			>
 				<span class="min-w-0">
 					<span class="block font-mono text-[0.78rem] text-muted">{copy.next}</span>
-					<span class="mt-1 block text-balance font-display text-[clamp(1.25rem,2.4vw,1.75rem)] font-medium leading-tight tracking-[-0.015em] transition-colors group-hover:text-accent">
+					<span
+						class="mt-1 block text-balance font-display text-[clamp(1.25rem,2.4vw,1.75rem)] font-heading leading-tight tracking-[-0.015em] underline decoration-transparent decoration-[3px] underline-offset-[6px] transition-colors group-hover:text-accent light:group-hover:decoration-brand"
+						data-project-path={nextProject.path}
+					>
 						{nextProject.name}
 					</span>
 				</span>
@@ -172,7 +177,7 @@ const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
 		<div class="page-shell py-section">
 			<h2
 				id="project-contact"
-				class="max-w-[14em] text-balance font-display text-[clamp(2rem,4.6vw,3.75rem)] font-medium leading-[1.05] tracking-[-0.03em]"
+				class="max-w-[14em] text-balance font-display text-[clamp(2rem,4.6vw,3.75rem)] font-heading leading-[1.05] tracking-[-0.03em]"
 				data-animate-text="words"
 			>
 				{copy.contact}
@@ -181,10 +186,10 @@ const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
 				<p class="max-w-[34em] text-pretty text-lg leading-[1.7] text-drench-muted">{copy.contactCopy}</p>
 				<a
 					href={`${homePath}#contacto`}
-					class="inline-flex min-h-12 items-center gap-2.5 border border-on-drench bg-on-drench px-5.5 font-mono text-sm font-semibold text-drench transition-[opacity,translate] hover:opacity-90 active:translate-y-px"
+					class="group inline-flex min-h-12 items-center gap-2.5 border border-on-drench bg-on-drench px-5.5 font-mono text-sm font-semibold text-drench transition-[opacity,translate] hover:opacity-90 active:translate-y-px"
 				>
 					{copy.contactAction}
-					<Icon name="arrow-right" class="size-4 shrink-0" />
+					<Icon name="arrow-right" class="size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-[3px]" />
 				</a>
 			</div>
 		</div>

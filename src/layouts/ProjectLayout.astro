@@ -53,7 +53,7 @@ const structuredData = createProjectSchema({
 	<a class="skip-link" href="#contenido">
 		{locale === 'es' ? 'Saltar al contenido' : 'Skip to content'}
 	</a>
-	<Header locale={locale} isLanding={false} alternatePath={project.alternatePath} />
+	<Header locale={locale} isLanding={false} alternatePath={project.alternatePath} currentSection="proyectos" />
 	<main id="contenido" tabindex="-1">
 		<slot />
 	</main>

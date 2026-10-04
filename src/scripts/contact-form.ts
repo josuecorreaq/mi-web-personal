@@ -137,6 +137,7 @@ const bindContactForm = (form: HTMLFormElement) => {
 	const modalMessage = form.querySelector<HTMLElement>('[data-contact-modal-message]');
 	const modalSuccessIcon = form.querySelector<HTMLElement>('[data-contact-modal-success-icon]');
 	const modalErrorIcon = form.querySelector<HTMLElement>('[data-contact-modal-error-icon]');
+	const modalEmail = form.querySelector<HTMLElement>('[data-contact-modal-email]');
 	const modalClose = form.querySelector<HTMLButtonElement>('[data-contact-modal-close]');
 	const submitLabel = form.dataset.submitLabel ?? submitText?.textContent ?? '';
 	const sendingLabel = form.dataset.sendingLabel ?? submitLabel;
@@ -160,6 +161,11 @@ const bindContactForm = (form: HTMLFormElement) => {
 		modalMessage.textContent = safeMessage;
 		modalSuccessIcon.hidden = type !== 'success';
 		modalErrorIcon.hidden = type !== 'error';
+
+		// Every failure leaves a direct way to write, whatever stopped the form.
+		if (modalEmail) {
+			modalEmail.hidden = type !== 'error';
+		}
 		setSubmitting(false);
 		submitButton?.focus();
 		modal.showModal();

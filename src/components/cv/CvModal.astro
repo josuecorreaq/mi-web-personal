@@ -1,7 +1,6 @@
 ---
 import type { Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
-import CvDocument from './CvDocument.astro';
 import Icon from '../common/Icon.astro';
 
 interface Props {
@@ -33,7 +32,15 @@ const titleId = `${locale}-cv-modal-title`;
 		</button>
 	</div>
 
-	<div class="overflow-y-auto overscroll-contain p-5 sm:p-8">
-		<CvDocument locale={locale} />
+	{/* The CV itself comes from the page partial in src/pages/partials/cv, fetched by src/scripts/cv-modal.ts. */}
+	<div
+		class="overflow-y-auto overscroll-contain p-5 sm:p-8"
+		aria-busy="true"
+		data-cv-content
+		data-src={`/partials/cv/${locale}/`}
+		data-loading-message={cv.loading}
+		data-error-message={cv.loadError}
+	>
+		<p class="font-mono text-[0.8125rem] text-muted" role="status" data-cv-status>{cv.loading}</p>
 	</div>
 </dialog>
