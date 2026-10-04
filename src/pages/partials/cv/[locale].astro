@@ -1,0 +1,23 @@
+---
+import CvDocument from '../../../components/cv/CvDocument.astro';
+import { languages, type Locale } from '../../../i18n/config';
+
+// A page partial: the CV dialog fetches this markup the first time someone reaches for it, so the
+// pages themselves don't carry the whole CV. public/.htaccess keeps /partials/ out of the index.
+export const partial = true;
+
+export function getStaticPaths() {
+	return (Object.keys(languages) as Locale[]).map((locale) => ({
+		params: { locale },
+		props: { locale },
+	}));
+}
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<CvDocument locale={locale} />

@@ -21,8 +21,17 @@ const t = useTranslations(locale);
 					href={item.href}
 					data-scroll-target={item.scrollTarget}
 					data-nav-link={item.id}
+					aria-current={item.current ? 'true' : undefined}
+					aria-label={item.label}
 				>
-					<span class="nav-link-label">{item.label}</span>
+					<span class="nav-link-label">
+						{/* data-out is each letter's turn to roll back; the script reshuffles it, and without it they leave right to left. */}
+						<span class="nav-link-letters" aria-hidden="true">
+							{Array.from(item.label).map((letter, index, letters) => (
+								<span class="nav-link-letter" data-out={letters.length - 1 - index}>{letter}</span>
+							))}
+						</span>
+					</span>
 				</a>
 			</li>
 		))}
@@ -53,14 +62,12 @@ const t = useTranslations(locale);
 		content: '';
 	}
 
-	/* Hover preview: a neutral mark. */
+	/* Hover preview: a neutral mark drawn from the left, like the rule under the site's text links. */
 	.nav-link::before {
 		background: var(--color-muted);
-		opacity: 0;
-		transform: scaleX(0.4);
-		transition:
-			opacity 160ms ease,
-			transform 200ms var(--nav-ease);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 200ms var(--nav-ease);
 	}
 
 	/* Current section: the accent mark hands off between links in the scroll direction. */
@@ -85,12 +92,44 @@ const t = useTranslations(locale);
 		transform-origin: right;
 	}
 
+	/* A split-flap board turning over: on hover the letters roll up one after another from left to
+	   right and their copies roll in from below; on leave they roll back down in a scattered order.
+	   The text lands where it was, so the nav never shifts. A 1.1 line box is the shortest that
+	   keeps Geist Mono's ink, the descender of y included, inside the clip at either end. */
+	.nav-link-letters {
+		display: inline-flex;
+		overflow: hidden;
+		line-height: 1.1;
+	}
+
+	.nav-link-letter {
+		white-space: pre;
+		/* The copy is the letter's own shadow, one line box below. */
+		text-shadow: 0 1.1em 0 currentColor;
+		transition: transform 400ms cubic-bezier(0.84, 0, 0.16, 1);
+		/* A quintic in-out (GSAP's power4.inOut) traced point by point; no cubic-bezier gets within 3% of
+		   it. Browsers without linear() keep the closest cubic-bezier above. */
+		transition-timing-function: linear(0, 0 4.17%, 0.0001 8.33%, 0.0005 12.5%, 0.0021 16.67%, 0.0063 20.83%, 0.0156 25%, 0.0338 29.17%, 0.0658 33.33%, 0.1187 37.5%, 0.2009 41.67%, 0.3236 45.83%, 0.5 50%, 0.6764 54.17%, 0.7991 58.33%, 0.8813 62.5%, 0.9342 66.67%, 0.9662 70.83%, 0.9844 75%, 0.9937 79.17%, 0.9979 83.33%, 0.9995 87.5%, 0.9999 91.67%, 1 95.83%, 1);
+	}
+
+	/* Leaving: each letter waits for its turn in the shuffled order. */
+	.nav-link-letter[data-out='1'] { transition-delay: 30ms; }
+	.nav-link-letter[data-out='2'] { transition-delay: 60ms; }
+	.nav-link-letter[data-out='3'] { transition-delay: 90ms; }
+	.nav-link-letter[data-out='4'] { transition-delay: 120ms; }
+	.nav-link-letter[data-out='5'] { transition-delay: 150ms; }
+	.nav-link-letter[data-out='6'] { transition-delay: 180ms; }
+	.nav-link-letter[data-out='7'] { transition-delay: 210ms; }
+	.nav-link-letter[data-out='8'] { transition-delay: 240ms; }
+	.nav-link-letter[data-out='9'] { transition-delay: 270ms; }
+	.nav-link-letter[data-out='10'] { transition-delay: 300ms; }
+	.nav-link-letter[data-out='11'] { transition-delay: 330ms; }
+
 	.nav-link:focus-visible {
 		outline: none;
 	}
 
 	.nav-link:focus-visible::before {
-		opacity: 1;
 		transform: none;
 	}
 
@@ -105,8 +144,47 @@ const t = useTranslations(locale);
 		}
 
 		.nav-link:hover::before {
-			opacity: 1;
 			transform: none;
 		}
+
+		/* Entering: left to right, like the rule drawing underneath, and a little slower than leaving. */
+		.nav-link:hover .nav-link-letter {
+			transform: translateY(-100%);
+			transition-duration: 500ms;
+			transition-delay: 0ms;
+		}
+
+		.nav-link:hover .nav-link-letter:nth-child(2) { transition-delay: 30ms; }
+		.nav-link:hover .nav-link-letter:nth-child(3) { transition-delay: 60ms; }
+		.nav-link:hover .nav-link-letter:nth-child(4) { transition-delay: 90ms; }
+		.nav-link:hover .nav-link-letter:nth-child(5) { transition-delay: 120ms; }
+		.nav-link:hover .nav-link-letter:nth-child(6) { transition-delay: 150ms; }
+		.nav-link:hover .nav-link-letter:nth-child(7) { transition-delay: 180ms; }
+		.nav-link:hover .nav-link-letter:nth-child(8) { transition-delay: 210ms; }
+		.nav-link:hover .nav-link-letter:nth-child(9) { transition-delay: 240ms; }
+		.nav-link:hover .nav-link-letter:nth-child(10) { transition-delay: 270ms; }
+		.nav-link:hover .nav-link-letter:nth-child(11) { transition-delay: 300ms; }
+		.nav-link:hover .nav-link-letter:nth-child(n + 12) { transition-delay: 330ms; }
 	}
 </style>
+
+<script>
+	// Every hover deals the letters a new exit order, so leaving never repeats the same pattern.
+	// Only data-out changes here; the delays live in the CSS above.
+	document.querySelectorAll<HTMLElement>('[data-nav] .nav-link').forEach((link) => {
+		const letters = Array.from(link.querySelectorAll<HTMLElement>('.nav-link-letter'));
+
+		link.addEventListener('pointerenter', () => {
+			const turns = letters.map((_, index) => index);
+
+			for (let index = turns.length - 1; index > 0; index--) {
+				const swap = Math.floor(Math.random() * (index + 1));
+				[turns[index], turns[swap]] = [turns[swap], turns[index]];
+			}
+
+			letters.forEach((letter, index) => {
+				letter.dataset.out = String(turns[index]);
+			});
+		});
+	});
+</script>

@@ -54,18 +54,21 @@ const statementClass =
 			<a
 				href="#contacto"
 				data-scroll-target="contacto"
-				class="inline-flex min-h-12 items-center gap-2.5 border border-brand-edge bg-brand px-5.5 font-mono text-sm font-semibold text-on-brand transition-[background-color,translate] hover:bg-brand-hover active:translate-y-px"
+				class="group inline-flex min-h-12 items-center gap-2.5 border border-brand-edge bg-brand px-5.5 font-mono text-sm font-semibold text-on-brand transition-[background-color,translate] hover:bg-brand-hover active:translate-y-px"
 			>
 				{t.contactCta}
-				<Icon name="arrow-right" class="size-4 shrink-0" />
+				<Icon name="arrow-right" class="size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-[3px]" />
 			</a>
 			<a
 				href="#proyectos"
 				data-scroll-target="proyectos"
-				class="inline-flex min-h-12 items-center gap-2 font-mono text-sm font-semibold text-ink underline decoration-line decoration-1 underline-offset-[6px] transition-colors hover:text-accent hover:decoration-accent"
+				class="group inline-flex min-h-12 items-center gap-2 font-mono text-sm font-semibold text-ink transition-colors hover:text-accent"
 			>
-				{t.projectsCta}
-				<Icon name="arrow-down" class="size-4 shrink-0" />
+				{/* Next to the primary button it keeps a hairline at rest; on hover the drawn rule of the other text links runs over it. */}
+				<span class="link-rule link-rule-rest">
+					{t.projectsCta}
+				</span>
+				<Icon name="arrow-down" class="size-4 shrink-0 transition-transform duration-200 group-hover:translate-y-[3px]" />
 			</a>
 		</div>
 

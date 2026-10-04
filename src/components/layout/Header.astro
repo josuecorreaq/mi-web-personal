@@ -14,9 +14,11 @@ interface Props {
 	locale: Locale;
 	isLanding?: boolean;
 	alternatePath?: string;
+	/** Landing section a separate page belongs to; the landing tracks its sections with the scroll spy instead. */
+	currentSection?: string;
 }
 
-const { locale, isLanding = true, alternatePath } = Astro.props;
+const { locale, isLanding = true, alternatePath, currentSection } = Astro.props;
 const t = useTranslations(locale);
 const basePath = getLocalePath(locale);
 const sectionHref = (targetId: string) =>
@@ -27,7 +29,12 @@ const navItems: NavItem[] = [
 	{ id: 'enfoque', label: t.nav.approach },
 	{ id: 'trayectoria', label: t.nav.trajectory },
 	{ id: 'contacto', label: t.nav.contact },
-].map((item) => ({ ...item, href: sectionHref(item.id), scrollTarget: scrollTarget(item.id) }));
+].map((item) => ({
+	...item,
+	href: sectionHref(item.id),
+	scrollTarget: scrollTarget(item.id),
+	current: !isLanding && item.id === currentSection,
+}));
 ---
 
 <header

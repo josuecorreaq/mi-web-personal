@@ -33,6 +33,7 @@ const labels =
 <script>
 	const root = document.documentElement;
 	const toggles = document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]');
+	let themeTransition: ViewTransition | null = null;
 
 	const setTheme = (theme: 'light' | 'dark') => {
 		root.dataset.theme = theme;
@@ -68,12 +69,21 @@ const labels =
 				return;
 			}
 
+			// El barrido de global.css solo aplica mientras dure esta marca; las navegaciones
+			// entre páginas conservan el fundido.
+			root.dataset.themeSwitch = '';
 			const transition = document.startViewTransition(() => setTheme(nextTheme));
+			themeTransition = transition;
 
 			// El navegador rechaza la transición si la pestaña está oculta o si otra la
 			// interrumpe. El tema ya se aplicó; solo hay que evitar el rechazo sin capturar.
 			transition.ready.catch(() => {});
-			transition.finished.catch(() => {});
+			transition.finished
+				.catch(() => {})
+				.finally(() => {
+					// Un segundo clic rápido reemplaza la transición; la marca es de la vigente.
+					if (themeTransition === transition) delete root.dataset.themeSwitch;
+				});
 		});
 	});
 

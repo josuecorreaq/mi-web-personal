@@ -41,6 +41,42 @@
 	--font-body: "TASA Orbiter", ui-sans-serif, system-ui, sans-serif;
 	--font-mono: "Geist Mono", ui-monospace, monospace;
 	--font-weight-heading: 640;
+	--ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Text links draw a rule under their label toward the arrow on hover. The link carries `group` and
+   the label `link-rule`; secondary links beside a button add `link-rule-rest`, a hairline at rest. */
+@utility link-rule {
+	position: relative;
+
+	&::after {
+		position: absolute;
+		inset-inline: 0;
+		bottom: -0.25rem;
+		height: 2px;
+		background: currentColor;
+		content: '';
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 200ms var(--default-transition-timing-function);
+	}
+
+	@media (hover: hover) {
+		:where(.group):hover &::after {
+			transform: none;
+		}
+	}
+}
+
+@utility link-rule-rest {
+	&::before {
+		position: absolute;
+		inset-inline: 0;
+		bottom: -0.25rem;
+		height: 1px;
+		background: var(--color-line);
+		content: '';
+	}
 }
 
 :root {
@@ -84,6 +120,45 @@ body {
 
 body:has(dialog[open]) {
 	overflow: hidden;
+}
+
+/* Dialogs rise into place over a fading backdrop. They close in reverse only where the browser
+   keeps a closing dialog in the top layer (`overlay`); elsewhere they close at once rather than
+   fall back into the page for the length of the transition. */
+@media (prefers-reduced-motion: no-preference) {
+	dialog[open],
+	dialog[open]::backdrop {
+		transition:
+			opacity 200ms var(--ease-out-quart),
+			translate 240ms var(--ease-out-quart);
+	}
+
+	@starting-style {
+		dialog[open] {
+			opacity: 0;
+			translate: 0 0.5rem;
+		}
+
+		dialog[open]::backdrop {
+			opacity: 0;
+		}
+	}
+
+	@supports (overlay: auto) {
+		dialog:not([open]),
+		dialog:not([open])::backdrop {
+			opacity: 0;
+			transition:
+				opacity 150ms ease-in,
+				translate 150ms ease-in,
+				display 150ms allow-discrete,
+				overlay 150ms allow-discrete;
+		}
+
+		dialog:not([open]) {
+			translate: 0 0.25rem;
+		}
+	}
 }
 
 ::selection {
@@ -146,19 +221,34 @@ summary {
 	}
 }
 
-::view-transition-old(root) {
+/* Page loads cross-fade, and a project title travels between its card and the case study header.
+   BaseLayout marks the title on each side with data-vt-title, since the CSP forbids inline styles. */
+@media (prefers-reduced-motion: no-preference) {
+	@view-transition {
+		navigation: auto;
+	}
+}
+
+[data-vt-title] {
+	view-transition-name: project-title;
+}
+
+::view-transition-group(project-title) {
+	animation-duration: 450ms;
+	animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Theme changes wipe the new theme in from the top instead. ThemeToggle flags them with data-theme-switch. */
+:root[data-theme-switch]::view-transition-old(root) {
+	z-index: 0;
 	animation: none;
 	mix-blend-mode: normal;
 }
 
-::view-transition-new(root) {
-	animation: theme-reveal 600ms cubic-bezier(0.2, 0, 0, 1) both;
+:root[data-theme-switch]::view-transition-new(root) {
 	z-index: 1;
+	animation: theme-reveal 600ms cubic-bezier(0.2, 0, 0, 1) both;
 	mix-blend-mode: normal;
-}
-
-::view-transition-old(root) {
-	z-index: 0;
 }
 
 @keyframes theme-reveal {

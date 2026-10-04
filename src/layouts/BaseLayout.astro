@@ -117,6 +117,85 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 			})();
 		</script>
 
+		<script is:inline>
+			// Page-to-page view transitions (opted in by @view-transition in global.css). The project
+			// title that leads to the next page travels into that page's title. pagereveal fires before
+			// the first render, so this has to run from the head.
+			(() => {
+				let clickedHref = null;
+
+				const markTitle = (title) => {
+					document.querySelectorAll('[data-vt-title]').forEach((marked) => {
+						delete marked.dataset.vtTitle;
+					});
+
+					if (!title) return null;
+
+					// A title off screen or tucked under the sticky header would fly in over everything;
+					// let it fade with the page instead.
+					const box = title.getBoundingClientRect();
+					const header = document.querySelector('[data-site-header]');
+					const top = header ? header.getBoundingClientRect().bottom : 0;
+					if (box.top < top || box.top >= window.innerHeight) return null;
+
+					title.dataset.vtTitle = '';
+					return title;
+				};
+
+				const titleFor = (url) => {
+					if (!url) return null;
+					const { pathname } = new URL(url, window.location.href);
+					return document.querySelector('[data-project-path="' + pathname + '"]');
+				};
+
+				const pageTitle = () => document.querySelector('h1[data-project-path]');
+
+				// Browsers without the Navigation API only know the destination from the clicked link.
+				if (!window.navigation) {
+					document.addEventListener(
+						'click',
+						(event) => {
+							const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+							clickedHref = link ? link.href : null;
+						},
+						true,
+					);
+				}
+
+				// The browser skips a transition when the tab is hidden, the next page is slow, or another
+				// navigation interrupts it; the page still loads, so the rejection needs no handling.
+				const ignoreSkip = (transition) => transition.ready.catch(() => {});
+
+				window.addEventListener('pageswap', (event) => {
+					if (!event.viewTransition) return;
+
+					ignoreSkip(event.viewTransition);
+					const destination = event.activation ? event.activation.entry.url : clickedHref;
+					markTitle(titleFor(destination) ?? pageTitle());
+				});
+
+				window.addEventListener('pagereveal', (event) => {
+					// A page restored from the back/forward cache may still carry the mark it left with.
+					markTitle(null);
+
+					if (!event.viewTransition) return;
+
+					ignoreSkip(event.viewTransition);
+					const activation = window.navigation ? window.navigation.activation : null;
+					const origin = activation && activation.from ? activation.from.url : document.referrer;
+					const title = markTitle(pageTitle() ?? titleFor(origin));
+
+					// The title lands already in place; its text reveal would only hide it from the transition.
+					if (title && title.hasAttribute('data-animate-text')) {
+						title.dataset.textAnimationState = 'complete';
+					}
+
+					const clear = () => markTitle(null);
+					event.viewTransition.finished.then(clear, clear);
+				});
+			})();
+		</script>
+
 		{description && <meta property="og:type" content={ogType} />}
 		{description && <meta property="og:title" content={title} />}
 		{description && <meta property="og:description" content={description} />}

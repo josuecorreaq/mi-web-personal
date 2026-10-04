@@ -101,6 +101,8 @@ const translations = {
 		cv: {
 			modalTitle: 'Curriculum vitae',
 			close: 'Cerrar',
+			loading: 'Cargando el CV…',
+			loadError: 'No se pudo cargar el CV. Revisa tu conexión y vuelve a abrirlo.',
 			name: 'Josué Andrés Correa Quispe',
 			role: 'Ingeniero de Sistemas · Desarrollador Backend',
 			location: 'Piura, Perú',
@@ -473,6 +475,8 @@ const translations = {
 		cv: {
 			modalTitle: 'Curriculum vitae',
 			close: 'Close',
+			loading: 'Loading the CV…',
+			loadError: 'The CV could not be loaded. Check your connection and open it again.',
 			name: 'Josue Andres Correa Quispe',
 			role: 'Systems Engineer · Backend Developer',
 			location: 'Piura, Peru',

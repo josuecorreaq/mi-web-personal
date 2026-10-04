@@ -29,17 +29,20 @@ const { locale, status, title, description, actionLabel, projectsLabel, homePath
 			<div class="mt-block flex flex-wrap items-center gap-x-6 gap-y-3">
 				<a
 					href={homePath}
-					class="inline-flex min-h-12 items-center gap-2.5 border border-brand-edge bg-brand px-5.5 font-mono text-sm font-semibold text-on-brand transition-[background-color,translate] hover:bg-brand-hover active:translate-y-px"
+					class="group inline-flex min-h-12 items-center gap-2.5 border border-brand-edge bg-brand px-5.5 font-mono text-sm font-semibold text-on-brand transition-[background-color,translate] hover:bg-brand-hover active:translate-y-px"
 				>
 					{actionLabel}
-					<Icon name="arrow-right" class="size-4 shrink-0" />
+					<Icon name="arrow-right" class="size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-[3px]" />
 				</a>
 				<a
 					href={`${homePath}#proyectos`}
-					class="inline-flex min-h-12 items-center gap-2 font-mono text-sm font-semibold text-ink underline decoration-line decoration-1 underline-offset-[6px] transition-colors hover:text-accent hover:decoration-accent"
+					class="group inline-flex min-h-12 items-center gap-2 font-mono text-sm font-semibold text-ink transition-colors hover:text-accent"
 				>
-					{projectsLabel}
-					<Icon name="arrow-right" class="size-4 shrink-0" />
+					{/* Same hairline-plus-drawn-rule as the hero's secondary link. */}
+					<span class="link-rule link-rule-rest">
+						{projectsLabel}
+					</span>
+					<Icon name="arrow-right" class="size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-[3px]" />
 				</a>
 			</div>
 		</div>

@@ -31,11 +31,12 @@ const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
 
 <article>
 	<header class="page-shell pb-section pt-[clamp(1.5rem,4vw,3rem)]">
+		{/* Back to this project's own entry, so the title has a card to return to. */}
 		<a
-			href={`${homePath}#proyectos`}
-			class="inline-flex min-h-11 items-center gap-2 font-mono text-[0.8125rem] text-muted transition-colors hover:text-accent"
+			href={`${homePath}#${project.slug}`}
+			class="group inline-flex min-h-11 items-center gap-2 font-mono text-[0.8125rem] text-muted transition-colors hover:text-accent"
 		>
-			<ArrowLeft class="size-4" aria-hidden="true" stroke-width={1.8} />
+			<ArrowLeft class="size-4 transition-transform duration-200 group-hover:-translate-x-[3px]" aria-hidden="true" stroke-width={1.8} />
 			{copy.back}
 		</a>
 
@@ -47,6 +48,7 @@ const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
 		<h1
 			class="ml-(--optical-inset) mt-4.5 max-w-[16em] text-balance font-display text-[clamp(2.25rem,5vw,4.25rem)] font-heading leading-[1.06] tracking-[-0.03em]"
 			data-animate-text="words"
+			data-project-path={project.path}
 		>
 			{project.name}
 		</h1>
@@ -159,7 +161,10 @@ const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
 			>
 				<span class="min-w-0">
 					<span class="block font-mono text-[0.78rem] text-muted">{copy.next}</span>
-					<span class="mt-1 block text-balance font-display text-[clamp(1.25rem,2.4vw,1.75rem)] font-heading leading-tight tracking-[-0.015em] underline decoration-transparent decoration-[3px] underline-offset-[6px] transition-colors group-hover:text-accent light:group-hover:decoration-brand">
+					<span
+						class="mt-1 block text-balance font-display text-[clamp(1.25rem,2.4vw,1.75rem)] font-heading leading-tight tracking-[-0.015em] underline decoration-transparent decoration-[3px] underline-offset-[6px] transition-colors group-hover:text-accent light:group-hover:decoration-brand"
+						data-project-path={nextProject.path}
+					>
 						{nextProject.name}
 					</span>
 				</span>
@@ -181,10 +186,10 @@ const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
 				<p class="max-w-[34em] text-pretty text-lg leading-[1.7] text-drench-muted">{copy.contactCopy}</p>
 				<a
 					href={`${homePath}#contacto`}
-					class="inline-flex min-h-12 items-center gap-2.5 border border-on-drench bg-on-drench px-5.5 font-mono text-sm font-semibold text-drench transition-[opacity,translate] hover:opacity-90 active:translate-y-px"
+					class="group inline-flex min-h-12 items-center gap-2.5 border border-on-drench bg-on-drench px-5.5 font-mono text-sm font-semibold text-drench transition-[opacity,translate] hover:opacity-90 active:translate-y-px"
 				>
 					{copy.contactAction}
-					<Icon name="arrow-right" class="size-4 shrink-0" />
+					<Icon name="arrow-right" class="size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-[3px]" />
 				</a>
 			</div>
 		</div>

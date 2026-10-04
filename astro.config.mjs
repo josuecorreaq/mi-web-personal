@@ -6,7 +6,7 @@ export default defineConfig({
 	site: 'https://josuecorreaq.com',
 	trailingSlash: 'always',
 	build: {
-		inlineStylesheets: 'always',
+		inlineStylesheets: 'auto',
 	},
 	vite: {
 		plugins: [tailwindcss()],

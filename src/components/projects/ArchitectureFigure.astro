@@ -16,8 +16,11 @@ interface Props {
 }
 
 const { layers, coreLayer, caption, labels, class: className } = Astro.props;
-// Build-time id so each figure's buttons point at their own rule panels.
-const uid = `arch-${Math.random().toString(36).slice(2, 8)}`;
+// Build-time id so each figure's buttons point at their own rule panels. It is a hash (FNV-1a) of the
+// figure's content, so the built HTML only changes when the figure does.
+const uid = `arch-${Array.from(caption + layers.map((layer) => layer.name).join('|'))
+	.reduce((hash, char) => Math.imul(hash ^ char.charCodeAt(0), 16777619) >>> 0, 2166136261)
+	.toString(36)}`;
 // A dependency between adjacent layers is drawn by the connector above the lower row:
 // down when the upper layer depends on the lower one, up for the reverse.
 const rows = layers.map((layer, index) => {
@@ -45,7 +48,7 @@ const bypasses = layers.flatMap((layer, from) =>
 // Grid placement has to be literal class names so Tailwind can see them.
 const rowStart = ['row-start-1', 'row-start-2', 'row-start-3', 'row-start-4', 'row-start-5', 'row-start-6', 'row-start-7', 'row-start-8'];
 const rowEnd = ['row-end-1', 'row-end-2', 'row-end-3', 'row-end-4', 'row-end-5', 'row-end-6', 'row-end-7', 'row-end-8', 'row-end-9'];
-const ease = 'ease-[cubic-bezier(0.25,1,0.5,1)] motion-reduce:transition-none';
+const ease = 'ease-out-quart motion-reduce:transition-none';
 ---
 
 <figure class:list={['m-0 min-w-0 border border-line', className]} data-architecture>
@@ -55,26 +58,24 @@ const ease = 'ease-[cubic-bezier(0.25,1,0.5,1)] motion-reduce:transition-none';
 	</div>
 	<ol class="grid gap-y-5 p-[clamp(1rem,2.4vw,1.75rem)]" data-architecture-layers>
 		{rows.map((row, index) => (
-			<li
-				class:list={['relative col-start-1', rowStart[index]]}
-				data-animate-reveal="up"
-				data-animate-reveal-delay={index * 90}
-			>
+			<li class:list={['relative col-start-1', rowStart[index]]}>
 				{row.edge && (
 					<span
 						class:list={[
-							'absolute -top-5 left-7 flex h-5 w-3 -translate-x-1/2 text-field transition-[color,opacity] duration-200',
-							'data-[state=active]:text-accent data-[state=dimmed]:opacity-35',
+							'absolute -top-5 left-7 flex h-5 w-3 -translate-x-1/2 text-field transition-opacity duration-200',
+							'data-[state=dimmed]:opacity-35',
 							ease,
 						]}
 						data-edge-from={row.edge.from ?? ''}
+						data-direction={row.edge.direction ?? undefined}
 						data-state="idle"
 						aria-hidden="true"
 					>
 						<svg class="size-full overflow-visible" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square">
 							<path d="M6 0v20" />
-							{row.edge.direction === 'down' && <path d="M2.5 15.5 6 19l3.5-3.5" />}
-							{row.edge.direction === 'up' && <path d="M2.5 4.5 6 1l3.5 3.5" />}
+							{row.edge.direction && <path class="edge-trace" d="M6 0v20" stroke="currentColor" />}
+							{row.edge.direction === 'down' && <path class="edge-head" d="M2.5 15.5 6 19l3.5-3.5" stroke="currentColor" />}
+							{row.edge.direction === 'up' && <path class="edge-head" d="M2.5 4.5 6 1l3.5 3.5" stroke="currentColor" />}
 						</svg>
 					</span>
 				)}
@@ -82,7 +83,8 @@ const ease = 'ease-[cubic-bezier(0.25,1,0.5,1)] motion-reduce:transition-none';
 					type="button"
 					class:list={[
 						'flex min-h-13 w-full touch-manipulation flex-wrap items-center justify-between gap-x-4 gap-y-0.5 border px-4 py-2 text-left font-mono text-[0.84rem]',
-						'transition-[background-color,border-color,opacity] duration-200 data-[state=dimmed]:opacity-40',
+						// A dependency answers once the trace from the active layer reaches it.
+						'transition-[background-color,border-color,opacity] duration-200 data-[state=dimmed]:opacity-40 data-[state=dependency]:delay-150',
 						row.isCore
 							? 'border-brand bg-brand font-semibold text-on-brand hover:bg-brand-hover data-[state=dependency]:border-accent'
 							: 'border-line hover:border-field data-[state=active]:border-ink data-[state=active]:bg-surface data-[state=dependency]:border-accent',
@@ -104,18 +106,22 @@ const ease = 'ease-[cubic-bezier(0.25,1,0.5,1)] motion-reduce:transition-none';
 		{bypasses.map((bypass) => (
 			<span
 				class:list={[
-					'pointer-events-none relative col-start-1 my-[1.625rem] w-3 translate-x-full justify-self-end border-y border-r border-current text-field transition-[color,opacity] duration-200',
-					'data-[state=active]:text-accent data-[state=dimmed]:opacity-35',
+					'pointer-events-none relative col-start-1 my-[1.625rem] w-3 translate-x-full justify-self-end border-y border-r border-current text-field transition-opacity duration-200',
+					'data-[state=dimmed]:opacity-35',
 					rowStart[bypass.start],
 					rowEnd[bypass.end + 1],
 					ease,
 				]}
 				data-edge-from={bypass.from}
+				data-direction={bypass.direction}
 				data-state="idle"
 				aria-hidden="true"
 			>
+				<span class="bypass-trace" data-segment="out"></span>
+				<span class="bypass-trace" data-segment="run"></span>
+				<span class="bypass-trace" data-segment="in"></span>
 				<svg
-					class:list={['absolute -left-px h-2 w-1.5', bypass.direction === 'down' ? '-bottom-[4.5px]' : '-top-[4.5px]']}
+					class:list={['edge-head absolute -left-px h-2 w-1.5', bypass.direction === 'down' ? '-bottom-[4.5px]' : '-top-[4.5px]']}
 					viewBox="0 0 6 8"
 					fill="none"
 					stroke="currentColor"
@@ -159,6 +165,8 @@ const ease = 'ease-[cubic-bezier(0.25,1,0.5,1)] motion-reduce:transition-none';
 </figure>
 
 <script>
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
 	const initializeArchitectureFigures = () => {
 		document.querySelectorAll<HTMLElement>('[data-architecture]').forEach((figure) => {
 			const list = figure.querySelector<HTMLElement>('[data-architecture-layers]');
@@ -173,8 +181,17 @@ const ease = 'ease-[cubic-bezier(0.25,1,0.5,1)] motion-reduce:transition-none';
 			// `pinned` survives until the visitor taps the layer again; `preview` follows hover and keyboard focus.
 			let pinned: number | null = null;
 			let preview: number | null = null;
+			// Pending steps of the one-time tour below.
+			let tour: number[] = [];
+
+			const stopTour = () => {
+				tour.forEach((step) => window.clearTimeout(step));
+				tour = [];
+			};
 
 			const render = () => {
+				// Any interaction takes the figure back from the tour.
+				stopTour();
 				const active = preview ?? pinned;
 				const dependencies = active === null
 					? []
@@ -238,8 +255,153 @@ const ease = 'ease-[cubic-bezier(0.25,1,0.5,1)] motion-reduce:transition-none';
 				preview = null;
 				render();
 			});
+
+			// The first time the figure comes into view, every dependency is traced once, layer by
+			// layer, so the direction of each arrow shows before the visitor touches anything.
+			const playTour = () => {
+				const sources = [...new Set(edges.map((edge) => edge.dataset.edgeFrom ?? ''))]
+					.filter(Boolean)
+					.sort((a, b) => Number(a) - Number(b));
+
+				// One layer every 160 ms, so each trace sets off as the previous one lands.
+				sources.forEach((source, step) => {
+					tour.push(window.setTimeout(() => {
+						edges.forEach((edge) => {
+							if (edge.dataset.edgeFrom === source) edge.dataset.state = 'active';
+						});
+					}, 200 + step * 160));
+				});
+				tour.push(window.setTimeout(render, 200 + sources.length * 160 + 900));
+			};
+
+			if (reduceMotion.matches || !('IntersectionObserver' in window)) return;
+
+			const observer = new IntersectionObserver(
+				(entries) => {
+					if (!entries.some((entry) => entry.isIntersecting)) return;
+					observer.disconnect();
+					if (pinned === null && preview === null) playTour();
+				},
+				{ threshold: 0.6 },
+			);
+			observer.observe(list);
 		});
 	};
 
 	initializeArchitectureFigures();
 </script>
+
+<style>
+	/* An active dependency is drawn as a trace that leaves the active layer and runs to the layer
+	   it depends on; the arrowhead lights up as the trace lands. The script only flips data-state. */
+	.edge-trace {
+		color: var(--color-accent);
+		opacity: 0;
+		transform: scaleY(0);
+		transform-box: fill-box;
+	}
+
+	[data-direction='down'] .edge-trace {
+		transform-origin: top;
+	}
+
+	[data-direction='up'] .edge-trace {
+		transform-origin: bottom;
+	}
+
+	/* A bypass trace runs out of its source layer, along the gutter and into its target. */
+	.bypass-trace {
+		position: absolute;
+		background: var(--color-accent);
+		opacity: 0;
+		transform: scaleX(0);
+	}
+
+	.bypass-trace[data-segment='run'] {
+		top: -1px;
+		right: -1px;
+		bottom: -1px;
+		width: 1px;
+		transform: scaleY(0);
+	}
+
+	.bypass-trace:not([data-segment='run']) {
+		right: -1px;
+		left: 0;
+		height: 1px;
+	}
+
+	[data-direction='down'] > [data-segment='out'],
+	[data-direction='up'] > [data-segment='in'] {
+		top: -1px;
+	}
+
+	[data-direction='down'] > [data-segment='in'],
+	[data-direction='up'] > [data-segment='out'] {
+		bottom: -1px;
+	}
+
+	[data-segment='out'] {
+		transform-origin: left;
+	}
+
+	[data-segment='in'] {
+		transform-origin: right;
+	}
+
+	[data-direction='down'] > [data-segment='run'] {
+		transform-origin: top;
+	}
+
+	[data-direction='up'] > [data-segment='run'] {
+		transform-origin: bottom;
+	}
+
+	[data-state='active'] .edge-trace,
+	[data-state='active'] > .bypass-trace {
+		opacity: 1;
+		transform: none;
+	}
+
+	[data-state='active'] .edge-head {
+		color: var(--color-accent);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		/* Leaving fades the trace instead of drawing it back, so sweeping across layers never reverses a line. */
+		.edge-trace,
+		.bypass-trace {
+			transition:
+				opacity 150ms ease,
+				transform 0s 150ms;
+		}
+
+		.edge-head {
+			transition: color 150ms ease;
+		}
+
+		[data-state='active'] .edge-trace {
+			transition: transform 200ms var(--ease-out-quart);
+		}
+
+		[data-state='active'] > [data-segment='out'] {
+			transition: transform 40ms linear;
+		}
+
+		[data-state='active'] > [data-segment='run'] {
+			transition: transform 130ms linear 40ms;
+		}
+
+		[data-state='active'] > [data-segment='in'] {
+			transition: transform 60ms var(--ease-out-quart) 170ms;
+		}
+
+		[data-state='active'] .edge-head {
+			transition: color 120ms ease 120ms;
+		}
+
+		[data-state='active'] > .edge-head {
+			transition-delay: 210ms;
+		}
+	}
+</style>

@@ -48,4 +48,12 @@ ErrorDocument 404 /404.html
 	<FilesMatch "\.(webmanifest|xml|txt)$">
 		Header set Cache-Control "public, max-age=86400"
 	</FilesMatch>
+	# CSS y JS del build: el nombre lleva el hash del contenido y cada deploy apunta a nombres nuevos.
+	<If "%{REQUEST_URI} =~ m#^/_astro/#">
+		Header set Cache-Control "public, max-age=31536000, immutable"
+	</If>
+	# Fragmentos que la página carga por fetch (el CV del diálogo): no son páginas propias.
+	<If "%{REQUEST_URI} =~ m#^/partials/#">
+		Header set X-Robots-Tag "noindex"
+	</If>
 </IfModule>
