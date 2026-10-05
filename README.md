@@ -202,6 +202,7 @@ Después de un despliegue que añada o renombre rutas:
 1. Comprueba que `https://josuecorreaq.com/sitemap.xml` ya lista las URL nuevas.
 2. Reenvía el sitemap en Google Search Console.
 3. Usa Inspección de URLs y solicita indexación para cada ruta nueva.
+4. Ejecuta `npm run indexnow` para avisar a Bing y a los demás buscadores de IndexNow. El script lee las URL de `dist/sitemap.xml` y solo envía si `https://josuecorreaq.com/<clave>.txt` ya está publicado; la clave vive en `public/` y es pública por diseño.
 
 ## Despliegue
 
