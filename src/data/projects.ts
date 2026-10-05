@@ -1,7 +1,9 @@
 import type { Locale } from '../i18n/config';
 import { useTranslations } from '../i18n/translations';
 
-export const PROJECT_LAST_MODIFIED = '2026-08-28';
+/** First publication of the case-study pages; stays fixed across content updates. */
+export const PROJECT_PUBLISHED = '2026-08-28';
+export const PROJECT_LAST_MODIFIED = '2026-10-05';
 
 export interface ArchitectureLayer {
 	readonly name: string;
@@ -62,8 +64,8 @@ const projectDefinitions = [
 			en: '/en/projects/disbursement-management-system/',
 		},
 		seoTitle: {
-			es: 'Sistema de Desembolsos | Josué Correa',
-			en: 'Disbursement Management System | Josue Correa',
+			es: 'Sistema de desembolsos en Laravel y React | Josué Correa',
+			en: 'Laravel Disbursement Management System | Josue Correa',
 		},
 		seoDescription: {
 			es: 'Caso de estudio de un sistema financiero con 147 endpoints REST, 21 suites automatizadas y 50 % menos pasos manuales al validar pagos.',
@@ -85,8 +87,8 @@ const projectDefinitions = [
 			en: '/en/projects/credit-management-platform/',
 		},
 		seoTitle: {
-			es: 'Plataforma de Gestión Crediticia | Josué Correa',
-			en: 'Credit Management Platform | Josue Correa',
+			es: 'Plataforma crediticia modular en Laravel | Josué Correa',
+			en: 'Modular Credit Platform in Laravel | Josue Correa',
 		},
 		seoDescription: {
 			es: 'Caso de estudio de una plataforma crediticia modular con nueve dominios, autorización por tres alcances, contrato de rutas y 110 tests de arquitectura.',
@@ -148,7 +150,7 @@ export const getProjects = (locale: Locale): Project[] => {
 		seoTitle: definition.seoTitle[locale],
 		seoDescription: definition.seoDescription[locale],
 		stack: definition.stack[locale],
-		datePublished: PROJECT_LAST_MODIFIED,
+		datePublished: PROJECT_PUBLISHED,
 		dateModified: PROJECT_LAST_MODIFIED,
 	}));
 };

@@ -3,9 +3,9 @@ import type { Locale } from './config';
 const translations = {
 	es: {
 		meta: {
-			title: 'Josué Correa | Desarrollador Backend',
+			title: 'Josué Correa | Desarrollador Backend en Piura, Perú',
 			description:
-				'Portafolio de Josué Correa, Desarrollador Backend especializado en Laravel, PHP, APIs REST y sistemas financieros modulares.',
+				'Josué Correa Quispe, desarrollador backend en Piura, Perú. Convierto procesos desordenados en sistemas claros con Laravel, PHP y MySQL. Presencial o remoto.',
 		},
 		nav: {
 			projects: 'Proyectos',
@@ -377,9 +377,9 @@ const translations = {
 	},
 	en: {
 		meta: {
-			title: 'Josue Correa | Backend Developer',
+			title: 'Josue Correa | Backend Developer, Peru (Remote)',
 			description:
-				'Portfolio of Josue Correa, a Backend Developer specialized in Laravel, PHP, REST APIs and modular financial systems.',
+				'Josue Correa Quispe, backend developer based in Piura, Peru. I turn messy processes into clear systems with Laravel, PHP and MySQL. On-site or remote.',
 		},
 		nav: {
 			projects: 'Projects',
