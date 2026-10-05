@@ -1,0 +1,384 @@
+---
+import Icon from '../common/Icon.astro';
+import { getProjects } from '../../data/projects';
+import { getLocalePath, type Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n/translations';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale).services;
+const contactHref = `${getLocalePath(locale)}#contacto`;
+const projects = getProjects(locale);
+// Same rows as the case studies: title on the left, content on the right.
+const rowClass = 'flex flex-wrap items-start gap-x-16 gap-y-5';
+const rowTitleClass =
+	'min-w-0 flex-[0_1_20rem] text-balance font-display text-[clamp(1.5rem,2.4vw,1.875rem)] font-heading leading-[1.15] tracking-[-0.02em]';
+const rowBodyClass = 'min-w-0 flex-[1_1_32rem]';
+const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
+const labelClass = 'font-mono text-[0.8125rem] text-muted';
+// Beside a ruled list the title drops to the line of the list's first row. The columns sit side by side from
+// 58rem, where the container fits 20rem + 4rem gap + 32rem; stacked, the title keeps its place.
+const listTitleOffset = {
+	reach: 'min-[58rem]:pt-4',
+	evidence: 'min-[58rem]:pt-2',
+	faq: 'min-[58rem]:pt-5',
+};
+---
+
+<article>
+	<header class="page-shell pb-section pt-[clamp(1.5rem,4vw,3rem)]">
+		<p class={labelClass}>{t.label}</p>
+		<h1
+			class="ml-(--optical-inset) mt-4.5 max-w-[16em] text-balance font-display text-[clamp(2.25rem,5vw,4.25rem)] font-heading leading-[1.06] tracking-[-0.03em]"
+			data-animate-text="words"
+		>
+			{t.hero.title}
+		</h1>
+		<p
+			class="mt-[clamp(0.75rem,2vw,1.25rem)] max-w-[32em] text-pretty font-display text-[clamp(1.25rem,2.2vw,1.75rem)] font-heading leading-[1.3] tracking-[-0.015em] text-muted"
+			data-animate-reveal="up"
+			data-animate-reveal-delay="200"
+		>
+			{t.hero.lead}
+		</p>
+
+		<div
+			class="mt-block flex flex-wrap items-end justify-between gap-x-16 gap-y-5"
+			data-animate-reveal="up"
+			data-animate-reveal-delay="300"
+		>
+			<a
+				href={contactHref}
+				class="group inline-flex min-h-12 items-center gap-2.5 border border-brand-edge bg-brand px-5.5 font-mono text-sm font-semibold text-on-brand transition-[background-color,translate] hover:bg-brand-hover active:translate-y-px"
+			>
+				{t.hero.cta}
+				<Icon name="arrow-right" class="size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-[3px]" />
+			</a>
+
+			<dl class="flex flex-wrap gap-x-12 gap-y-4">
+				{t.hero.facts.map((fact) => (
+					<div>
+						<dt class="flex items-center gap-1.5 font-mono text-[0.78rem] text-muted">
+							<Icon name={fact.icon} class="size-3.5 shrink-0 text-accent" />
+							{fact.label}
+						</dt>
+						<dd class="mt-1 pl-5 text-[0.9375rem]">{fact.value}</dd>
+					</div>
+				))}
+			</dl>
+		</div>
+	</header>
+
+	<section class="page-shell border-t border-line py-section">
+		{t.offer.items.map((service, index) => (
+			<div class:list={[rowClass, index === 0 ? 'pb-block' : 'border-t border-line pt-block']}>
+				<h2 class={rowTitleClass}>{service.name}</h2>
+				<div class={rowBodyClass}>
+					<p class={proseClass} data-animate-reveal="up">{service.description}</p>
+					<ul class="mt-6 border-t border-line">
+						{service.points.map((point, pointIndex) => (
+							<li
+								class="flex gap-3.5 border-b border-line py-4.5 text-pretty leading-relaxed"
+								data-animate-reveal="up"
+								data-animate-reveal-delay={pointIndex * 70}
+							>
+								<span class="mt-[0.65rem] size-[5px] shrink-0 bg-accent" aria-hidden="true"></span>
+								{point}
+							</li>
+						))}
+					</ul>
+				</div>
+			</div>
+		))}
+	</section>
+
+	<section class="page-shell border-t border-line py-section" aria-labelledby="services-process">
+		<div class={rowClass}>
+			<h2 id="services-process" class={rowTitleClass}>{t.process.title}</h2>
+			{/* Drawn with the case studies' architecture primitives: ruled frame, stacked boxes, arrows between them. */}
+			<figure class:list={['m-0 min-w-0 border border-line', rowBodyClass]} data-process>
+				<div class="flex justify-between gap-3 border-b border-line px-4 py-3 font-mono text-[0.78rem] text-muted">
+					<span>{t.process.label}</span>
+					<span>{t.process.steps.length} {t.process.stages}</span>
+				</div>
+				<ol class="grid gap-y-5 p-[clamp(1rem,2.4vw,1.75rem)]" data-process-steps>
+					{t.process.steps.map((step, index) => (
+						<li class="relative" data-animate-reveal="up" data-animate-reveal-delay={index * 90}>
+							{index > 0 && (
+								<span
+									class="absolute -top-5 left-7 flex h-5 w-3 -translate-x-1/2 text-field"
+									data-process-edge
+									data-state="idle"
+									aria-hidden="true"
+								>
+									<svg class="size-full overflow-visible" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square">
+										<path d="M6 0v20" />
+										<path class="process-trace" d="M6 0v20" />
+										<path class="process-head" d="M2.5 15.5 6 19l3.5-3.5" />
+									</svg>
+								</span>
+							)}
+							<div
+								class="border border-line px-4 py-3 transition-colors duration-200 data-[state=active]:border-accent motion-reduce:transition-none"
+								data-process-step
+								data-state="idle"
+							>
+								<h3 class="font-mono text-[0.84rem] font-semibold">{step.title}</h3>
+								<p class="mt-1 text-pretty text-[0.9375rem] leading-relaxed text-muted">{step.description}</p>
+							</div>
+						</li>
+					))}
+				</ol>
+				<figcaption class="border-t border-line px-4 py-3.5 text-sm leading-relaxed text-pretty text-muted">
+					{t.process.caption}
+				</figcaption>
+			</figure>
+		</div>
+	</section>
+
+	<section class="page-shell border-t border-line py-section" aria-labelledby="services-reach">
+		<div class={rowClass}>
+			<h2 id="services-reach" class:list={[rowTitleClass, listTitleOffset.reach]}>{t.reach.title}</h2>
+			<dl class:list={[rowBodyClass, 'border-t border-line']}>
+				{t.reach.items.map((item, index) => (
+					<div
+						class="flex flex-wrap gap-x-8 gap-y-1 border-b border-line py-5"
+						data-animate-reveal="up"
+						data-animate-reveal-delay={index * 80}
+					>
+						<dt class="w-36 shrink-0 pt-[0.15rem] font-mono text-[0.8125rem]">{item.label}</dt>
+						<dd class="min-w-0 flex-[1_1_18rem] text-pretty leading-relaxed text-muted">{item.value}</dd>
+					</div>
+				))}
+			</dl>
+		</div>
+	</section>
+
+	<section class="page-shell border-t border-line py-section" aria-labelledby="services-evidence">
+		<div class={rowClass}>
+			<h2 id="services-evidence" class:list={[rowTitleClass, listTitleOffset.evidence]}>{t.evidence.title}</h2>
+			<ul class:list={[rowBodyClass, 'border-t border-line']}>
+				{projects.map((project) => {
+					const [metric] = project.metrics;
+
+					return (
+						<li>
+							<a href={project.path} class="group flex min-h-22 items-center justify-between gap-6 border-b border-line py-4">
+								<span class="min-w-0">
+									<span class="block font-mono text-[0.78rem] text-muted">
+										{metric.value} · {metric.label}
+									</span>
+									<span
+										class="mt-1 block text-balance font-display text-[clamp(1.25rem,2.4vw,1.75rem)] font-heading leading-tight tracking-[-0.015em] underline decoration-transparent decoration-[3px] underline-offset-[6px] transition-colors group-hover:text-accent light:group-hover:decoration-brand"
+										data-project-path={project.path}
+									>
+										{project.name}
+									</span>
+								</span>
+								<Icon name="arrow-right" class="size-5 shrink-0 transition-transform duration-200 group-hover:translate-x-1" />
+							</a>
+						</li>
+					);
+				})}
+			</ul>
+		</div>
+	</section>
+
+	<section class="page-shell border-t border-line py-section" aria-labelledby="services-faq">
+		<div class={rowClass}>
+			<h2 id="services-faq" class:list={[rowTitleClass, listTitleOffset.faq]}>{t.faq.title}</h2>
+			{/* Closed answers stay in the HTML, so search engines and the FAQPage schema still read them. */}
+			<div class:list={[rowBodyClass, 'border-t border-line']}>
+				{t.faq.items.map((item, index) => (
+					<details
+						class="faq-item group border-b border-line"
+						name="services-faq"
+						data-animate-reveal="up"
+						data-animate-reveal-delay={index * 70}
+					>
+						<summary class="flex min-h-18 items-center justify-between gap-6 py-4">
+							<h3 class="text-pretty font-display text-[clamp(1.125rem,1.8vw,1.375rem)] font-heading leading-snug tracking-[-0.01em] transition-colors group-hover:text-accent">
+								{item.question}
+							</h3>
+							<svg
+								class="faq-toggle size-9 shrink-0"
+								viewBox="0 0 36 36"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.25"
+								stroke-linecap="square"
+								aria-hidden="true"
+							>
+								<path class="faq-toggle-corners" d="M1 7V1h6M29 1h6v6M35 29v6h-6M7 35H1v-6" />
+								<path d="M13 18h10" />
+								<path class="faq-toggle-bar" d="M18 13v10" />
+							</svg>
+						</summary>
+						<p class="faq-answer max-w-[38em] pb-6 text-pretty leading-relaxed text-muted">{item.answer}</p>
+					</details>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<section class="drench bg-drench text-on-drench" aria-labelledby="services-contact">
+		<div class="page-shell py-section">
+			<h2
+				id="services-contact"
+				class="max-w-[14em] text-balance font-display text-[clamp(2rem,4.6vw,3.75rem)] font-heading leading-[1.05] tracking-[-0.03em]"
+				data-animate-text="words"
+			>
+				{t.cta.title}
+			</h2>
+			<div class="mt-block flex flex-wrap items-end justify-between gap-x-16 gap-y-6">
+				<p class="max-w-[34em] text-pretty text-lg leading-[1.7] text-drench-muted">{t.cta.copy}</p>
+				<a
+					href={contactHref}
+					class="group inline-flex min-h-12 items-center gap-2.5 border border-on-drench bg-on-drench px-5.5 font-mono text-sm font-semibold text-drench transition-[opacity,translate] hover:opacity-90 active:translate-y-px"
+				>
+					{t.cta.action}
+					<Icon name="arrow-right" class="size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-[3px]" />
+				</a>
+			</div>
+		</div>
+	</section>
+</article>
+
+<script>
+	// The first time the process comes into view, a trace runs down the arrows once and lights each stage
+	// as it arrives, then the figure settles back, like the tour of the case studies' architecture.
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+	document.querySelectorAll<HTMLElement>('[data-process]').forEach((figure) => {
+		const list = figure.querySelector<HTMLElement>('[data-process-steps]');
+		const steps = Array.from(figure.querySelectorAll<HTMLElement>('[data-process-step]'));
+		const edges = Array.from(figure.querySelectorAll<HTMLElement>('[data-process-edge]'));
+
+		if (!list || steps.length === 0 || reduceMotion.matches || !('IntersectionObserver' in window)) return;
+
+		const setState = (element: HTMLElement | undefined, state: 'idle' | 'active') => {
+			if (element) element.dataset.state = state;
+		};
+
+		// Each edge leads into the stage after it, so edge i lands on stage i + 1.
+		const playTour = () => {
+			// The stages fade in with the scroll reveals (650 ms); the first one lights once it has landed.
+			const start = 700;
+			const perStage = 420;
+			const traceLength = 220;
+
+			window.setTimeout(() => setState(steps[0], 'active'), start);
+			edges.forEach((edge, index) => {
+				const leaves = start + 200 + index * perStage;
+				window.setTimeout(() => setState(edge, 'active'), leaves);
+				window.setTimeout(() => setState(steps[index + 1], 'active'), leaves + traceLength);
+			});
+			window.setTimeout(() => {
+				[...steps, ...edges].forEach((element) => setState(element, 'idle'));
+			}, start + 200 + edges.length * perStage + 1200);
+		};
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (!entries.some((entry) => entry.isIntersecting)) return;
+				observer.disconnect();
+				playTour();
+			},
+			{ threshold: 0.6 },
+		);
+		observer.observe(list);
+	});
+</script>
+
+<style>
+	/* Process tour: a trace draws down each arrow and its head lights as it lands. The script only flips data-state. */
+	.process-trace {
+		color: var(--color-accent);
+		opacity: 0;
+		transform: scaleY(0);
+		transform-box: fill-box;
+		transform-origin: top;
+	}
+
+	[data-state='active'] .process-trace {
+		opacity: 1;
+		transform: none;
+	}
+
+	[data-state='active'] .process-head {
+		color: var(--color-accent);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		/* Settling back fades the traces instead of drawing them up again. */
+		.process-trace {
+			transition:
+				opacity 300ms ease,
+				transform 0s 300ms;
+		}
+
+		.process-head {
+			transition: color 300ms ease;
+		}
+
+		[data-state='active'] .process-trace {
+			transition: transform 220ms var(--ease-out-quart);
+		}
+
+		[data-state='active'] .process-head {
+			transition: color 120ms ease 160ms;
+		}
+	}
+
+	/* FAQ rows: native details, so they open without script. The plus turns into a minus by laying its
+	   vertical bar down; motion stays on transform and opacity like the rest of the site. */
+	.faq-item summary {
+		list-style: none;
+	}
+
+	.faq-item summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.faq-toggle-corners {
+		color: var(--color-field);
+	}
+
+	.faq-item summary:hover .faq-toggle-corners,
+	.faq-item[open] .faq-toggle-corners {
+		color: var(--color-accent);
+	}
+
+	.faq-toggle-bar {
+		transform-box: fill-box;
+		transform-origin: center;
+	}
+
+	.faq-item[open] .faq-toggle-bar {
+		transform: rotate(90deg);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.faq-toggle-corners {
+			transition: color 160ms ease;
+		}
+
+		.faq-toggle-bar {
+			transition: transform 240ms var(--ease-out-quart);
+		}
+
+		.faq-item[open] .faq-answer {
+			animation: faq-answer-in 240ms var(--ease-out-quart);
+		}
+	}
+
+	@keyframes faq-answer-in {
+		from {
+			opacity: 0;
+			transform: translateY(-0.25rem);
+		}
+	}
+</style>

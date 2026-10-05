@@ -1,0 +1,34 @@
+---
+import ServicesPage from '../../components/services/ServicesPage.astro';
+import { createServicesSchema } from '../../data/schema';
+import { SERVICES_LAST_MODIFIED, SERVICES_PUBLISHED, servicesPaths } from '../../data/services';
+import { useTranslations } from '../../i18n/translations';
+import PageLayout from '../../layouts/PageLayout.astro';
+
+const t = useTranslations('es').services;
+const siteUrl = new URL('/', Astro.site ?? Astro.url);
+const structuredData = createServicesSchema({
+	locale: 'es',
+	siteUrl,
+	pageUrl: new URL(servicesPaths.es, siteUrl),
+	title: t.meta.title,
+	description: t.meta.description,
+	label: t.label,
+	services: t.offer.items,
+	faq: t.faq.items,
+	datePublished: SERVICES_PUBLISHED,
+	dateModified: SERVICES_LAST_MODIFIED,
+});
+---
+
+<PageLayout
+	locale="es"
+	title={t.meta.title}
+	description={t.meta.description}
+	path={servicesPaths.es}
+	alternatePath={servicesPaths.en}
+	structuredData={structuredData}
+	currentSection="servicios"
+>
+	<ServicesPage locale="es" />
+</PageLayout>

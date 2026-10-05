@@ -1,0 +1,55 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import CvModal from '../components/cv/CvModal.astro';
+import ScrollReveals from '../components/common/ScrollReveals.astro';
+import TextAnimations from '../components/common/TextAnimations.astro';
+import BaseLayout from './BaseLayout.astro';
+import type { SchemaNode } from '../data/schema';
+import type { Locale } from '../i18n/config';
+
+// A standalone page outside the landing (services, and later notes): same chrome as the case studies.
+interface Props {
+	locale: Locale;
+	title: string;
+	description: string;
+	/** This page's path; the canonical URL and the language alternates derive from it. */
+	path: string;
+	/** The same page in the other language. */
+	alternatePath: string;
+	/** Required: without it BaseLayout would fall back to the home page's ProfilePage schema. */
+	structuredData: readonly SchemaNode[];
+	/** Header item the page belongs to, so the nav marks it. */
+	currentSection?: string;
+}
+
+const { locale, title, description, path, alternatePath, structuredData, currentSection } = Astro.props;
+const siteUrl = new URL('/', Astro.site ?? Astro.url);
+const canonical = new URL(path, siteUrl);
+const alternate = new URL(alternatePath, siteUrl);
+const alternateUrls = locale === 'es'
+	? { es: canonical, en: alternate, xDefault: canonical }
+	: { es: alternate, en: canonical, xDefault: alternate };
+---
+
+<BaseLayout
+	locale={locale}
+	title={title}
+	description={description}
+	canonical={canonical}
+	alternateUrls={alternateUrls}
+	structuredData={structuredData}
+>
+	<a class="skip-link" href="#contenido">
+		{locale === 'es' ? 'Saltar al contenido' : 'Skip to content'}
+	</a>
+	<Header locale={locale} isLanding={false} alternatePath={alternatePath} currentSection={currentSection} />
+	<main id="contenido" tabindex="-1">
+		<slot />
+	</main>
+	<Footer locale={locale} tone="drench" />
+	<CvModal locale={locale} />
+	<TextAnimations />
+	<ScrollReveals />
+	<script src="../scripts/cv-modal.ts"></script>
+</BaseLayout>

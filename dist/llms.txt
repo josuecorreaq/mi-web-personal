@@ -23,6 +23,14 @@
 - GitHub: https://github.com/josuecorreaq
 - X: https://x.com/josuecorreaqu
 
+## Services
+
+- [Servicios](https://josuecorreaq.com/servicios/) / [English](https://josuecorreaq.com/en/services/): services page with scope, process and FAQ.
+- Custom web systems: a single system in place of spreadsheets, email and chat, with role-based permissions, a searchable history of every operation, and reports and PDFs generated from the system's data.
+- REST APIs and integrations: REST APIs for web frontends with authentication and permissions enforced on the server, integrations between internal systems, and reports and PDFs served from the API.
+- Work mode: on-site in Piura; remote for the rest of Peru and clients abroad (Peru time, UTC−5).
+- Process: initial conversation, proposal with scope and stages, built in reviewable deliveries, go-live with an included warranty period. Projects are quoted by scope; no fixed public prices.
+
 ## Experience
 
 - Software Developer, independent project (January 2026 - present): end-to-end credit management platform on Laravel, React and MySQL, structured as a modular monolith with nine business domains, access control by user, role and branch, and a phased migration backed by a route contract test.
@@ -37,7 +45,7 @@
 
 - Josué Correa Quispe is a backend developer based in Piura, Peru, focused on Laravel, PHP, MySQL and REST APIs for business process automation.
 - His portfolio presents two financial systems: a disbursement management system in production and a modular credit management platform under construction.
-- The canonical indexable pages are the two portfolio home pages (https://josuecorreaq.com/ and https://josuecorreaq.com/en/) and the four case-study pages listed above.
+- The canonical indexable pages are the two portfolio home pages (https://josuecorreaq.com/ and https://josuecorreaq.com/en/), the two services pages and the four case-study pages listed above.
 
 ## Optional
 

@@ -214,3 +214,88 @@ export const createProjectSchema = ({
 		},
 	];
 };
+
+interface ServicesSchemaOptions {
+	locale: Locale;
+	siteUrl: URL;
+	pageUrl: URL;
+	title: string;
+	description: string;
+	label: string;
+	services: readonly { name: string; description: string }[];
+	faq: readonly { question: string; answer: string }[];
+	datePublished: string;
+	dateModified: string;
+}
+
+export const createServicesSchema = ({
+	locale,
+	siteUrl,
+	pageUrl,
+	title,
+	description,
+	label,
+	services,
+	faq,
+	datePublished,
+	dateModified,
+}: ServicesSchemaOptions): SchemaNode[] => {
+	const personId = new URL('/#person', siteUrl).toString();
+	const websiteId = new URL('/#website', siteUrl).toString();
+	const pageId = new URL(`${pageUrl.pathname}#webpage`, siteUrl).toString();
+	const breadcrumbId = new URL(`${pageUrl.pathname}#breadcrumbs`, siteUrl).toString();
+	const country = { '@type': 'Country', name: locale === 'es' ? 'Perú' : 'Peru' };
+	const areaServed = [{ '@type': 'City', name: 'Piura', containedInPlace: country }, country];
+
+	return [
+		createPersonNode(locale, siteUrl, new URL('/images/profile.webp', siteUrl)),
+		createWebsiteNode(siteUrl),
+		{
+			// The FAQ is visible on the page, so the page itself is the FAQPage.
+			'@type': ['WebPage', 'FAQPage'],
+			'@id': pageId,
+			url: pageUrl.toString(),
+			name: title,
+			description,
+			inLanguage: locale,
+			datePublished,
+			dateModified,
+			isPartOf: { '@id': websiteId },
+			about: { '@id': personId },
+			breadcrumb: { '@id': breadcrumbId },
+			mainEntity: faq.map((item) => ({
+				'@type': 'Question',
+				name: item.question,
+				acceptedAnswer: { '@type': 'Answer', text: item.answer },
+			})),
+		},
+		...services.map((service, index) => ({
+			'@type': 'Service',
+			'@id': new URL(`${pageUrl.pathname}#service-${index + 1}`, siteUrl).toString(),
+			name: service.name,
+			serviceType: service.name,
+			description: service.description,
+			url: pageUrl.toString(),
+			provider: { '@id': personId },
+			areaServed,
+		})),
+		{
+			'@type': 'BreadcrumbList',
+			'@id': breadcrumbId,
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					position: 1,
+					name: locale === 'es' ? 'Inicio' : 'Home',
+					item: new URL(locale === 'es' ? '/' : '/en/', siteUrl).toString(),
+				},
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: label,
+					item: pageUrl.toString(),
+				},
+			],
+		},
+	];
+};

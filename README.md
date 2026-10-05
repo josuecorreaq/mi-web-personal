@@ -102,6 +102,8 @@ La implementación Laravel viva está en `C:\api-josuecorreaq`; su contrato comp
 | --- | --- |
 | `/` | Portafolio en español y URL canónica principal. |
 | `/en/` | Portafolio en inglés. |
+| `/servicios/` | Servicios en español: qué construyo, proceso, modalidad y preguntas frecuentes. |
+| `/en/services/` | Servicios en inglés. |
 | `/proyectos/<slug>/` | Caso de estudio en español. |
 | `/en/projects/<slug>/` | Caso de estudio en inglés. |
 | `/sitemap.xml` | Sitemap generado con alternates `hreflang`. |
@@ -116,7 +118,7 @@ Slugs publicados actualmente:
 | Sistema de Desembolsos | `/proyectos/sistema-gestion-desembolsos/` | `/en/projects/disbursement-management-system/` |
 | Plataforma de Gestión Crediticia | `/proyectos/plataforma-gestion-crediticia/` | `/en/projects/credit-management-platform/` |
 
-El selector de idioma enlaza directamente entre `/` y `/en/`. Los casos de estudio enlazan a su equivalente en el otro idioma mediante `hreflang`.
+El selector de idioma enlaza directamente entre `/` y `/en/`. Los servicios y los casos de estudio enlazan a su equivalente en el otro idioma mediante `hreflang`.
 
 ## Estructura del proyecto
 
@@ -139,10 +141,12 @@ grateful-giant/
 │   │   ├── errors/            # Presentación de errores
 │   │   ├── layout/            # Header y footer
 │   │   ├── projects/          # Tarjeta y caso de estudio
-│   │   └── sections/          # Secciones principales del portafolio
+│   │   ├── sections/          # Secciones principales del portafolio
+│   │   └── services/          # Página de servicios
 │   ├── data/
 │   │   ├── projects.ts        # Definición, slugs y rutas de los proyectos
 │   │   ├── schema.ts          # Datos estructurados JSON-LD
+│   │   ├── services.ts        # Rutas y fechas de la página de servicios
 │   │   ├── social.ts          # Enlaces de contacto y perfiles
 │   │   └── technologies.ts    # Tecnologías por idioma
 │   ├── i18n/
@@ -151,10 +155,12 @@ grateful-giant/
 │   ├── layouts/
 │   │   ├── BaseLayout.astro    # Documento, SEO y tema inicial
 │   │   ├── MainLayout.astro    # Navegación y composición principal
+│   │   ├── PageLayout.astro    # Envoltura de páginas sueltas (servicios)
 │   │   └── ProjectLayout.astro # Envoltura de los casos de estudio
 │   ├── pages/
 │   │   ├── en/                # Rutas en inglés
 │   │   ├── proyectos/         # Casos de estudio en español
+│   │   ├── servicios/         # Servicios en español
 │   │   ├── index.astro        # Portada en español
 │   │   ├── 404.astro          # Error localizado
 │   │   └── sitemap.xml.ts     # Generador del sitemap
@@ -195,7 +201,7 @@ export default defineConfig({
 
 Si el sitio se publica en otro dominio, actualiza `site` antes de compilar. Astro utiliza este valor para generar las URL canónicas y las referencias `hreflang`.
 
-Las URL indexables son las dos portadas (`/` y `/en/`) y los cuatro casos de estudio. Todas publican canonical propio, `hreflang` recíproco y `x-default` apuntando a la versión en español.
+Las URL indexables son las dos portadas (`/` y `/en/`), las dos páginas de servicios (`/servicios/` y `/en/services/`) y los cuatro casos de estudio. Todas publican canonical propio, `hreflang` recíproco y `x-default` apuntando a la versión en español.
 
 Después de un despliegue que añada o renombre rutas:
 

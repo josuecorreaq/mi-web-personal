@@ -8,6 +8,7 @@ const translations = {
 				'Josué Correa Quispe, desarrollador backend en Piura, Perú. Convierto procesos desordenados en sistemas claros con Laravel, PHP y MySQL. Presencial o remoto.',
 		},
 		nav: {
+			services: 'Servicios',
 			projects: 'Proyectos',
 			approach: 'Enfoque',
 			trajectory: 'Trayectoria',
@@ -336,6 +337,120 @@ const translations = {
 				},
 			],
 		},
+		services: {
+			meta: {
+				title: 'Sistemas web a medida y APIs en Piura, Perú | Josué Correa',
+				description:
+					'Desarrollo sistemas web a medida y APIs REST con Laravel, PHP y MySQL. Presencial en Piura, remoto en todo Perú y el extranjero. Cotización por alcance.',
+			},
+			label: 'Servicios',
+			hero: {
+				title: 'Sistemas web a medida y APIs',
+				lead: 'Para empresas en Piura, en todo Perú y en el extranjero.',
+				cta: 'Cuéntame tu proyecto',
+				facts: [
+					{ label: 'Ubicación', value: 'Piura, Perú', icon: 'location' },
+					{ label: 'Modalidad', value: 'Presencial en Piura o remoto', icon: 'circle-check' },
+				],
+			},
+			offer: {
+				items: [
+					{
+						name: 'Sistemas web a medida',
+						description:
+							'Cuando la operación vive repartida entre Excel, correo y mensajería, construyo un solo sistema donde cada registro tiene fecha y responsable.',
+						points: [
+							'Un sistema en lugar de hojas de cálculo y mensajes sueltos.',
+							'Permisos por rol: cada persona ve y hace solo lo que le corresponde.',
+							'Historial consultable de cada operación.',
+							'Reportes y PDFs generados desde los datos del sistema.',
+						],
+					},
+					{
+						name: 'APIs REST e integraciones',
+						description:
+							'Diseño APIs que sostienen un frontend web y conectan los sistemas que ya usa tu negocio, para que los datos viajen solos en lugar de copiarse a mano.',
+						points: [
+							'APIs REST para frontends web, con autenticación y permisos validados en el servidor.',
+							'Integración entre sistemas internos que hoy no se comunican.',
+							'Reportes y PDFs servidos desde la API.',
+							'Rutas cubiertas por pruebas, para cambiar el sistema sin romper a quien lo consume.',
+						],
+					},
+				],
+			},
+			process: {
+				title: 'Cómo trabajo',
+				label: 'Proceso',
+				stages: 'etapas',
+				caption: 'Cada entrega es software funcionando que revisas antes de pasar a la siguiente etapa.',
+				steps: [
+					{
+						title: 'Conversación inicial',
+						description:
+							'Me cuentas cómo funciona hoy el proceso y qué está fallando. Primero entiendo el negocio, después elijo la tecnología.',
+					},
+					{
+						title: 'Propuesta con alcance y etapas',
+						description:
+							'Te envío qué se construye, en qué etapas y cuánto cuesta. Sin precios genéricos: la cotización sale del alcance.',
+					},
+					{
+						title: 'Construcción por entregas',
+						description: 'Trabajo por etapas y en cada entrega revisas el avance funcionando, no solo un informe.',
+					},
+					{
+						title: 'Puesta en producción',
+						description: 'El sistema entra en operación con un periodo de garantía incluido para corregir errores.',
+					},
+				],
+			},
+			reach: {
+				title: 'Dónde trabajo',
+				items: [
+					{ label: 'Piura', value: 'Presencial, con reuniones en tu empresa para entender el proceso de cerca.' },
+					{ label: 'Resto de Perú', value: 'Remoto, con reuniones por videollamada y entregas en línea.' },
+					{ label: 'Extranjero', value: 'Remoto, en la zona horaria de Perú (UTC−5).' },
+				],
+			},
+			evidence: {
+				title: 'Sistemas que ya construí',
+			},
+			faq: {
+				title: 'Preguntas frecuentes',
+				items: [
+					{
+						question: '¿Cuánto cuesta un sistema a medida?',
+						answer:
+							'Depende del alcance. Después de una primera conversación te envío una propuesta con lo que se construye, las etapas y el costo de cada una.',
+					},
+					{
+						question: '¿Cuánto tarda?',
+						answer:
+							'También depende del alcance. La propuesta fija etapas con fechas, y en cada entrega ves el sistema funcionando.',
+					},
+					{
+						question: '¿Trabajas presencial o remoto?',
+						answer:
+							'Presencial en Piura. Para el resto de Perú y el extranjero trabajo en remoto, con reuniones por videollamada.',
+					},
+					{
+						question: '¿Qué pasa después de la entrega?',
+						answer:
+							'Cada proyecto incluye un periodo de garantía para corregir errores; su duración queda definida en la propuesta. Las mejoras y el soporte posteriores se acuerdan aparte.',
+					},
+					{
+						question: '¿Con qué tecnologías trabajas?',
+						answer: 'Laravel, PHP y MySQL en el backend, y React en el frontend web. En el desarrollo uso Git y Docker.',
+					},
+				],
+			},
+			cta: {
+				title: '¿Tienes un proceso que ordenar?',
+				copy: 'Cuéntame cómo funciona hoy y qué necesitas que cambie.',
+				action: 'Contáctame',
+			},
+		},
 		contact: {
 			title: 'Hablemos de tu próximo proyecto.',
 			channelsLabel: 'Escríbeme o encuéntrame en',
@@ -382,6 +497,7 @@ const translations = {
 				'Josue Correa Quispe, backend developer based in Piura, Peru. I turn messy processes into clear systems with Laravel, PHP and MySQL. On-site or remote.',
 		},
 		nav: {
+			services: 'Services',
 			projects: 'Projects',
 			approach: 'Approach',
 			trajectory: 'Experience',
@@ -709,6 +825,119 @@ const translations = {
 					},
 				},
 			],
+		},
+		services: {
+			meta: {
+				title: 'Custom Web Systems & APIs | Josue Correa, Peru (Remote)',
+				description:
+					'Custom web systems and REST APIs built with Laravel, PHP and MySQL for businesses in Peru and abroad. Remote, UTC−5. Quoted by scope.',
+			},
+			label: 'Services',
+			hero: {
+				title: 'Custom web systems and APIs',
+				lead: 'For businesses in Piura, across Peru and abroad.',
+				cta: 'Tell me about your project',
+				facts: [
+					{ label: 'Location', value: 'Piura, Peru', icon: 'location' },
+					{ label: 'Work mode', value: 'On-site in Piura or remote', icon: 'circle-check' },
+				],
+			},
+			offer: {
+				items: [
+					{
+						name: 'Custom web systems',
+						description:
+							'When operations are spread across spreadsheets, email and chat, I build a single system where every record has a date and an owner.',
+						points: [
+							'One system instead of spreadsheets and scattered messages.',
+							'Role-based permissions: each person sees and does only what their role allows.',
+							'A searchable history of every operation.',
+							'Reports and PDFs generated from the system’s data.',
+						],
+					},
+					{
+						name: 'REST APIs and integrations',
+						description:
+							'I design APIs that power a web frontend and connect the systems your business already uses, so data moves on its own instead of being copied by hand.',
+						points: [
+							'REST APIs for web frontends, with authentication and permissions enforced on the server.',
+							'Integrations between internal systems that don’t talk to each other today.',
+							'Reports and PDFs served from the API.',
+							'Routes covered by tests, so the system can change without breaking whoever consumes it.',
+						],
+					},
+				],
+			},
+			process: {
+				title: 'How I work',
+				label: 'Process',
+				stages: 'stages',
+				caption: 'Every delivery is working software you review before moving on to the next stage.',
+				steps: [
+					{
+						title: 'Initial conversation',
+						description:
+							'You walk me through how the process works today and what is failing. I understand the business first, then choose the technology.',
+					},
+					{
+						title: 'Proposal with scope and stages',
+						description:
+							'I send you what will be built, in which stages and at what cost. No generic prices: the quote comes from the scope.',
+					},
+					{
+						title: 'Built in deliveries',
+						description: 'I work in stages, and at each delivery you review working software, not just a report.',
+					},
+					{
+						title: 'Go-live',
+						description: 'The system goes into production with an included warranty period to fix defects.',
+					},
+				],
+			},
+			reach: {
+				title: 'Where I work',
+				items: [
+					{ label: 'Piura', value: 'On-site, with meetings at your company to understand the process up close.' },
+					{ label: 'Rest of Peru', value: 'Remote, with video calls and online deliveries.' },
+					{ label: 'Abroad', value: 'Remote, on Peru time (UTC−5), which overlaps with US business hours.' },
+				],
+			},
+			evidence: {
+				title: 'Systems I have built',
+			},
+			faq: {
+				title: 'Frequently asked questions',
+				items: [
+					{
+						question: 'How much does a custom system cost?',
+						answer:
+							'It depends on the scope. After a first conversation I send you a proposal with what will be built, the stages and the cost of each one.',
+					},
+					{
+						question: 'How long does it take?',
+						answer:
+							'That also depends on the scope. The proposal sets stages with dates, and at each delivery you see the system working.',
+					},
+					{
+						question: 'Do you work on-site or remotely?',
+						answer: 'On-site in Piura. For the rest of Peru and clients abroad I work remotely, with video calls.',
+					},
+					{
+						question: 'What happens after delivery?',
+						answer:
+							'Every project includes a warranty period to fix defects; its length is set in the proposal. Later improvements and support are agreed separately.',
+					},
+					{
+						question: 'Which technologies do you use?',
+						answer: 'Laravel, PHP and MySQL on the backend, and React for the web frontend. I use Git and Docker during development.',
+					},
+				],
+			},
+			cta: {
+				title: 'Have a process that needs order?',
+				copy: 'Tell me how it works today and what needs to change.',
+				action: 'Get in touch',
+			},
 		},
 		contact: {
 			title: 'Let’s talk about your next project.',
