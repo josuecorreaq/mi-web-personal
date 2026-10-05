@@ -20,6 +20,22 @@
 		<xhtml:link rel="alternate" hreflang="x-default" href="https://josuecorreaq.com/" />
 	</url>
 	<url>
+		<loc>https://josuecorreaq.com/servicios/</loc>
+		<lastmod>2026-10-05</lastmod>
+		<priority>0.9</priority>
+		<xhtml:link rel="alternate" hreflang="es" href="https://josuecorreaq.com/servicios/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://josuecorreaq.com/en/services/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://josuecorreaq.com/servicios/" />
+	</url>
+	<url>
+		<loc>https://josuecorreaq.com/en/services/</loc>
+		<lastmod>2026-10-05</lastmod>
+		<priority>0.9</priority>
+		<xhtml:link rel="alternate" hreflang="es" href="https://josuecorreaq.com/servicios/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://josuecorreaq.com/en/services/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://josuecorreaq.com/servicios/" />
+	</url>
+	<url>
 		<loc>https://josuecorreaq.com/proyectos/sistema-gestion-desembolsos/</loc>
 		<lastmod>2026-10-05</lastmod>
 		<priority>0.8</priority>

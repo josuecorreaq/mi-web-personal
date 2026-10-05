@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { PROJECT_LAST_MODIFIED, projectRoutePairs } from '../data/projects';
+import { servicesRoutePair } from '../data/services';
 
 interface LocalizedPage {
 	es: string;
@@ -14,6 +15,10 @@ const pages: LocalizedPage[] = [
 		en: '/en/',
 		lastmod: PROJECT_LAST_MODIFIED,
 		priority: '1.0',
+	},
+	{
+		...servicesRoutePair,
+		priority: '0.9',
 	},
 	...projectRoutePairs.map((project) => ({
 		...project,
