@@ -1,0 +1,34 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+	href: string;
+	title: string;
+	eyebrow?: string;
+	description?: string;
+	projectPath?: string;
+	class?: string;
+}
+
+const { href, title, eyebrow, description, projectPath, class: className } = Astro.props;
+---
+
+<a
+	href={href}
+	class:list={['group flex min-h-22 items-center justify-between gap-6', description ? 'py-5' : 'py-4', className]}
+>
+	<span class="min-w-0">
+		{eyebrow && <span class="block font-mono text-[0.78rem] text-muted">{eyebrow}</span>}
+		<span
+			class:list={[
+				'block text-balance type-link-title underline decoration-transparent decoration-[3px] underline-offset-[6px] transition-colors group-hover:text-accent light:group-hover:decoration-brand',
+				eyebrow && 'mt-1',
+			]}
+			data-project-path={projectPath}
+		>
+			{title}
+		</span>
+		{description && <span class="mt-1.5 block max-w-[34em] text-pretty text-muted">{description}</span>}
+	</span>
+	<Icon name="arrow-right" class="size-5 shrink-0 transition-transform duration-200 group-hover:translate-x-1" />
+</a>

@@ -1,0 +1,133 @@
+---
+import { figureBar, figureCaption } from '../../styles/classes';
+
+interface Props {
+	label: string;
+	stagesLabel: string;
+	caption: string;
+	steps: readonly { readonly title: string; readonly description: string }[];
+	class?: string;
+}
+
+const { label, stagesLabel, caption, steps, class: className } = Astro.props;
+---
+
+<figure class:list={['m-0 min-w-0 border border-line', className]} data-process>
+	<div class={figureBar}>
+		<span>{label}</span>
+		<span>{steps.length} {stagesLabel}</span>
+	</div>
+	<ol class="grid gap-y-5 p-[clamp(1rem,2.4vw,1.75rem)]" data-process-steps>
+		{steps.map((step, index) => (
+			<li class="relative" data-animate-reveal="up" data-animate-reveal-delay={index * 90}>
+				{index > 0 && (
+					<span
+						class="absolute -top-5 left-7 flex h-5 w-3 -translate-x-1/2 text-field"
+						data-process-edge
+						data-state="idle"
+						aria-hidden="true"
+					>
+						<svg class="size-full overflow-visible" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square">
+							<path d="M6 0v20" />
+							<path class="process-trace" d="M6 0v20" />
+							<path class="process-head" d="M2.5 15.5 6 19l3.5-3.5" />
+						</svg>
+					</span>
+				)}
+				<div
+					class="border border-line px-4 py-3 transition-colors duration-200 data-[state=active]:border-accent motion-reduce:transition-none"
+					data-process-step
+					data-state="idle"
+				>
+					<h3 class="font-mono text-[0.84rem] font-semibold">{step.title}</h3>
+					<p class="mt-1 text-pretty text-[0.9375rem] leading-relaxed text-muted">{step.description}</p>
+				</div>
+			</li>
+		))}
+	</ol>
+	<figcaption class={figureCaption}>{caption}</figcaption>
+</figure>
+
+<script>
+
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+	document.querySelectorAll<HTMLElement>('[data-process]').forEach((figure) => {
+		const list = figure.querySelector<HTMLElement>('[data-process-steps]');
+		const steps = Array.from(figure.querySelectorAll<HTMLElement>('[data-process-step]'));
+		const edges = Array.from(figure.querySelectorAll<HTMLElement>('[data-process-edge]'));
+
+		if (!list || steps.length === 0 || reduceMotion.matches || !('IntersectionObserver' in window)) return;
+
+		const setState = (element: HTMLElement | undefined, state: 'idle' | 'active') => {
+			if (element) element.dataset.state = state;
+		};
+
+		const playTour = () => {
+			const start = 700;
+			const perStage = 420;
+			const traceLength = 220;
+
+			window.setTimeout(() => setState(steps[0], 'active'), start);
+			edges.forEach((edge, index) => {
+				const leaves = start + 200 + index * perStage;
+				window.setTimeout(() => setState(edge, 'active'), leaves);
+				window.setTimeout(() => setState(steps[index + 1], 'active'), leaves + traceLength);
+			});
+			window.setTimeout(() => {
+				[...steps, ...edges].forEach((element) => setState(element, 'idle'));
+			}, start + 200 + edges.length * perStage + 1200);
+		};
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (!entries.some((entry) => entry.isIntersecting)) return;
+				observer.disconnect();
+				playTour();
+			},
+			{ threshold: 0.6 },
+		);
+		observer.observe(list);
+	});
+</script>
+
+<style>
+	/* A trace draws down each arrow and its head lights as it lands. The script only flips data-state. */
+	.process-trace {
+		color: var(--color-accent);
+		opacity: 0;
+		transform: scaleY(0);
+		transform-box: fill-box;
+		transform-origin: top;
+	}
+
+	[data-state='active'] .process-trace {
+		opacity: 1;
+		transform: none;
+	}
+
+	[data-state='active'] .process-head {
+		color: var(--color-accent);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		/* Settling back fades the traces instead of drawing them up again. */
+		.process-trace {
+			transition:
+				opacity 300ms ease,
+				transform 0s 300ms;
+		}
+
+		.process-head {
+			transition: color 300ms ease;
+		}
+
+		[data-state='active'] .process-trace {
+			transition: transform 220ms var(--ease-out-quart);
+		}
+
+		[data-state='active'] .process-head {
+			transition: color 120ms ease 160ms;
+		}
+	}
+</style>

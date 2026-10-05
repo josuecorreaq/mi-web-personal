@@ -1,0 +1,30 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Icon from './Icon.astro';
+
+interface Props extends HTMLAttributes<'a'> {
+	variant?: 'primary' | 'inverse' | 'text';
+	arrow?: 'right' | 'down';
+}
+
+const { variant = 'primary', arrow = 'right', class: className, ...attrs } = Astro.props;
+const variantClass = {
+	primary:
+		'gap-2.5 border border-brand-edge bg-brand px-5.5 text-on-brand transition-[background-color,translate] hover:bg-brand-hover active:translate-y-px',
+	inverse:
+		'gap-2.5 border border-on-drench bg-on-drench px-5.5 text-drench transition-[opacity,translate] hover:opacity-90 active:translate-y-px',
+	text: 'gap-2 text-ink transition-colors hover:text-accent',
+}[variant];
+const arrowClass =
+	arrow === 'down'
+		? 'size-4 shrink-0 transition-transform duration-200 group-hover:translate-y-[3px]'
+		: 'size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-[3px]';
+---
+
+<a
+	class:list={['group inline-flex min-h-12 items-center font-mono text-sm font-semibold', variantClass, className]}
+	{...attrs}
+>
+	{variant === 'text' ? <span class="link-rule link-rule-rest"><slot /></span> : <slot />}
+	<Icon name={arrow === 'down' ? 'arrow-down' : 'arrow-right'} class={arrowClass} />
+</a>

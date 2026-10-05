@@ -1,5 +1,6 @@
 ---
-import Icon from '../common/Icon.astro';
+import ActionLink from '../common/ActionLink.astro';
+import FactList from '../common/FactList.astro';
 import type { Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
 
@@ -51,37 +52,10 @@ const statementClass =
 		data-animate-reveal-delay="380"
 	>
 		<div class="flex flex-wrap items-center gap-x-6 gap-y-3">
-			<a
-				href="#contacto"
-				data-scroll-target="contacto"
-				class="group inline-flex min-h-12 items-center gap-2.5 border border-brand-edge bg-brand px-5.5 font-mono text-sm font-semibold text-on-brand transition-[background-color,translate] hover:bg-brand-hover active:translate-y-px"
-			>
-				{t.contactCta}
-				<Icon name="arrow-right" class="size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-[3px]" />
-			</a>
-			<a
-				href="#proyectos"
-				data-scroll-target="proyectos"
-				class="group inline-flex min-h-12 items-center gap-2 font-mono text-sm font-semibold text-ink transition-colors hover:text-accent"
-			>
-				{/* Next to the primary button it keeps a hairline at rest; on hover the drawn rule of the other text links runs over it. */}
-				<span class="link-rule link-rule-rest">
-					{t.projectsCta}
-				</span>
-				<Icon name="arrow-down" class="size-4 shrink-0 transition-transform duration-200 group-hover:translate-y-[3px]" />
-			</a>
+			<ActionLink href="#contacto" data-scroll-target="contacto">{t.contactCta}</ActionLink>
+			<ActionLink href="#proyectos" data-scroll-target="proyectos" variant="text" arrow="down">{t.projectsCta}</ActionLink>
 		</div>
 
-		<dl class="flex flex-wrap gap-x-12 gap-y-4">
-			{t.facts.map((fact) => (
-				<div>
-					<dt class="flex items-center gap-1.5 font-mono text-[0.78rem] text-muted">
-						<Icon name={fact.icon} class="size-3.5 shrink-0 text-accent" />
-						{fact.label}
-					</dt>
-					<dd class="mt-1 pl-5 text-[0.9375rem]">{fact.value}</dd>
-				</div>
-			))}
-		</dl>
+		<FactList facts={t.facts} />
 	</div>
 </section>

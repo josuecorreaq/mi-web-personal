@@ -13,6 +13,10 @@ export const social = {
 		handle: 'x.com/josuecorreaqu',
 		url: 'https://x.com/josuecorreaqu',
 	},
+	// Google Business Profile, by its Maps CID: stable, unlike the share.google short links.
+	googleBusiness: {
+		url: 'https://www.google.com/maps?cid=3448927027785118895',
+	},
 } as const;
 
-export const socialProfileUrls = [social.linkedin.url, social.github.url, social.x.url];
+export const socialProfileUrls = [social.linkedin.url, social.github.url, social.x.url, social.googleBusiness.url];
