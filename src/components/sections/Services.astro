@@ -1,0 +1,39 @@
+---
+import ActionLink from '../common/ActionLink.astro';
+import LinkRow from '../common/LinkRow.astro';
+import { servicesPaths } from '../../data/services';
+import type { Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n/translations';
+import { detailRow } from '../../styles/classes';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale).services;
+const servicesPath = servicesPaths[locale];
+---
+
+<section id="servicios" class="page-shell border-t border-line py-section">
+	<div class={detailRow.row}>
+		<div class="min-w-0 flex-[0_1_20rem]">
+			<h2 class="type-section-title">{t.label}</h2>
+			<p class="mt-4 max-w-[28em] text-pretty text-muted">{t.teaser}</p>
+			<ActionLink href={servicesPath} variant="text" class="mt-5">{t.teaserAction}</ActionLink>
+		</div>
+
+		<ul class:list={[detailRow.body, 'border-t border-line']}>
+			{t.offer.items.map((service, index) => (
+				<li data-animate-reveal="up" data-animate-reveal-delay={index * 80}>
+					<LinkRow
+						href={`${servicesPath}#${service.id}`}
+						title={service.name}
+						description={service.summary}
+						class="border-b border-line"
+					/>
+				</li>
+			))}
+		</ul>
+	</div>
+</section>

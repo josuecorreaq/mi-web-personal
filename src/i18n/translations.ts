@@ -5,7 +5,7 @@ const translations = {
 		meta: {
 			title: 'Josué Correa | Desarrollador Backend en Piura, Perú',
 			description:
-				'Josué Correa Quispe, desarrollador backend en Piura, Perú. Convierto procesos desordenados en sistemas claros con Laravel, PHP y MySQL. Presencial o remoto.',
+				'Josué Correa Quispe, desarrollador backend en Piura, Perú. Convierto procesos manuales en sistemas claros con Laravel, PHP y MySQL. Presencial o remoto.',
 		},
 		nav: {
 			services: 'Servicios',
@@ -22,7 +22,7 @@ const translations = {
 		},
 		hero: {
 			lead: 'Soy Josué Correa, desarrollador backend.',
-			statement: 'Convierto procesos desordenados en sistemas claros que crecen',
+			statement: 'Convierto procesos manuales en sistemas claros que crecen',
 			statementMark: 'sin romperse',
 			contactCta: 'Contáctame',
 			projectsCta: 'Ver proyectos',
@@ -54,15 +54,15 @@ const translations = {
 			principles: [
 				{
 					title: 'Separación por dominios',
-					description: 'Cada área del negocio vive en su propio módulo, con una frontera pública explícita.',
+					description: 'Cada área del negocio en su módulo, con fronteras claras.',
 				},
 				{
 					title: 'Acceso controlado en el servidor',
-					description: 'Sesión, permiso por acción y alcance se validan en el backend, nunca en la interfaz.',
+					description: 'Permisos validados en el servidor, nunca en la interfaz.',
 				},
 				{
 					title: 'Cambios verificados',
-					description: 'Las rutas públicas están cubiertas por pruebas: una migración interna no rompe a quien ya consume la API.',
+					description: 'Rutas cubiertas por pruebas: cambiar no rompe lo que ya funciona.',
 				},
 			],
 		},
@@ -190,7 +190,7 @@ const translations = {
 			labels: {
 				architecture: 'Arquitectura',
 				layers: 'capas',
-				readCase: 'Leer el caso completo',
+				viewProject: 'Ver proyecto completo',
 				inspectHint: 'Selecciona una capa para ver de qué depende.',
 				dependsOn: 'Depende de',
 				noDependencies: 'No depende de ninguna capa',
@@ -344,6 +344,8 @@ const translations = {
 					'Desarrollo sistemas web a medida y APIs REST con Laravel, PHP y MySQL. Presencial en Piura, remoto en todo Perú y el extranjero. Cotización por alcance.',
 			},
 			label: 'Servicios',
+			teaser: 'Sistemas web a medida y APIs para empresas en Piura, en todo Perú y en el extranjero.',
+			teaserAction: 'Ver servicios',
 			hero: {
 				title: 'Sistemas web a medida y APIs',
 				lead: 'Para empresas en Piura, en todo Perú y en el extranjero.',
@@ -356,7 +358,9 @@ const translations = {
 			offer: {
 				items: [
 					{
+						id: 'sistemas-web-a-medida',
 						name: 'Sistemas web a medida',
+						summary: 'Aplicaciones de gestión hechas a la medida de tu proceso, desde el registro diario hasta los reportes.',
 						description:
 							'Cuando la operación vive repartida entre Excel, correo y mensajería, construyo un solo sistema donde cada registro tiene fecha y responsable.',
 						points: [
@@ -367,7 +371,9 @@ const translations = {
 						],
 					},
 					{
+						id: 'apis-rest-e-integraciones',
 						name: 'APIs REST e integraciones',
+						summary: 'APIs para tu frontend web y para conectar los sistemas que tu negocio ya usa.',
 						description:
 							'Diseño APIs que sostienen un frontend web y conectan los sistemas que ya usa tu negocio, para que los datos viajen solos en lugar de copiarse a mano.',
 						points: [
@@ -494,7 +500,7 @@ const translations = {
 		meta: {
 			title: 'Josue Correa | Backend Developer, Peru (Remote)',
 			description:
-				'Josue Correa Quispe, backend developer based in Piura, Peru. I turn messy processes into clear systems with Laravel, PHP and MySQL. On-site or remote.',
+				'Josue Correa Quispe, backend developer based in Piura, Peru. I turn manual processes into clear systems with Laravel, PHP and MySQL. On-site or remote.',
 		},
 		nav: {
 			services: 'Services',
@@ -511,7 +517,7 @@ const translations = {
 		},
 		hero: {
 			lead: 'I’m Josue Correa, a backend developer.',
-			statement: 'I turn messy processes into clear systems that grow',
+			statement: 'I turn manual processes into clear systems that grow',
 			statementMark: 'without breaking',
 			contactCta: 'Get in touch',
 			projectsCta: 'View projects',
@@ -543,15 +549,15 @@ const translations = {
 			principles: [
 				{
 					title: 'Separation by domain',
-					description: 'Every business area lives in its own module, behind an explicit public boundary.',
+					description: 'Each business area in its own module, with clear boundaries.',
 				},
 				{
 					title: 'Access enforced on the server',
-					description: 'Session, per-action permission and scope are checked in the backend, never in the interface.',
+					description: 'Permissions checked on the server, never in the interface.',
 				},
 				{
 					title: 'Verified changes',
-					description: 'Public routes are covered by tests: an internal migration never breaks an existing API consumer.',
+					description: 'Routes under test: changes don’t break what works.',
 				},
 			],
 		},
@@ -679,7 +685,7 @@ const translations = {
 			labels: {
 				architecture: 'Architecture',
 				layers: 'layers',
-				readCase: 'Read the full case study',
+				viewProject: 'View full project',
 				inspectHint: 'Select a layer to see what it depends on.',
 				dependsOn: 'Depends on',
 				noDependencies: 'Depends on no other layer',
@@ -833,6 +839,8 @@ const translations = {
 					'Custom web systems and REST APIs built with Laravel, PHP and MySQL for businesses in Peru and abroad. Remote, UTC−5. Quoted by scope.',
 			},
 			label: 'Services',
+			teaser: 'Custom web systems and APIs for businesses in Piura, across Peru and abroad.',
+			teaserAction: 'See services',
 			hero: {
 				title: 'Custom web systems and APIs',
 				lead: 'For businesses in Piura, across Peru and abroad.',
@@ -845,7 +853,9 @@ const translations = {
 			offer: {
 				items: [
 					{
+						id: 'custom-web-systems',
 						name: 'Custom web systems',
+						summary: 'Management applications built around your process, from day-to-day records to reports.',
 						description:
 							'When operations are spread across spreadsheets, email and chat, I build a single system where every record has a date and an owner.',
 						points: [
@@ -856,7 +866,9 @@ const translations = {
 						],
 					},
 					{
+						id: 'rest-apis-and-integrations',
 						name: 'REST APIs and integrations',
+						summary: 'APIs for your web frontend and to connect the systems your business already uses.',
 						description:
 							'I design APIs that power a web frontend and connect the systems your business already uses, so data moves on its own instead of being copied by hand.',
 						points: [

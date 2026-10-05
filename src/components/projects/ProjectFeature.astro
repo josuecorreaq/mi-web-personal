@@ -1,13 +1,13 @@
 ---
 import ArchitectureFigure from './ArchitectureFigure.astro';
-import Icon from '../common/Icon.astro';
+import ActionLink from '../common/ActionLink.astro';
 import MetaList from '../common/MetaList.astro';
 import type { Project } from '../../data/projects';
 
 interface Labels {
 	readonly architecture: string;
 	readonly layers: string;
-	readonly readCase: string;
+	readonly viewProject: string;
 	readonly inspectHint: string;
 	readonly dependsOn: string;
 	readonly noDependencies: string;
@@ -57,17 +57,14 @@ const { project, labels, reversed = false, divided = false } = Astro.props;
 			))}
 		</dl>
 
-		<a
+		<ActionLink
 			href={project.path}
-			class="group mt-6 inline-flex min-h-11 items-center gap-2 font-mono text-sm font-semibold text-ink transition-colors hover:text-accent"
-			aria-label={`${labels.readCase}: ${project.name}`}
+			variant="text"
+			class="mt-6"
+			aria-label={`${labels.viewProject}: ${project.name}`}
 		>
-			{/* Same drawn rule as the contact channels: it runs toward the arrow on hover. */}
-			<span class="link-rule">
-				{labels.readCase}
-			</span>
-			<Icon name="arrow-right" class="size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-[3px]" />
-		</a>
+			{labels.viewProject}
+		</ActionLink>
 	</div>
 
 	<ArchitectureFigure

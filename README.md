@@ -136,13 +136,13 @@ grateful-giant/
 │   └── generate-csp.mjs       # Calcula hashes y escribe dist/.htaccess
 ├── src/
 │   ├── components/
-│   │   ├── common/            # Botón, iconos, tema y animaciones
+│   │   ├── common/            # Piezas compartidas: enlaces de acción, listas, fila enlazada, bloque de contacto, iconos, tema y animaciones
 │   │   ├── cv/                # Documento y modal del CV
 │   │   ├── errors/            # Presentación de errores
 │   │   ├── layout/            # Header y footer
 │   │   ├── projects/          # Tarjeta y caso de estudio
 │   │   ├── sections/          # Secciones principales del portafolio
-│   │   └── services/          # Página de servicios
+│   │   └── services/          # Página de servicios, diagrama del proceso y preguntas frecuentes
 │   ├── data/
 │   │   ├── projects.ts        # Definición, slugs y rutas de los proyectos
 │   │   ├── schema.ts          # Datos estructurados JSON-LD
@@ -168,7 +168,8 @@ grateful-giant/
 │   │   ├── contact-form.ts    # Envío y validación del formulario
 │   │   └── cv-modal.ts        # Control del modal del CV
 │   └── styles/
-│       └── global.css         # Tokens, temas y estilos globales
+│       ├── classes.ts         # Recetas de layout compartidas (filas de detalle, etiquetas, figuras)
+│       └── global.css         # Tokens, temas, escala tipográfica (type-*) y estilos globales
 ├── astro.config.mjs
 ├── package.json
 └── tsconfig.json

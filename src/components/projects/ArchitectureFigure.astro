@@ -1,5 +1,6 @@
 ---
 import type { ArchitectureLayer } from '../../data/projects';
+import { figureBar } from '../../styles/classes';
 
 interface Props {
 	layers: readonly ArchitectureLayer[];
@@ -52,7 +53,7 @@ const ease = 'ease-out-quart motion-reduce:transition-none';
 ---
 
 <figure class:list={['m-0 min-w-0 border border-line', className]} data-architecture>
-	<div class="flex justify-between gap-3 border-b border-line px-4 py-3 font-mono text-[0.78rem] text-muted">
+	<div class={figureBar}>
 		<span>{labels.architecture}</span>
 		<span>{rows.length} {labels.layers}</span>
 	</div>

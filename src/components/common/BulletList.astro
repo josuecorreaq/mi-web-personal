@@ -1,0 +1,21 @@
+---
+interface Props {
+	items: readonly string[];
+	class?: string;
+}
+
+const { items, class: className } = Astro.props;
+---
+
+<ul class:list={['border-t border-line', className]}>
+	{items.map((item, index) => (
+		<li
+			class="flex gap-3.5 border-b border-line py-4.5 text-pretty leading-relaxed"
+			data-animate-reveal="up"
+			data-animate-reveal-delay={index * 70}
+		>
+			<span class="mt-[0.65rem] size-[5px] shrink-0 bg-accent" aria-hidden="true"></span>
+			{item}
+		</li>
+	))}
+</ul>

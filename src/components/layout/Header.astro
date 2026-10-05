@@ -2,7 +2,6 @@
 import type { Locale } from '../../i18n/config';
 import { getLocalePath } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
-import { servicesPaths } from '../../data/services';
 import ThemeToggle from '../common/ThemeToggle.astro';
 import BrandMark from './header/BrandMark.astro';
 import CvButton from './header/CvButton.astro';
@@ -24,9 +23,10 @@ const basePath = getLocalePath(locale);
 const sectionHref = (targetId: string) =>
 	isLanding ? `#${targetId}` : `${basePath}#${targetId}`;
 const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
-const sectionItems: NavItem[] = [
+const navItems: NavItem[] = [
 	{ id: 'proyectos', label: t.nav.projects },
 	{ id: 'enfoque', label: t.nav.approach },
+	{ id: 'servicios', label: t.nav.services },
 	{ id: 'trayectoria', label: t.nav.trajectory },
 	{ id: 'contacto', label: t.nav.contact },
 ].map((item) => ({
@@ -35,16 +35,6 @@ const sectionItems: NavItem[] = [
 	scrollTarget: scrollTarget(item.id),
 	current: !isLanding && item.id === currentSection,
 }));
-
-const navItems: NavItem[] = [
-	{
-		id: 'servicios',
-		label: t.nav.services,
-		href: servicesPaths[locale],
-		current: currentSection === 'servicios',
-	},
-	...sectionItems,
-];
 ---
 
 <header

@@ -1,7 +1,9 @@
 ---
 import ArrowLeft from '@lucide/astro/icons/arrow-left';
 import ArchitectureFigure from './ArchitectureFigure.astro';
-import Icon from '../common/Icon.astro';
+import BulletList from '../common/BulletList.astro';
+import ContactBand from '../common/ContactBand.astro';
+import LinkRow from '../common/LinkRow.astro';
 import MetaList from '../common/MetaList.astro';
 import { getLocalePath, type Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
@@ -10,6 +12,7 @@ import {
 	projectPageCopy,
 	type Project,
 } from '../../data/projects';
+import { detailRow, figureCaption } from '../../styles/classes';
 
 interface Props {
 	locale: Locale;
@@ -22,11 +25,7 @@ const labels = useTranslations(locale).projects.labels;
 const homePath = getLocalePath(locale);
 const nextProject = getNextProject(locale, project.id);
 // Each block below reads like a row of the landing's experience list: title on the left, content on the right.
-const rowClass = 'flex flex-wrap items-start gap-x-16 gap-y-5';
-const rowTitleClass =
-	'min-w-0 flex-[0_1_20rem] text-balance font-display text-[clamp(1.5rem,2.4vw,1.875rem)] font-heading leading-[1.15] tracking-[-0.02em]';
-const rowBodyClass = 'min-w-0 flex-[1_1_32rem]';
-const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
+const { row: rowClass, title: rowTitleClass, body: rowBodyClass, prose: proseClass } = detailRow;
 ---
 
 <article>
@@ -46,14 +45,14 @@ const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
 			emphasizeFirst
 		/>
 		<h1
-			class="ml-(--optical-inset) mt-4.5 max-w-[16em] text-balance font-display text-[clamp(2.25rem,5vw,4.25rem)] font-heading leading-[1.06] tracking-[-0.03em]"
+			class="ml-(--optical-inset) mt-4.5 max-w-[16em] text-balance type-page-title"
 			data-animate-text="words"
 			data-project-path={project.path}
 		>
 			{project.name}
 		</h1>
 		<p
-			class="mt-[clamp(0.75rem,2vw,1.25rem)] max-w-[32em] text-pretty font-display text-[clamp(1.25rem,2.2vw,1.75rem)] font-heading leading-[1.3] tracking-[-0.015em] text-muted"
+			class="mt-[clamp(0.75rem,2vw,1.25rem)] max-w-[32em] text-pretty type-lead text-muted"
 			data-animate-reveal="up"
 			data-animate-reveal-delay="200"
 		>
@@ -118,18 +117,7 @@ const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
 		<div class={rowClass}>
 			<h2 id="project-evidence" class={rowTitleClass}>{copy.evidence}</h2>
 			<div class={rowBodyClass}>
-				<ul class="border-t border-line">
-					{project.evidence.map((item, index) => (
-						<li
-							class="flex gap-3.5 border-b border-line py-4.5 text-pretty leading-relaxed"
-							data-animate-reveal="up"
-							data-animate-reveal-delay={index * 70}
-						>
-							<span class="mt-[0.65rem] size-[5px] shrink-0 bg-accent" aria-hidden="true"></span>
-							{item}
-						</li>
-					))}
-				</ul>
+				<BulletList items={project.evidence} />
 
 				{/* Long test names wrap only after an underscore, and wrapped lines hang under the first one. */}
 				{project.samples?.map((sample) => (
@@ -139,7 +127,7 @@ const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
 							<span>{sample.label}</span>
 						</div>
 						<pre class="whitespace-pre-wrap p-4 font-mono text-[0.8125rem] leading-relaxed [overflow-wrap:anywhere]" translate="no"><code>{sample.rows.map((row) => <span class:list={['block min-h-[1lh] pl-[2ch] -indent-[2ch]', row.trimStart().startsWith('//') && 'text-muted']}>{row.split(/(?<=_)/).map((part, index) => <>{index > 0 && <wbr />}{part}</>)}</span>)}</code></pre>
-						<figcaption class="border-t border-line px-4 py-3.5 text-sm leading-relaxed text-pretty text-muted">
+						<figcaption class={figureCaption}>
 							{sample.caption}
 						</figcaption>
 					</figure>
@@ -155,43 +143,21 @@ const proseClass = 'max-w-[38em] text-pretty text-lg leading-[1.7] text-muted';
 		</div>
 
 		<nav class="mt-block" aria-label={copy.next}>
-			<a
+			<LinkRow
 				href={nextProject.path}
-				class="group flex min-h-22 items-center justify-between gap-6 border-y border-line py-4"
-			>
-				<span class="min-w-0">
-					<span class="block font-mono text-[0.78rem] text-muted">{copy.next}</span>
-					<span
-						class="mt-1 block text-balance font-display text-[clamp(1.25rem,2.4vw,1.75rem)] font-heading leading-tight tracking-[-0.015em] underline decoration-transparent decoration-[3px] underline-offset-[6px] transition-colors group-hover:text-accent light:group-hover:decoration-brand"
-						data-project-path={nextProject.path}
-					>
-						{nextProject.name}
-					</span>
-				</span>
-				<Icon name="arrow-right" class="size-5 shrink-0 transition-transform duration-200 group-hover:translate-x-1" />
-			</a>
+				eyebrow={copy.next}
+				title={nextProject.name}
+				projectPath={nextProject.path}
+				class="border-y border-line"
+			/>
 		</nav>
 	</section>
 
-	<section class="drench bg-drench text-on-drench" aria-labelledby="project-contact">
-		<div class="page-shell py-section">
-			<h2
-				id="project-contact"
-				class="max-w-[14em] text-balance font-display text-[clamp(2rem,4.6vw,3.75rem)] font-heading leading-[1.05] tracking-[-0.03em]"
-				data-animate-text="words"
-			>
-				{copy.contact}
-			</h2>
-			<div class="mt-block flex flex-wrap items-end justify-between gap-x-16 gap-y-6">
-				<p class="max-w-[34em] text-pretty text-lg leading-[1.7] text-drench-muted">{copy.contactCopy}</p>
-				<a
-					href={`${homePath}#contacto`}
-					class="group inline-flex min-h-12 items-center gap-2.5 border border-on-drench bg-on-drench px-5.5 font-mono text-sm font-semibold text-drench transition-[opacity,translate] hover:opacity-90 active:translate-y-px"
-				>
-					{copy.contactAction}
-					<Icon name="arrow-right" class="size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-[3px]" />
-				</a>
-			</div>
-		</div>
-	</section>
+	<ContactBand
+		id="project-contact"
+		title={copy.contact}
+		copy={copy.contactCopy}
+		action={copy.contactAction}
+		href={`${homePath}#contacto`}
+	/>
 </article>

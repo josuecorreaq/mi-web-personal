@@ -1,0 +1,22 @@
+---
+import Icon, { type IconName } from './Icon.astro';
+
+// Short labelled facts with an icon (location, availability) under a hero.
+interface Props {
+	facts: readonly { readonly label: string; readonly value: string; readonly icon: IconName }[];
+}
+
+const { facts } = Astro.props;
+---
+
+<dl class="flex flex-wrap gap-x-12 gap-y-4">
+	{facts.map((fact) => (
+		<div>
+			<dt class="flex items-center gap-1.5 font-mono text-[0.78rem] text-muted">
+				<Icon name={fact.icon} class="size-3.5 shrink-0 text-accent" />
+				{fact.label}
+			</dt>
+			<dd class="mt-1 pl-5 text-[0.9375rem]">{fact.value}</dd>
+		</div>
+	))}
+</dl>

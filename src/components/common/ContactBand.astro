@@ -1,0 +1,26 @@
+---
+import ActionLink from './ActionLink.astro';
+
+// The yellow drench block that closes the case studies and the services page before the footer.
+interface Props {
+	id: string;
+	title: string;
+	copy: string;
+	action: string;
+	href: string;
+}
+
+const { id, title, copy, action, href } = Astro.props;
+---
+
+<section class="drench bg-drench text-on-drench" aria-labelledby={id}>
+	<div class="page-shell py-section">
+		<h2 id={id} class="max-w-[14em] text-balance type-closing-title" data-animate-text="words">
+			{title}
+		</h2>
+		<div class="mt-block flex flex-wrap items-end justify-between gap-x-16 gap-y-6">
+			<p class="max-w-[34em] text-pretty text-lg leading-[1.7] text-drench-muted">{copy}</p>
+			<ActionLink href={href} variant="inverse">{action}</ActionLink>
+		</div>
+	</div>
+</section>

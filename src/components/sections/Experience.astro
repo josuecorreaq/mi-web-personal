@@ -13,7 +13,7 @@ const t = useTranslations(locale).experience;
 
 <section id="trayectoria" class="page-shell border-t border-line py-section">
 	<div class="flex flex-wrap items-center justify-between gap-x-12 gap-y-3">
-		<h2 class="font-display text-[clamp(2rem,4vw,3.25rem)] font-heading leading-[1.05] tracking-[-0.03em]">
+		<h2 class="type-section-title">
 			{t.title}
 		</h2>
 		<p class="max-w-[28em] text-pretty text-muted">{t.copy}</p>
@@ -46,7 +46,7 @@ const t = useTranslations(locale).experience;
 				</div>
 
 				<div class="min-w-0 flex-[1_1_26rem] pt-1.5">
-					<h3 class="font-display text-[clamp(1.5rem,2.4vw,1.875rem)] font-heading leading-[1.15] tracking-[-0.02em]">
+					<h3 class="type-row-title">
 						{item.role}
 					</h3>
 					<MetaList items={[item.organization, item.project]} class="mt-2 text-[0.9375rem] text-muted" />

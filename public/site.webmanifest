@@ -2,7 +2,7 @@
 	"id": "/",
 	"name": "Josué Correa | Desarrollador Backend",
 	"short_name": "Josué Correa",
-	"description": "Josué Correa Quispe, desarrollador backend en Piura, Perú. Convierto procesos desordenados en sistemas claros con Laravel, PHP y MySQL. Presencial o remoto.",
+	"description": "Josué Correa Quispe, desarrollador backend en Piura, Perú. Convierto procesos manuales en sistemas claros con Laravel, PHP y MySQL. Presencial o remoto.",
 	"start_url": "/",
 	"scope": "/",
 	"display": "minimal-ui",
