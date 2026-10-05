@@ -180,7 +180,7 @@ La mayor parte del contenido visible se administra desde:
 
 Al modificar textos, conserva la paridad semántica entre español e inglés. Las claves de ambos idiomas deben mantener la misma estructura para evitar inconsistencias en compilación o renderizado.
 
-Al añadir un proyecto, actualiza `projectDefinitions` en `src/data/projects.ts` con sus dos slugs y sus dos rutas. El sitemap, las rutas estáticas y los `hreflang` se derivan de ahí; no hay que registrarlo en otro sitio. Actualiza también `PROJECT_LAST_MODIFIED` para que el `lastmod` del sitemap refleje el cambio.
+Al añadir un proyecto, actualiza `projectDefinitions` en `src/data/projects.ts` con sus dos slugs y sus dos rutas. El sitemap, las rutas estáticas y los `hreflang` se derivan de ahí; no hay que registrarlo en otro sitio. Actualiza también `PROJECT_LAST_MODIFIED` para que el `lastmod` del sitemap, el `dateModified` de los casos y el de la portada reflejen el cambio. `PROJECT_PUBLISHED` es la fecha de primera publicación de los casos y no cambia.
 
 ## SEO y dominio
 
@@ -230,7 +230,7 @@ El hosting debe servir `404.html` como página de error personalizada y respetar
 - Despliega juntos el contenido de `dist/` y su `.htaccess`; los hashes pertenecen exactamente a ese build.
 - Si cPanel administra `.htaccess`, conserva sus bloques y copia únicamente la línea `Content-Security-Policy` generada.
 - No publiques `public/.htaccess` directamente: contiene el marcador, no la política final.
-- Evita dejar HTML antiguo en `/es/`. La ruta española canónica actual es `/`; elimina el artefacto obsoleto durante un despliegue limpio o configúralo como redirección permanente a `/`.
+- `.htaccess` redirige con 301 todo `/es/` a `/`, la ruta española canónica actual. `.cpanel.yml` copia sin borrar, así que el HTML antiguo de `/es/` puede seguir en `public_html`; bórralo desde cPanel aunque la redirección ya impida servirlo.
 
 El despliegue a cPanel está descrito en `.cpanel.yml`.
 

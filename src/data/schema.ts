@@ -1,4 +1,5 @@
 import { social, socialProfileUrls } from './social';
+import { PROJECT_LAST_MODIFIED } from './projects';
 import type { Locale } from '../i18n/config';
 
 export type SchemaNode = Record<string, unknown>;
@@ -26,6 +27,23 @@ const personDescription = {
 	en: 'Software developer based in Piura, Peru, specializing in web applications, business systems, APIs, and backend architecture.',
 } as const;
 
+// The CV lives in a noindex partial, so education reaches search engines and AI assistants only here.
+const university: SchemaNode = {
+	'@type': 'CollegeOrUniversity',
+	name: 'Universidad César Vallejo',
+	url: 'https://www.ucv.edu.pe/',
+	address: {
+		'@type': 'PostalAddress',
+		addressLocality: 'Piura',
+		addressCountry: 'PE',
+	},
+};
+
+const degreeName = {
+	es: 'Título profesional de Ingeniero de Sistemas',
+	en: 'Professional degree in Systems Engineering',
+} as const;
+
 const createPersonNode = (locale: Locale, siteUrl: URL, profileImage: URL): SchemaNode => ({
 	'@type': 'Person',
 	'@id': new URL('/#person', siteUrl).toString(),
@@ -48,6 +66,24 @@ const createPersonNode = (locale: Locale, siteUrl: URL, profileImage: URL): Sche
 		},
 	},
 	sameAs: socialProfileUrls,
+	alumniOf: university,
+	hasCredential: {
+		'@type': 'EducationalOccupationalCredential',
+		credentialCategory: 'degree',
+		name: degreeName[locale],
+		dateCreated: '2026-05',
+		recognizedBy: university,
+	},
+	hasOccupation: {
+		'@type': 'Occupation',
+		name: locale === 'es' ? 'Desarrollador Backend' : 'Backend Developer',
+		occupationLocation: {
+			'@type': 'City',
+			name: 'Piura',
+		},
+		skills: 'Laravel, PHP, MySQL, React, REST APIs',
+	},
+	knowsLanguage: ['es', 'en'],
 	knowsAbout: [
 		'Laravel',
 		'PHP',
@@ -89,6 +125,7 @@ export const createProfileSchema = ({
 			name: title,
 			description,
 			inLanguage: locale,
+			dateModified: PROJECT_LAST_MODIFIED,
 			about: { '@id': personId },
 			mainEntity: { '@id': personId },
 			primaryImageOfPage: {
