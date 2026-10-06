@@ -21,7 +21,9 @@ const updatedOn = new Intl.DateTimeFormat(locale === 'es' ? 'es-PE' : 'en-US', {
 
 <article>
 	<header class="page-shell pb-section pt-[clamp(1.5rem,4vw,3rem)]">
-		<p class={monoLabel}>{t.label}</p>
+		<p class={monoLabel}>
+			{t.updated} <time datetime={PRIVACY_LAST_MODIFIED}>{updatedOn}</time>
+		</p>
 		<h1 class="ml-(--optical-inset) mt-4.5 max-w-[16em] text-balance type-page-title" data-animate-text="words">
 			{t.title}
 		</h1>
@@ -31,9 +33,6 @@ const updatedOn = new Intl.DateTimeFormat(locale === 'es' ? 'es-PE' : 'en-US', {
 			data-animate-reveal-delay="200"
 		>
 			{t.lead}
-		</p>
-		<p class:list={[monoLabel, 'mt-block']} data-animate-reveal="up" data-animate-reveal-delay="300">
-			{t.updated} <time datetime={PRIVACY_LAST_MODIFIED}>{updatedOn}</time>
 		</p>
 	</header>
 

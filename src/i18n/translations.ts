@@ -479,6 +479,8 @@ const translations = {
 				successTitle: 'Mensaje enviado',
 				errorTitle: 'No se pudo enviar',
 				close: 'Cerrar',
+				consentPrefix: 'Al enviar aceptas que use tus datos solo para responderte, según la',
+				consentLink: 'política de privacidad',
 			},
 			email: 'Email',
 			linkedin: 'LinkedIn',
@@ -494,7 +496,7 @@ const translations = {
 			},
 			label: 'Privacidad',
 			title: 'Política de privacidad',
-			lead: 'Qué datos recoge esta web, para qué los uso y qué puedes hacer con ellos. En corto: lo mínimo, sin cookies de seguimiento y sin vender nada a nadie.',
+			lead: 'Qué datos recoge esta web, para qué y qué puedes hacer con ellos.',
 			updated: 'Actualizada el',
 			contactPrefix: 'Escríbeme a',
 			sections: [
@@ -502,18 +504,33 @@ const translations = {
 					id: 'responsable',
 					title: 'Responsable',
 					paragraphs: [
-						'Josué Correa Quispe, desarrollador de software en Piura, Perú, es el responsable de los datos que se recogen en este sitio.',
+						'Josué Correa Quispe, desarrollador de software en Piura, Perú, es el responsable de los datos personales que se recogen en este sitio.',
+						'Para navegar por esta web no necesitas darme ningún dato personal. Solo los recibo si decides escribirme.',
 					],
 					points: [],
 					contact: true,
 				},
 				{
+					id: 'marco-legal',
+					title: 'Marco legal',
+					paragraphs: [
+						'Esta política se rige por la Ley N.° 29733, Ley de Protección de Datos Personales del Perú, y su reglamento. En la práctica, eso significa que:',
+					],
+					points: [
+						'Solo recojo los datos necesarios para responderte.',
+						'Los uso únicamente para la finalidad por la que me los diste.',
+						'Los conservo solo mientras hagan falta y los protejo con medidas técnicas razonables.',
+						'Puedes ejercer tus derechos sobre ellos en cualquier momento y de forma gratuita.',
+					],
+					contact: false,
+				},
+				{
 					id: 'formulario',
 					title: 'Formulario de contacto',
 					paragraphs: [
-						'Si me escribes desde el formulario, recibo tu nombre, tu email y tu mensaje. Los uso solo para responderte y conversar sobre lo que me planteas. No los comparto, no los vendo y no te suscribo a ningún boletín.',
-						'Los conservo mientras dure la conversación y el tiempo razonable después para darle seguimiento. Puedes pedirme que los borre cuando quieras.',
-						'Antes del envío, Cloudflare Turnstile comprueba que lo hace una persona y no un bot. Para eso Cloudflare analiza datos técnicos del navegador; no los uso para nada más.',
+						'Si me escribes desde el formulario, recibo tu nombre, tu email y tu mensaje. Los uso solo para responderte y conversar sobre lo que me planteas, por ejemplo para preparar una cotización. No los uso para publicidad y no te suscribo a ningún boletín.',
+						'Al enviar el formulario aceptas que trate esos datos con esa única finalidad. Te pido que sean verdaderos, para poder responderte; no hace falta que me des más información de la necesaria.',
+						'Los conservo mientras dure la conversación y el tiempo razonable después para darle seguimiento. Cuando ya no son necesarios, los elimino. Puedes pedirme que los borre antes cuando quieras.',
 					],
 					points: [],
 					contact: false,
@@ -552,11 +569,62 @@ const translations = {
 					contact: false,
 				},
 				{
+					id: 'proveedores',
+					title: 'Proveedores',
+					paragraphs: [
+						'No vendo, alquilo ni cedo tus datos. Para que la web funcione me apoyo en algunos proveedores, que solo los tratan para prestar su servicio:',
+					],
+					points: [
+						'Cloudflare, para la analítica de visitas y para comprobar con Turnstile que el formulario lo envía una persona y no un bot.',
+						'El proveedor de hosting donde se alojan la web y el servicio que recibe los mensajes.',
+						'El proveedor de correo con el que recibo tu mensaje y te respondo.',
+					],
+					contact: false,
+				},
+				{
+					id: 'transferencia',
+					title: 'Fuera del Perú',
+					paragraphs: [
+						'Algunos de estos proveedores, como Cloudflare, tienen servidores fuera del Perú, por lo que tus datos pueden tratarse en otros países. Trabajo con proveedores que ofrecen un nivel de protección adecuado.',
+						'Solo comunicaría tus datos a una autoridad si una ley o una orden judicial me lo exige.',
+					],
+					points: [],
+					contact: false,
+				},
+				{
+					id: 'seguridad',
+					title: 'Seguridad',
+					paragraphs: [
+						'Toda la web funciona por HTTPS, con cabeceras de seguridad estrictas, verificación contra bots y límite de envíos en el formulario. Hago lo razonable para proteger tus datos, pero ninguna transmisión por internet es completamente segura.',
+					],
+					points: [],
+					contact: false,
+				},
+				{
+					id: 'enlaces',
+					title: 'Enlaces a otros sitios',
+					paragraphs: [
+						'Esta web enlaza a sitios de terceros como GitHub, LinkedIn y X. Cuando los visitas, se aplican sus propias políticas de privacidad, no esta.',
+					],
+					points: [],
+					contact: false,
+				},
+				{
+					id: 'menores',
+					title: 'Menores de edad',
+					paragraphs: [
+						'Esta web está dirigida a empresas y profesionales. Si me entero de que un menor de edad me envió sus datos sin autorización de sus padres o tutores, los elimino.',
+					],
+					points: [],
+					contact: false,
+				},
+				{
 					id: 'derechos',
 					title: 'Tus derechos',
 					paragraphs: [
-						'Según la Ley N.° 29733 de Protección de Datos Personales del Perú, puedes acceder a tus datos, rectificarlos, cancelarlos u oponerte a su uso. Respondo a tu solicitud lo antes posible.',
-						'Si consideras que no atendí tu solicitud, puedes acudir a la Autoridad Nacional de Protección de Datos Personales.',
+						'Puedes pedirme acceder a tus datos, rectificarlos, cancelarlos, oponerte a su uso o revocar tu consentimiento (derechos ARCO). Es gratuito.',
+						'Escríbeme con el asunto «Protección de datos personales», indica qué quieres hacer y los datos que me diste para poder ubicarlos. Si hace falta verificar que eres el titular, te lo pediré. Respondo dentro de los plazos que fija la ley.',
+						'Si consideras que no atendí tu solicitud, puedes acudir a la Autoridad Nacional de Protección de Datos Personales o al Poder Judicial mediante un proceso de hábeas data.',
 					],
 					points: [],
 					contact: true,
@@ -1059,6 +1127,8 @@ const translations = {
 				successTitle: 'Message sent',
 				errorTitle: 'Message not sent',
 				close: 'Close',
+				consentPrefix: 'By sending, you agree that I use your data only to reply, as described in the',
+				consentLink: 'privacy policy',
 			},
 			email: 'Email',
 			linkedin: 'LinkedIn',
@@ -1074,7 +1144,7 @@ const translations = {
 			},
 			label: 'Privacy',
 			title: 'Privacy policy',
-			lead: 'What data this site collects, what I use it for and what you can do about it. In short: the minimum, no tracking cookies, and nothing sold to anyone.',
+			lead: 'What data this site collects, why, and what you can do about it.',
 			updated: 'Updated on',
 			contactPrefix: 'Write to me at',
 			sections: [
@@ -1082,18 +1152,33 @@ const translations = {
 					id: 'controller',
 					title: 'Who is responsible',
 					paragraphs: [
-						'Josue Correa Quispe, a software developer based in Piura, Peru, is responsible for the data collected on this site.',
+						'Josue Correa Quispe, a software developer based in Piura, Peru, is responsible for the personal data collected on this site.',
+						'You do not need to give me any personal data to browse this site. I only receive it if you decide to write to me.',
 					],
 					points: [],
 					contact: true,
 				},
 				{
+					id: 'legal-framework',
+					title: 'Legal framework',
+					paragraphs: [
+						'This policy is governed by Peru’s Personal Data Protection Law (Law No. 29733) and its regulations. In practice, that means:',
+					],
+					points: [
+						'I only collect the data needed to reply to you.',
+						'I use it solely for the purpose you gave it to me for.',
+						'I keep it only as long as it is needed and protect it with reasonable technical measures.',
+						'You can exercise your rights over it at any time, free of charge.',
+					],
+					contact: false,
+				},
+				{
 					id: 'contact-form',
 					title: 'Contact form',
 					paragraphs: [
-						'If you write to me through the form, I receive your name, your email and your message. I use them only to reply and to discuss what you raise. I do not share them, sell them or sign you up for any newsletter.',
-						'I keep them for as long as the conversation lasts and a reasonable time afterwards to follow up. You can ask me to delete them at any time.',
-						'Before the form is sent, Cloudflare Turnstile checks that a person, not a bot, is sending it. To do so Cloudflare analyzes technical browser data; I do not use it for anything else.',
+						'If you write to me through the form, I receive your name, your email and your message. I use them only to reply and to discuss what you raise, for example to prepare a quote. I do not use them for advertising or sign you up for any newsletter.',
+						'By sending the form you agree that I process that data for that sole purpose. Please make sure it is accurate so I can reply; there is no need to share more than necessary.',
+						'I keep it for as long as the conversation lasts and a reasonable time afterwards to follow up. Once it is no longer needed, I delete it. You can ask me to delete it sooner at any time.',
 					],
 					points: [],
 					contact: false,
@@ -1132,11 +1217,62 @@ const translations = {
 					contact: false,
 				},
 				{
+					id: 'providers',
+					title: 'Service providers',
+					paragraphs: [
+						'I do not sell, rent or hand over your data. To run the site I rely on a few providers, who only process it to deliver their service:',
+					],
+					points: [
+						'Cloudflare, for visit analytics and for checking with Turnstile that a person, not a bot, sends the form.',
+						'The hosting provider where the site and the service that receives messages run.',
+						'The email provider I use to receive your message and reply to you.',
+					],
+					contact: false,
+				},
+				{
+					id: 'transfers',
+					title: 'Outside Peru',
+					paragraphs: [
+						'Some of these providers, such as Cloudflare, have servers outside Peru, so your data may be processed in other countries. I work with providers that offer an adequate level of protection.',
+						'I would only disclose your data to an authority if a law or a court order requires it.',
+					],
+					points: [],
+					contact: false,
+				},
+				{
+					id: 'security',
+					title: 'Security',
+					paragraphs: [
+						'The whole site runs over HTTPS, with strict security headers, bot verification and a rate limit on the form. I do what is reasonable to protect your data, but no transmission over the internet is completely secure.',
+					],
+					points: [],
+					contact: false,
+				},
+				{
+					id: 'links',
+					title: 'Links to other sites',
+					paragraphs: [
+						'This site links to third-party sites such as GitHub, LinkedIn and X. When you visit them, their own privacy policies apply, not this one.',
+					],
+					points: [],
+					contact: false,
+				},
+				{
+					id: 'minors',
+					title: 'Minors',
+					paragraphs: [
+						'This site is aimed at businesses and professionals. If I learn that a minor sent me their data without their parents’ or guardians’ consent, I delete it.',
+					],
+					points: [],
+					contact: false,
+				},
+				{
 					id: 'rights',
 					title: 'Your rights',
 					paragraphs: [
-						'Under Peru’s Personal Data Protection Law (Law No. 29733), you can access your data, correct it, have it deleted or object to its use. I answer requests as soon as possible.',
-						'If you feel your request was not handled, you can contact Peru’s National Personal Data Protection Authority.',
+						'You can ask me to access your data, correct it, have it deleted, object to its use or withdraw your consent. It is free of charge.',
+						'Write to me with the subject “Personal data protection”, say what you want to do and include the data you gave me so I can find it. If I need to verify that you are the data owner, I will ask. I reply within the time limits set by law.',
+						'If you feel your request was not handled, you can contact Peru’s National Personal Data Protection Authority or file a habeas data claim with the courts.',
 					],
 					points: [],
 					contact: true,
