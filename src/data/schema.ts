@@ -44,6 +44,9 @@ const degreeName = {
 	en: 'Professional degree in Systems Engineering',
 } as const;
 
+// Google reads datePublished/dateModified as DateTime and flags bare dates, so they carry Lima's offset.
+const toSchemaDateTime = (date: string): string => `${date}T00:00:00-05:00`;
+
 const createPersonNode = (locale: Locale, siteUrl: URL, profileImage: URL): SchemaNode => ({
 	'@type': 'Person',
 	'@id': new URL('/#person', siteUrl).toString(),
@@ -125,7 +128,7 @@ export const createProfileSchema = ({
 			name: title,
 			description,
 			inLanguage: locale,
-			dateModified: PROJECT_LAST_MODIFIED,
+			dateModified: toSchemaDateTime(PROJECT_LAST_MODIFIED),
 			about: { '@id': personId },
 			mainEntity: { '@id': personId },
 			primaryImageOfPage: {
@@ -188,8 +191,8 @@ export const createProjectSchema = ({
 			inLanguage: locale,
 			identifier: projectId,
 			keywords: stack,
-			datePublished,
-			dateModified,
+			datePublished: toSchemaDateTime(datePublished),
+			dateModified: toSchemaDateTime(dateModified),
 			author: { '@id': personId },
 			mainEntityOfPage: { '@id': pageId },
 			image: socialImage.toString(),
@@ -258,8 +261,8 @@ export const createServicesSchema = ({
 			name: title,
 			description,
 			inLanguage: locale,
-			datePublished,
-			dateModified,
+			datePublished: toSchemaDateTime(datePublished),
+			dateModified: toSchemaDateTime(dateModified),
 			isPartOf: { '@id': websiteId },
 			about: { '@id': personId },
 			breadcrumb: { '@id': breadcrumbId },
