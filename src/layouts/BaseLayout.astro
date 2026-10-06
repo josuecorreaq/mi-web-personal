@@ -243,6 +243,14 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 		/>
 		<title>{title}</title>
 		{description && <script is:inline type="application/ld+json" set:html={schemaJson} />}
+		{import.meta.env.PROD && (
+			<script
+				is:inline
+				type="module"
+				src="https://static.cloudflareinsights.com/beacon.min.js"
+				data-cf-beacon='{"token": "e390e14adb004a51af90bed96ad385aa"}'
+			></script>
+		)}
 		<slot name="head" />
 	</head>
 	<body>
