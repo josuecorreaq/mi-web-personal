@@ -21,7 +21,7 @@ const { href, title, eyebrow, description, projectPath, class: className } = Ast
 		{eyebrow && <span class="block font-mono text-[0.78rem] text-muted">{eyebrow}</span>}
 		<span
 			class:list={[
-				'block text-balance type-link-title underline decoration-transparent decoration-[3px] underline-offset-[6px] transition-colors group-hover:text-accent light:group-hover:decoration-brand',
+				'link-rule block w-fit max-w-full text-balance type-link-title transition-colors group-hover:text-accent',
 				eyebrow && 'mt-1',
 			]}
 			data-project-path={projectPath}

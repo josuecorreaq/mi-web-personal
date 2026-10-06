@@ -1,37 +1,31 @@
 ---
-import ArchitectureFigure from './ArchitectureFigure.astro';
 import ActionLink from '../common/ActionLink.astro';
 import MetaList from '../common/MetaList.astro';
 import type { Project } from '../../data/projects';
 
 interface Labels {
-	readonly architecture: string;
-	readonly layers: string;
 	readonly viewProject: string;
-	readonly inspectHint: string;
-	readonly dependsOn: string;
-	readonly noDependencies: string;
 }
 
 interface Props {
 	project: Project;
 	labels: Labels;
-	reversed?: boolean;
 	divided?: boolean;
 }
 
-const { project, labels, reversed = false, divided = false } = Astro.props;
+const { project, labels, divided = false } = Astro.props;
+// The architecture diagram and the decision behind it live on the project page only.
+// Phones read top to bottom (summary, metrics, link); from lg the metrics take the right column, centered on the text.
 ---
 
 <article
 	id={project.slug}
 	class:list={[
-		'flex flex-wrap items-start gap-x-18 gap-y-10',
+		'grid items-start gap-x-18 gap-y-7 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]',
 		divided && 'border-t border-line pt-block',
-		reversed && 'flex-row-reverse',
 	]}
 >
-	<div class="min-w-0 flex-[1_1_25rem]">
+	<div class="min-w-0 lg:col-start-1 lg:row-start-1">
 		<MetaList
 			items={[project.year, project.architecture.version, project.client]}
 			class="font-mono text-[0.8125rem] text-muted"
@@ -45,33 +39,25 @@ const { project, labels, reversed = false, divided = false } = Astro.props;
 			{project.name}
 		</h3>
 		<p class="mt-4 max-w-[32em] text-pretty leading-relaxed text-muted">{project.objective}</p>
-
-		<dl class="mt-7 border-t border-line">
-			{project.metrics.map((metric) => (
-				<div class="flex items-center gap-5 border-b border-line py-3 sm:items-baseline">
-					<dt class="order-2 min-w-0 text-pretty text-[0.9375rem] leading-snug text-muted">{metric.label}</dt>
-					<dd class="order-1 w-24 shrink-0 font-display text-[1.625rem] font-heading leading-tight tabular-nums">
-						{metric.value}
-					</dd>
-				</div>
-			))}
-		</dl>
-
-		<ActionLink
-			href={project.path}
-			variant="text"
-			class="mt-6"
-			aria-label={`${labels.viewProject}: ${project.name}`}
-		>
-			{labels.viewProject}
-		</ActionLink>
 	</div>
 
-	<ArchitectureFigure
-		layers={project.architecture.layers}
-		coreLayer={project.coreLayer}
-		caption={project.decision}
-		labels={labels}
-		class="flex-[1_1_26rem]"
-	/>
+	<dl class="border-t border-line lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-center">
+		{project.metrics.map((metric) => (
+			<div class="flex items-center gap-5 border-b border-line py-3 sm:items-baseline">
+				<dt class="order-2 min-w-0 text-pretty text-[0.9375rem] leading-snug text-muted">{metric.label}</dt>
+				<dd class="order-1 w-24 shrink-0 font-display text-[1.625rem] font-heading leading-tight tabular-nums">
+					{metric.value}
+				</dd>
+			</div>
+		))}
+	</dl>
+
+	<ActionLink
+		href={project.path}
+		variant="text"
+		class="justify-self-start lg:col-start-1 lg:row-start-2"
+		aria-label={`${labels.viewProject}: ${project.name}`}
+	>
+		{labels.viewProject}
+	</ActionLink>
 </article>
