@@ -1,0 +1,65 @@
+---
+import BulletList from '../common/BulletList.astro';
+import { PRIVACY_LAST_MODIFIED } from '../../data/privacy';
+import { social } from '../../data/social';
+import type { Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n/translations';
+import { detailRow, monoLabel } from '../../styles/classes';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale).privacy;
+// The date is a bare YYYY-MM-DD, so it is read and printed in UTC to keep the day from shifting.
+const updatedOn = new Intl.DateTimeFormat(locale === 'es' ? 'es-PE' : 'en-US', {
+	dateStyle: 'long',
+	timeZone: 'UTC',
+}).format(new Date(PRIVACY_LAST_MODIFIED));
+---
+
+<article>
+	<header class="page-shell pb-section pt-[clamp(1.5rem,4vw,3rem)]">
+		<p class={monoLabel}>{t.label}</p>
+		<h1 class="ml-(--optical-inset) mt-4.5 max-w-[16em] text-balance type-page-title" data-animate-text="words">
+			{t.title}
+		</h1>
+		<p
+			class="mt-[clamp(0.75rem,2vw,1.25rem)] max-w-[32em] text-pretty type-lead text-muted"
+			data-animate-reveal="up"
+			data-animate-reveal-delay="200"
+		>
+			{t.lead}
+		</p>
+		<p class:list={[monoLabel, 'mt-block']} data-animate-reveal="up" data-animate-reveal-delay="300">
+			{t.updated} <time datetime={PRIVACY_LAST_MODIFIED}>{updatedOn}</time>
+		</p>
+	</header>
+
+	{t.sections.map((section) => (
+		<section class="page-shell border-t border-line py-section" aria-labelledby={section.id}>
+			<div class={detailRow.row}>
+				<h2 id={section.id} class={detailRow.title}>{section.title}</h2>
+				<div class:list={[detailRow.body, 'space-y-5']}>
+					{section.paragraphs.map((paragraph) => (
+						<p class={detailRow.prose} data-animate-reveal="up">{paragraph}</p>
+					))}
+					{section.points.length > 0 && <BulletList items={section.points} class="mt-6" />}
+					{section.contact && (
+						<p class={detailRow.prose} data-animate-reveal="up">
+							{t.contactPrefix}{' '}
+							<a
+								href={`mailto:${social.email}`}
+								class="link-rule link-rule-rest text-ink transition-colors hover:text-accent"
+							>
+								{social.email}
+							</a>
+							.
+						</p>
+					)}
+				</div>
+			</div>
+		</section>
+	))}
+</article>

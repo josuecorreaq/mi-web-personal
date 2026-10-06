@@ -486,6 +486,92 @@ const translations = {
 			x: 'X',
 			open: 'Abrir',
 		},
+		privacy: {
+			meta: {
+				title: 'Política de privacidad | Josué Correa',
+				description:
+					'Qué datos recoge josuecorreaq.com, para qué los uso y cómo ejercer tus derechos. Sin cookies de seguimiento ni publicidad.',
+			},
+			label: 'Privacidad',
+			title: 'Política de privacidad',
+			lead: 'Qué datos recoge esta web, para qué los uso y qué puedes hacer con ellos. En corto: lo mínimo, sin cookies de seguimiento y sin vender nada a nadie.',
+			updated: 'Actualizada el',
+			contactPrefix: 'Escríbeme a',
+			sections: [
+				{
+					id: 'responsable',
+					title: 'Responsable',
+					paragraphs: [
+						'Josué Correa Quispe, desarrollador de software en Piura, Perú, es el responsable de los datos que se recogen en este sitio.',
+					],
+					points: [],
+					contact: true,
+				},
+				{
+					id: 'formulario',
+					title: 'Formulario de contacto',
+					paragraphs: [
+						'Si me escribes desde el formulario, recibo tu nombre, tu email y tu mensaje. Los uso solo para responderte y conversar sobre lo que me planteas. No los comparto, no los vendo y no te suscribo a ningún boletín.',
+						'Los conservo mientras dure la conversación y el tiempo razonable después para darle seguimiento. Puedes pedirme que los borre cuando quieras.',
+						'Antes del envío, Cloudflare Turnstile comprueba que lo hace una persona y no un bot. Para eso Cloudflare analiza datos técnicos del navegador; no los uso para nada más.',
+					],
+					points: [],
+					contact: false,
+				},
+				{
+					id: 'analitica',
+					title: 'Analítica',
+					paragraphs: [
+						'Uso Cloudflare Web Analytics para saber cuántas visitas recibe el sitio y qué páginas se leen. No usa cookies, no guarda tu dirección IP y no te sigue entre sitios. Solo recoge datos agregados como estos:',
+					],
+					points: [
+						'Página visitada y página desde la que llegaste.',
+						'Navegador, sistema operativo y tipo de dispositivo.',
+						'País aproximado.',
+						'Tiempo de carga de la página.',
+					],
+					contact: false,
+				},
+				{
+					id: 'cookies',
+					title: 'Cookies y almacenamiento',
+					paragraphs: [
+						'Este sitio no usa cookies de seguimiento ni de publicidad.',
+						'Tu navegador guarda en su almacenamiento local el tema (claro u oscuro) y el idioma que elegiste, para recordarlos en tu próxima visita. Esa información no sale de tu dispositivo y la puedes borrar limpiando los datos del sitio.',
+					],
+					points: [],
+					contact: false,
+				},
+				{
+					id: 'servidor',
+					title: 'Servidor',
+					paragraphs: [
+						'Como cualquier web, el servidor que aloja este sitio registra datos técnicos de cada petición, como la dirección IP, la fecha y la página solicitada. Sirven para mantener el sitio seguro y detectar fallos, y se conservan por un tiempo limitado.',
+					],
+					points: [],
+					contact: false,
+				},
+				{
+					id: 'derechos',
+					title: 'Tus derechos',
+					paragraphs: [
+						'Según la Ley N.° 29733 de Protección de Datos Personales del Perú, puedes acceder a tus datos, rectificarlos, cancelarlos u oponerte a su uso. Respondo a tu solicitud lo antes posible.',
+						'Si consideras que no atendí tu solicitud, puedes acudir a la Autoridad Nacional de Protección de Datos Personales.',
+					],
+					points: [],
+					contact: true,
+				},
+				{
+					id: 'cambios',
+					title: 'Cambios',
+					paragraphs: [
+						'Si cambia algo de lo que se describe aquí, actualizaré esta página y la fecha que aparece arriba.',
+					],
+					points: [],
+					contact: false,
+				},
+			],
+		},
 		errors: {
 			notFound: {
 				metaTitle: 'Página no encontrada | Josué Correa',
@@ -979,6 +1065,92 @@ const translations = {
 			github: 'GitHub',
 			x: 'X',
 			open: 'Open',
+		},
+		privacy: {
+			meta: {
+				title: 'Privacy policy | Josue Correa',
+				description:
+					'What data josuecorreaq.com collects, what I use it for and how to exercise your rights. No tracking cookies and no advertising.',
+			},
+			label: 'Privacy',
+			title: 'Privacy policy',
+			lead: 'What data this site collects, what I use it for and what you can do about it. In short: the minimum, no tracking cookies, and nothing sold to anyone.',
+			updated: 'Updated on',
+			contactPrefix: 'Write to me at',
+			sections: [
+				{
+					id: 'controller',
+					title: 'Who is responsible',
+					paragraphs: [
+						'Josue Correa Quispe, a software developer based in Piura, Peru, is responsible for the data collected on this site.',
+					],
+					points: [],
+					contact: true,
+				},
+				{
+					id: 'contact-form',
+					title: 'Contact form',
+					paragraphs: [
+						'If you write to me through the form, I receive your name, your email and your message. I use them only to reply and to discuss what you raise. I do not share them, sell them or sign you up for any newsletter.',
+						'I keep them for as long as the conversation lasts and a reasonable time afterwards to follow up. You can ask me to delete them at any time.',
+						'Before the form is sent, Cloudflare Turnstile checks that a person, not a bot, is sending it. To do so Cloudflare analyzes technical browser data; I do not use it for anything else.',
+					],
+					points: [],
+					contact: false,
+				},
+				{
+					id: 'analytics',
+					title: 'Analytics',
+					paragraphs: [
+						'I use Cloudflare Web Analytics to see how many visits the site gets and which pages are read. It uses no cookies, does not store your IP address and does not follow you across sites. It only collects aggregate data such as:',
+					],
+					points: [
+						'The page visited and the page you came from.',
+						'Browser, operating system and device type.',
+						'Approximate country.',
+						'Page load time.',
+					],
+					contact: false,
+				},
+				{
+					id: 'cookies',
+					title: 'Cookies and storage',
+					paragraphs: [
+						'This site uses no tracking or advertising cookies.',
+						'Your browser keeps the theme (light or dark) and the language you chose in its local storage, so they are remembered on your next visit. That information never leaves your device, and you can delete it by clearing the site data.',
+					],
+					points: [],
+					contact: false,
+				},
+				{
+					id: 'server',
+					title: 'Server',
+					paragraphs: [
+						'Like any website, the server hosting this site logs technical data for each request, such as the IP address, the date and the page requested. They keep the site secure and help detect failures, and they are kept for a limited time.',
+					],
+					points: [],
+					contact: false,
+				},
+				{
+					id: 'rights',
+					title: 'Your rights',
+					paragraphs: [
+						'Under Peru’s Personal Data Protection Law (Law No. 29733), you can access your data, correct it, have it deleted or object to its use. I answer requests as soon as possible.',
+						'If you feel your request was not handled, you can contact Peru’s National Personal Data Protection Authority.',
+					],
+					points: [],
+					contact: true,
+				},
+				{
+					id: 'changes',
+					title: 'Changes',
+					paragraphs: [
+						'If anything described here changes, I will update this page and the date shown at the top.',
+					],
+					points: [],
+					contact: false,
+				},
+			],
 		},
 		errors: {
 			notFound: {

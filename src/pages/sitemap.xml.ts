@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { PROJECT_LAST_MODIFIED, projectRoutePairs } from '../data/projects';
+import { privacyRoutePair } from '../data/privacy';
 import { servicesRoutePair } from '../data/services';
 
 interface LocalizedPage {
@@ -24,6 +25,10 @@ const pages: LocalizedPage[] = [
 		...project,
 		priority: '0.8',
 	})),
+	{
+		...privacyRoutePair,
+		priority: '0.3',
+	},
 ];
 
 export const GET: APIRoute = ({ site }) => {

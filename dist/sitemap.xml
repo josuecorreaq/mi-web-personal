@@ -67,4 +67,20 @@
 		<xhtml:link rel="alternate" hreflang="en" href="https://josuecorreaq.com/en/projects/credit-management-platform/" />
 		<xhtml:link rel="alternate" hreflang="x-default" href="https://josuecorreaq.com/proyectos/plataforma-gestion-crediticia/" />
 	</url>
+	<url>
+		<loc>https://josuecorreaq.com/privacidad/</loc>
+		<lastmod>2026-10-06</lastmod>
+		<priority>0.3</priority>
+		<xhtml:link rel="alternate" hreflang="es" href="https://josuecorreaq.com/privacidad/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://josuecorreaq.com/en/privacy/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://josuecorreaq.com/privacidad/" />
+	</url>
+	<url>
+		<loc>https://josuecorreaq.com/en/privacy/</loc>
+		<lastmod>2026-10-06</lastmod>
+		<priority>0.3</priority>
+		<xhtml:link rel="alternate" hreflang="es" href="https://josuecorreaq.com/privacidad/" />
+		<xhtml:link rel="alternate" hreflang="en" href="https://josuecorreaq.com/en/privacy/" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://josuecorreaq.com/privacidad/" />
+	</url>
 </urlset>

@@ -1,0 +1,31 @@
+---
+import PrivacyPage from '../../components/privacy/PrivacyPage.astro';
+import { createPrivacySchema } from '../../data/schema';
+import { PRIVACY_LAST_MODIFIED, PRIVACY_PUBLISHED, privacyPaths } from '../../data/privacy';
+import { useTranslations } from '../../i18n/translations';
+import PageLayout from '../../layouts/PageLayout.astro';
+
+const t = useTranslations('es').privacy;
+const siteUrl = new URL('/', Astro.site ?? Astro.url);
+const structuredData = createPrivacySchema({
+	locale: 'es',
+	siteUrl,
+	pageUrl: new URL(privacyPaths.es, siteUrl),
+	title: t.meta.title,
+	description: t.meta.description,
+	label: t.label,
+	datePublished: PRIVACY_PUBLISHED,
+	dateModified: PRIVACY_LAST_MODIFIED,
+});
+---
+
+<PageLayout
+	locale="es"
+	title={t.meta.title}
+	description={t.meta.description}
+	path={privacyPaths.es}
+	alternatePath={privacyPaths.en}
+	structuredData={structuredData}
+>
+	<PrivacyPage locale="es" />
+</PageLayout>

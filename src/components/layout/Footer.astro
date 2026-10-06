@@ -1,7 +1,9 @@
 ---
 import Icon, { type IconName } from '../common/Icon.astro';
 import type { Locale } from '../../i18n/config';
+import { privacyPaths } from '../../data/privacy';
 import { social } from '../../data/social';
+import { useTranslations } from '../../i18n/translations';
 
 interface Props {
 	locale: Locale;
@@ -29,7 +31,18 @@ const links: { label: string; href: string; icon: IconName; external: boolean }[
 				tone === 'drench' && 'border-t border-on-drench/30',
 			]}
 		>
-			<p>© {year} {name}</p>
+			<p class="flex flex-wrap items-center gap-x-5">
+				<span>© {year} {name}</span>
+				<a
+					href={privacyPaths[locale]}
+					class:list={[
+						'link-rule inline-flex min-h-11 items-center transition-[color,opacity]',
+						tone === 'plain' ? 'hover:text-ink' : 'hover:opacity-70',
+					]}
+				>
+					{useTranslations(locale).privacy.label}
+				</a>
+			</p>
 			<nav class="-mr-3 flex gap-x-1" aria-label={locale === 'es' ? 'Redes' : 'Social'}>
 				{links.map((link) => (
 					<a
