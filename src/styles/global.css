@@ -69,6 +69,22 @@
 	}
 }
 
+/* `link-rule` for labels that can wrap (footer links): the rule follows each line of text instead of
+   spanning the label's box. It goes on an inline element; box-decoration-break gives every line its own. */
+@utility link-rule-inline {
+	padding-bottom: 0.25rem;
+	background: linear-gradient(currentColor, currentColor) no-repeat left bottom / 0 2px;
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
+	transition: background-size 200ms var(--default-transition-timing-function);
+
+	@media (hover: hover) {
+		:where(.group):hover & {
+			background-size: 100% 2px;
+		}
+	}
+}
+
 @utility link-rule-rest {
 	&::before {
 		position: absolute;

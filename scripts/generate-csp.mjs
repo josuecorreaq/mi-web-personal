@@ -101,14 +101,14 @@ for (const filePath of htmlFiles) {
 
 const directives = [
 	"default-src 'none'",
-	`script-src 'self' ${[...scriptHashes].sort().join(' ')} https://challenges.cloudflare.com`,
+	`script-src 'self' ${[...scriptHashes].sort().join(' ')} https://challenges.cloudflare.com https://static.cloudflareinsights.com`,
 	"script-src-attr 'none'",
 	`style-src 'self' ${[...styleHashes].sort().join(' ')}`,
 	"style-src-attr 'none'",
 	"img-src 'self' data:",
 	"font-src 'self'",
 	"manifest-src 'self'",
-	"connect-src 'self' https://api.josuecorreaq.com https://challenges.cloudflare.com",
+	"connect-src 'self' https://api.josuecorreaq.com https://challenges.cloudflare.com https://cloudflareinsights.com",
 	"frame-src https://challenges.cloudflare.com",
 	"form-action 'self' https://api.josuecorreaq.com",
 	"base-uri 'none'",

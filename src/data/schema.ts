@@ -302,3 +302,65 @@ export const createServicesSchema = ({
 		},
 	];
 };
+
+interface PrivacySchemaOptions {
+	locale: Locale;
+	siteUrl: URL;
+	pageUrl: URL;
+	title: string;
+	description: string;
+	label: string;
+	datePublished: string;
+	dateModified: string;
+}
+
+export const createPrivacySchema = ({
+	locale,
+	siteUrl,
+	pageUrl,
+	title,
+	description,
+	label,
+	datePublished,
+	dateModified,
+}: PrivacySchemaOptions): SchemaNode[] => {
+	const personId = new URL('/#person', siteUrl).toString();
+	const websiteId = new URL('/#website', siteUrl).toString();
+	const breadcrumbId = new URL(`${pageUrl.pathname}#breadcrumbs`, siteUrl).toString();
+
+	return [
+		createPersonNode(locale, siteUrl, new URL('/images/profile.webp', siteUrl)),
+		createWebsiteNode(siteUrl),
+		{
+			'@type': 'WebPage',
+			'@id': new URL(`${pageUrl.pathname}#webpage`, siteUrl).toString(),
+			url: pageUrl.toString(),
+			name: title,
+			description,
+			inLanguage: locale,
+			datePublished: toSchemaDateTime(datePublished),
+			dateModified: toSchemaDateTime(dateModified),
+			isPartOf: { '@id': websiteId },
+			publisher: { '@id': personId },
+			breadcrumb: { '@id': breadcrumbId },
+		},
+		{
+			'@type': 'BreadcrumbList',
+			'@id': breadcrumbId,
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					position: 1,
+					name: locale === 'es' ? 'Inicio' : 'Home',
+					item: new URL(locale === 'es' ? '/' : '/en/', siteUrl).toString(),
+				},
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: label,
+					item: pageUrl.toString(),
+				},
+			],
+		},
+	];
+};
