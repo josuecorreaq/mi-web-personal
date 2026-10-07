@@ -9,7 +9,7 @@ import ProcessFigure from './ProcessFigure.astro';
 import { getProjects } from '../../data/projects';
 import { getLocalePath, type Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
-import { detailRow, monoLabel } from '../../styles/classes';
+import { detailRow } from '../../styles/classes';
 
 interface Props {
 	locale: Locale;
@@ -28,8 +28,7 @@ const listTitleOffset = {
 
 <article>
 	<header class="page-shell pb-section pt-[clamp(1.5rem,4vw,3rem)]">
-		<p class={monoLabel}>{t.label}</p>
-		<h1 class="ml-(--optical-inset) mt-4.5 max-w-[16em] text-balance type-page-title" data-animate-text="words">
+		<h1 class="ml-(--optical-inset) max-w-[16em] text-balance type-page-title" data-animate-text="words">
 			{t.hero.title}
 		</h1>
 		<p
