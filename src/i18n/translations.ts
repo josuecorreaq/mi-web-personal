@@ -479,7 +479,7 @@ const translations = {
 				successTitle: 'Mensaje enviado',
 				errorTitle: 'No se pudo enviar',
 				close: 'Cerrar',
-				consentPrefix: 'Al enviar aceptas que use tus datos solo para responderte, según la',
+				consentPrefix: 'Al enviar aceptas la',
 				consentLink: 'política de privacidad',
 			},
 			email: 'Email',
@@ -487,6 +487,12 @@ const translations = {
 			github: 'GitHub',
 			x: 'X',
 			open: 'Abrir',
+		},
+		footer: {
+			blurb: 'Desarrollador backend en Piura, Perú. Sistemas web a medida, APIs y automatización de procesos con Laravel, PHP y MySQL.',
+			legalTitle: 'Legal',
+			privacy: 'Política de privacidad',
+			socialLabel: 'Redes',
 		},
 		privacy: {
 			meta: {
@@ -1127,7 +1133,7 @@ const translations = {
 				successTitle: 'Message sent',
 				errorTitle: 'Message not sent',
 				close: 'Close',
-				consentPrefix: 'By sending, you agree that I use your data only to reply, as described in the',
+				consentPrefix: 'By sending, you accept the',
 				consentLink: 'privacy policy',
 			},
 			email: 'Email',
@@ -1135,6 +1141,12 @@ const translations = {
 			github: 'GitHub',
 			x: 'X',
 			open: 'Open',
+		},
+		footer: {
+			blurb: 'Backend developer based in Piura, Peru. Custom web systems, APIs and process automation with Laravel, PHP and MySQL.',
+			legalTitle: 'Legal',
+			privacy: 'Privacy policy',
+			socialLabel: 'Social',
 		},
 		privacy: {
 			meta: {

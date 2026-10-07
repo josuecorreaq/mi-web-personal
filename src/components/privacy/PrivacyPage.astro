@@ -50,9 +50,9 @@ const updatedOn = new Intl.DateTimeFormat(locale === 'es' ? 'es-PE' : 'en-US', {
 							{t.contactPrefix}{' '}
 							<a
 								href={`mailto:${social.email}`}
-								class="link-rule link-rule-rest text-ink transition-colors hover:text-accent"
+								class="group text-ink transition-colors hover:text-accent"
 							>
-								{social.email}
+								<span class="link-rule link-rule-rest">{social.email}</span>
 							</a>
 							.
 						</p>

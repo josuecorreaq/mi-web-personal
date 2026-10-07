@@ -1,9 +1,10 @@
 ---
 import Icon, { type IconName } from '../common/Icon.astro';
-import type { Locale } from '../../i18n/config';
+import { getLocalePath, type Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n/translations';
+import { servicesPaths } from '../../data/services';
 import { privacyPaths } from '../../data/privacy';
 import { social } from '../../data/social';
-import { useTranslations } from '../../i18n/translations';
 
 interface Props {
 	locale: Locale;
@@ -11,59 +12,119 @@ interface Props {
 	tone?: 'drench' | 'plain';
 }
 
+interface FooterLink {
+	label: string;
+	href: string;
+	icon?: IconName;
+	external?: boolean;
+}
+
 const { locale, tone = 'plain' } = Astro.props;
+const t = useTranslations(locale);
 const name = locale === 'es' ? 'Josué Correa' : 'Josue Correa';
 const year = new Date().getFullYear();
 const newTabLabel = locale === 'es' ? 'se abre en otra pestaña' : 'opens in a new tab';
-const links: { label: string; href: string; icon: IconName; external: boolean }[] = [
-	{ label: 'Email', href: `mailto:${social.email}`, icon: 'email', external: false },
-	{ label: 'GitHub', href: social.github.url, icon: 'github', external: true },
-	{ label: 'LinkedIn', href: social.linkedin.url, icon: 'linkedin', external: true },
-	{ label: 'X', href: social.x.url, icon: 'x', external: true },
+const basePath = getLocalePath(locale);
+// Three short groups, not a link farm: what I offer, where to find me, and the legal page. Site
+// navigation is left to the sticky header.
+const groups: { id: string; title: string; links: FooterLink[] }[] = [
+	{
+		id: 'footer-services',
+		title: t.nav.services,
+		links: t.services.offer.items.map((service) => ({
+			label: service.name,
+			href: `${servicesPaths[locale]}#${service.id}`,
+		})),
+	},
+	{
+		id: 'footer-social',
+		title: t.footer.socialLabel,
+		links: [
+			{ label: 'GitHub', href: social.github.url, icon: 'github', external: true },
+			{ label: 'LinkedIn', href: social.linkedin.url, icon: 'linkedin', external: true },
+			{ label: 'X', href: social.x.url, icon: 'x', external: true },
+		],
+	},
+	{
+		id: 'footer-legal',
+		title: t.footer.legalTitle,
+		links: [
+			{ label: t.footer.privacy, href: privacyPaths[locale] },
+		],
+	},
 ];
+const isDrench = tone === 'drench';
+const labelClass = `font-mono text-[0.8125rem] ${isDrench ? 'text-drench-muted' : 'text-muted'}`;
+const linkClass = `group inline-flex min-h-11 items-center gap-2.5 py-2 text-pretty text-[0.9375rem] leading-snug transition-colors ${
+	isDrench ? 'text-on-drench' : 'text-muted hover:text-ink'
+}`;
 ---
 
-<footer class:list={[tone === 'drench' ? 'drench bg-drench text-on-drench' : 'border-t border-line bg-canvas text-muted']}>
+<footer class:list={[isDrench ? 'drench bg-drench text-on-drench' : 'border-t border-line bg-canvas text-muted']}>
 	<div class="page-shell">
 		<div
 			class:list={[
-				'flex flex-wrap items-center justify-between gap-x-6 gap-y-1 pb-6 pt-4 font-mono text-[0.8125rem]',
-				tone === 'drench' && 'border-t border-on-drench/30',
+				'grid grid-cols-2 gap-x-8 gap-y-10 pb-[clamp(2.5rem,6vw,4rem)] pt-[clamp(2rem,4vw,2.75rem)] lg:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,1fr))] lg:gap-x-12',
+				isDrench ? 'border-t border-on-drench/30' : '',
 			]}
 		>
-			<p class="flex flex-wrap items-center gap-x-5">
-				<span>© {year} {name}</span>
+			<div class="col-span-2 max-w-[24rem] lg:col-span-1">
 				<a
-					href={privacyPaths[locale]}
+					href={basePath}
 					class:list={[
-						'link-rule inline-flex min-h-11 items-center transition-[color,opacity]',
-						tone === 'plain' ? 'hover:text-ink' : 'hover:opacity-70',
+						'-mt-3 inline-flex min-h-11 items-center font-mono text-xl font-extrabold tracking-[-0.04em] transition-opacity hover:opacity-70',
+						isDrench ? 'text-on-drench' : 'text-ink',
 					]}
+					aria-label={t.nav.homeLabel}
 				>
-					{useTranslations(locale).privacy.label}
+					{'{jc}'}
 				</a>
-			</p>
-			<nav class="-mr-3 flex gap-x-1" aria-label={locale === 'es' ? 'Redes' : 'Social'}>
-				{links.map((link) => (
-					<a
-						href={link.href}
-						target={link.external ? '_blank' : undefined}
-						rel={link.external ? 'noopener noreferrer' : undefined}
-						title={link.label}
-						class:list={[
-							'group inline-flex size-11 items-center justify-center transition-[color,opacity]',
-							tone === 'plain' ? 'hover:text-ink' : 'hover:opacity-70',
-						]}
-					>
-						{/* The mark lifts by the same 3px the arrow links nudge. */}
-						<Icon name={link.icon} class="size-[1.125rem] transition-transform duration-200 group-hover:-translate-y-[3px]" />
-						<span class="sr-only">
-							{link.label}
-							{link.external && `, ${newTabLabel}`}
-						</span>
-					</a>
-				))}
-			</nav>
+				<p class:list={['mt-3 text-pretty text-[0.9375rem] leading-relaxed', isDrench ? 'text-drench-muted' : 'text-muted']}>
+					{t.footer.blurb}
+				</p>
+				<a href={`mailto:${social.email}`} class:list={[linkClass, 'mt-3 font-medium']}>
+					<span class="link-rule">{social.email}</span>
+				</a>
+			</div>
+
+			{groups.map((group) => (
+				<nav aria-labelledby={`${locale}-${group.id}`} class:list={[group.id === 'footer-legal' && 'col-span-2 sm:col-span-1']}>
+					<h2 id={`${locale}-${group.id}`} class={labelClass}>{group.title}</h2>
+					<ul class="mt-2.5">
+						{group.links.map((link) => (
+							<li>
+								<a
+									href={link.href}
+									target={link.external ? '_blank' : undefined}
+									rel={link.external ? 'noopener noreferrer' : undefined}
+									class={linkClass}
+								>
+									{link.icon && (
+										// The mark lifts by the same 3px the arrow links nudge.
+										<Icon
+											name={link.icon}
+											class="size-[1.125rem] shrink-0 transition-transform duration-200 group-hover:-translate-y-[3px]"
+										/>
+									)}
+									<span>
+										<span class="link-rule-inline">{link.label}</span>
+									</span>
+									{link.external && <span class="sr-only">, {newTabLabel}</span>}
+								</a>
+							</li>
+						))}
+					</ul>
+				</nav>
+			))}
 		</div>
+
+		<p
+			class:list={[
+				'border-t pb-5 pt-4 text-center font-mono text-[0.8125rem]',
+				isDrench ? 'border-on-drench/30' : 'border-line',
+			]}
+		>
+			© {year} {name}
+		</p>
 	</div>
 </footer>
