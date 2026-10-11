@@ -2,22 +2,6 @@
 
 @custom-variant light (&:where(:root[data-theme="light"], :root[data-theme="light"] *));
 
-@font-face {
-	font-family: "TASA Orbiter";
-	font-style: normal;
-	font-weight: 400 800;
-	font-display: swap;
-	src: url("/fonts/tasa-orbiter-latin.woff2") format("woff2");
-}
-
-@font-face {
-	font-family: "Geist Mono";
-	font-style: normal;
-	font-weight: 100 900;
-	font-display: swap;
-	src: url("/fonts/geist-mono-latin.woff2") format("woff2");
-}
-
 @theme {
 	--color-canvas: #09090b;
 	--color-surface: #18181b;
@@ -37,9 +21,9 @@
 	--color-drench-muted: #3f3f46;
 	--spacing-section: clamp(3rem, 6vw, 5rem);
 	--spacing-block: clamp(2.25rem, 4.5vw, 3.5rem);
-	--font-display: "TASA Orbiter", ui-sans-serif, system-ui, sans-serif;
-	--font-body: "TASA Orbiter", ui-sans-serif, system-ui, sans-serif;
-	--font-mono: "Geist Mono", ui-monospace, monospace;
+	--font-display: var(--font-tasa-orbiter);
+	--font-body: var(--font-tasa-orbiter);
+	--font-mono: var(--font-geist-mono);
 	--font-weight-heading: 640;
 	--ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }

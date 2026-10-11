@@ -136,13 +136,25 @@
 		});
 	};
 
+	// Text already painted on load stays visible: hiding it to animate it would delay the LCP.
+	const isOnScreen = (element: HTMLElement) => {
+		const box = element.getBoundingClientRect();
+		return box.height > 0 && box.top < window.innerHeight;
+	};
+
 	const initializeTextAnimations = () => {
 		if (reduceMotion.matches) return;
 
 		// A page transition may already have settled a title in place (see BaseLayout).
-		const elements = Array.from(
+		const candidates = Array.from(
 			document.querySelectorAll<HTMLElement>('[data-animate-text]'),
 		).filter((element) => element.dataset.textAnimationState !== 'complete');
+		const onScreen = candidates.filter(isOnScreen);
+		const elements = candidates.filter((element) => !onScreen.includes(element));
+
+		onScreen.forEach((element) => {
+			element.dataset.textAnimationState = 'complete';
+		});
 
 		elements.forEach((element) => {
 			element.dataset.textAnimationState = 'pending';
@@ -181,9 +193,7 @@
 
 <style is:global>
 	html[data-text-animations='enabled']
-		[data-animate-text][data-text-animation-state='pending'],
-	html[data-text-animations='enabled']
-		[data-animate-text]:not([data-text-animation-state]) {
+		[data-animate-text][data-text-animation-state='pending'] {
 		opacity: 0;
 	}
 
