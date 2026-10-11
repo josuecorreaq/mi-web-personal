@@ -55,12 +55,22 @@
 		}
 	};
 
+	// Content already painted on load stays visible: hiding it to animate it would delay the LCP.
+	const isOnScreen = (element: HTMLElement) => {
+		const box = element.getBoundingClientRect();
+		return box.height > 0 && box.top < window.innerHeight;
+	};
+
 	const initializeScrollReveals = () => {
 		if (reduceMotion.matches) return;
 
-		const elements = Array.from(
+		const candidates = Array.from(
 			document.querySelectorAll<HTMLElement>('[data-animate-reveal]'),
 		);
+		const onScreen = candidates.filter(isOnScreen);
+		const elements = candidates.filter((element) => !onScreen.includes(element));
+
+		onScreen.forEach((element) => completeReveal(element));
 
 		elements.forEach((element) => {
 			element.dataset.revealAnimationState = 'pending';
@@ -99,9 +109,7 @@
 
 <style is:global>
 	html[data-reveal-animations='enabled']
-		[data-animate-reveal][data-reveal-animation-state='pending'],
-	html[data-reveal-animations='enabled']
-		[data-animate-reveal]:not([data-reveal-animation-state]) {
+		[data-animate-reveal][data-reveal-animation-state='pending'] {
 		opacity: 0;
 	}
 
