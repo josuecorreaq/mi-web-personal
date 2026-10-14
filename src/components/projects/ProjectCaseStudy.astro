@@ -12,6 +12,7 @@ import {
 	projectPageCopy,
 	type Project,
 } from '../../data/projects';
+import { getNotesForProject } from '../../data/notes';
 import { detailRow, figureCaption } from '../../styles/classes';
 
 interface Props {
@@ -24,6 +25,9 @@ const copy = projectPageCopy[locale];
 const labels = useTranslations(locale).projects.labels;
 const homePath = getLocalePath(locale);
 const nextProject = getNextProject(locale, project.id);
+const notesCopy = useTranslations(locale).notes;
+// The notes drawn from this project; each one links back here as well.
+const projectNotes = await getNotesForProject(locale, project.id);
 // Each block below reads like a row of the landing's experience list: title on the left, content on the right.
 const { row: rowClass, title: rowTitleClass, body: rowBodyClass, prose: proseClass } = detailRow;
 ---
@@ -141,6 +145,24 @@ const { row: rowClass, title: rowTitleClass, body: rowBodyClass, prose: proseCla
 			<h2 id="project-result" class={rowTitleClass}>{copy.result}</h2>
 			<p class:list={[proseClass, rowBodyClass]}>{copy.resultCopy}</p>
 		</div>
+
+		{projectNotes.length > 0 && (
+			<nav class="mt-block" aria-label={notesCopy.projectNotes}>
+				<ul class="border-t border-line">
+					{projectNotes.map((note) => (
+						<li>
+							<LinkRow
+								href={note.path}
+								eyebrow={notesCopy.projectNotes}
+								title={note.title}
+								description={note.description}
+								class="border-b border-line"
+							/>
+						</li>
+					))}
+				</ul>
+			</nav>
+		)}
 
 		<nav class="mt-block" aria-label={copy.next}>
 			<LinkRow

@@ -3,7 +3,10 @@ import { useTranslations } from '../i18n/translations';
 
 /** First publication of the case-study pages; stays fixed across content updates. */
 export const PROJECT_PUBLISHED = '2026-08-28';
-export const PROJECT_LAST_MODIFIED = '2026-10-05';
+export const PROJECT_LAST_MODIFIED = '2026-10-13';
+
+/** Every case study's id; the notes collection checks its `project` field against them. */
+export const projectIds = ['financial-disbursement-management', 'credit-management-platform'] as const;
 
 export interface ArchitectureLayer {
 	readonly name: string;
@@ -41,7 +44,7 @@ interface ProjectTranslation {
 }
 
 export interface Project extends ProjectTranslation {
-	readonly id: 'financial-disbursement-management' | 'credit-management-platform';
+	readonly id: (typeof projectIds)[number];
 	readonly slug: string;
 	readonly path: string;
 	readonly alternatePath: string;

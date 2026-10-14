@@ -1,12 +1,18 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
+import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
 	site: 'https://josuecorreaq.com',
 	trailingSlash: 'always',
+	// MDX lets a note place the figure components among its prose; it inherits the markdown options.
+	integrations: [mdx()],
 	build: {
 		inlineStylesheets: 'auto',
+	},
+	markdown: {
+		syntaxHighlight: 'prism',
 	},
 	fonts: [
 		{

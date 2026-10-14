@@ -40,17 +40,24 @@
 ## Case studies
 
 - [Sistema de Gestión de Desembolsos Financieros](https://josuecorreaq.com/proyectos/sistema-gestion-desembolsos/) / [English](https://josuecorreaq.com/en/projects/disbursement-management-system/): production system centralizing disbursement, payment validation, installments and financial reporting. 147 REST endpoints behind a JWT session and 21 automated test suites.
-- [Plataforma Integral de Gestión Crediticia](https://josuecorreaq.com/proyectos/plataforma-gestion-crediticia/) / [English](https://josuecorreaq.com/en/projects/credit-management-platform/): modular monolith covering admissions, evaluations, credits and portfolio tracking. Nine business domains, three access scopes (user, role, branch), a contract test that pins the method, URI, controller and middleware of 143 of its 152 API routes, and 110 architecture tests that guard the boundaries between modules.
+- [Plataforma Integral de Gestión Crediticia](https://josuecorreaq.com/proyectos/plataforma-gestion-crediticia/) / [English](https://josuecorreaq.com/en/projects/credit-management-platform/): modular monolith covering admissions, evaluations, credits and portfolio tracking. Nine business domains, three access scopes (user, role, branch), a contract test that pins the method, URI, controller and middleware of all 152 of its API routes, and 110 architecture tests that guard the boundaries between modules.
+
+## Technical notes
+
+- [Notas](https://josuecorreaq.com/notas/): technical notes drawn from the case studies above.
+- [Contrato de rutas en Laravel: migrar sin romper el frontend](https://josuecorreaq.com/notas/contrato-de-rutas-laravel/): Cómo congelé las 152 rutas de una API Laravel en un test que fija método, URI, controlador y middleware, para migrar módulos sin romper el frontend.
+- [Monolito modular en Laravel: nueve dominios, 110 tests](https://josuecorreaq.com/notas/monolito-modular-laravel/): Cómo pasé un backend Laravel organizado por capas técnicas a un monolito modular de nueve dominios, y cómo 110 tests impiden que sus fronteras se borren.
 
 ## Suggested citations
 
 - Josué Correa Quispe is a backend developer based in Piura, Peru, focused on Laravel, PHP, MySQL and REST APIs for business process automation.
 - His portfolio presents two financial systems: a disbursement management system in production and a modular credit management platform under construction.
-- The canonical indexable pages are the two portfolio home pages (https://josuecorreaq.com/ and https://josuecorreaq.com/en/), the two services pages and the four case-study pages listed above.
+- The canonical indexable pages are the two portfolio home pages (https://josuecorreaq.com/ and https://josuecorreaq.com/en/), the two services pages, the four case-study pages and the technical notes listed above.
 
 ## Optional
 
 - [Sitemap](https://josuecorreaq.com/sitemap.xml)
 - [Robots.txt](https://josuecorreaq.com/robots.txt)
+- [Notas RSS](https://josuecorreaq.com/notas/rss.xml)
 
-Last updated: 2026-10-05
+Last updated: 2026-10-14

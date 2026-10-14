@@ -1,6 +1,9 @@
 ---
+/** A date goes in as text plus its machine-readable value, and comes out as a <time>. */
+type MetaItem = string | { readonly text: string; readonly datetime: string };
+
 interface Props {
-	items: readonly string[];
+	items: readonly MetaItem[];
 	class?: string;
 	emphasizeFirst?: boolean;
 }
@@ -17,7 +20,7 @@ const { items, class: className, emphasizeFirst = false } = Astro.props;
 					emphasizeFirst && index === 0 && 'text-ink',
 				]}
 			>
-				{item}
+				{typeof item === 'string' ? item : <time datetime={item.datetime}>{item.text}</time>}
 			</span>
 		))}
 	</span>

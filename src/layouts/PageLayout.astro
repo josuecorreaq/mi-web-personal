@@ -8,7 +8,7 @@ import BaseLayout from './BaseLayout.astro';
 import type { SchemaNode } from '../data/schema';
 import type { Locale } from '../i18n/config';
 
-// A standalone page outside the landing (services, and later notes): same chrome as the case studies.
+// A standalone page outside the landing (services, privacy, notes): same chrome as the case studies.
 interface Props {
 	locale: Locale;
 	title: string;
@@ -21,9 +21,35 @@ interface Props {
 	structuredData: readonly SchemaNode[];
 	/** Header item the page belongs to, so the nav marks it. */
 	currentSection?: string;
+	robots?: string;
+	ogType?: 'website' | 'article';
+	/**
+	 * Whether `alternatePath` is this same page translated. A note without a translation still offers
+	 * the language switch, but to a different page, so it must not claim it as its hreflang alternate.
+	 */
+	hreflang?: boolean;
+	/** The RSS feed this page belongs to, announced in the head. */
+	feed?: { path: string; title: string };
+	socialImageAlt?: string;
+	/** Label of the language switch when `alternatePath` is not this page translated. */
+	languageLabel?: string;
 }
 
-const { locale, title, description, path, alternatePath, structuredData, currentSection } = Astro.props;
+const {
+	locale,
+	title,
+	description,
+	path,
+	alternatePath,
+	structuredData,
+	currentSection,
+	robots,
+	ogType,
+	hreflang = true,
+	feed,
+	socialImageAlt,
+	languageLabel,
+} = Astro.props;
 const siteUrl = new URL('/', Astro.site ?? Astro.url);
 const canonical = new URL(path, siteUrl);
 const alternate = new URL(alternatePath, siteUrl);
@@ -37,13 +63,32 @@ const alternateUrls = locale === 'es'
 	title={title}
 	description={description}
 	canonical={canonical}
-	alternateUrls={alternateUrls}
+	alternateUrls={hreflang ? alternateUrls : undefined}
 	structuredData={structuredData}
+	robots={robots}
+	ogType={ogType}
+	socialImageAlt={socialImageAlt}
 >
+	{feed && (
+		<link
+			slot="head"
+			rel="alternate"
+			type="application/rss+xml"
+			title={feed.title}
+			href={new URL(feed.path, siteUrl)}
+		/>
+	)}
+	<slot name="head" slot="head" />
 	<a class="skip-link" href="#contenido">
 		{locale === 'es' ? 'Saltar al contenido' : 'Skip to content'}
 	</a>
-	<Header locale={locale} isLanding={false} alternatePath={alternatePath} currentSection={currentSection} />
+	<Header
+		locale={locale}
+		isLanding={false}
+		alternatePath={alternatePath}
+		languageLabel={languageLabel}
+		currentSection={currentSection}
+	/>
 	<main id="contenido" tabindex="-1">
 		<slot />
 	</main>

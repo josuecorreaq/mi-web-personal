@@ -4,6 +4,7 @@ import { getLocalePath, type Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
 import { servicesPaths } from '../../data/services';
 import { privacyPaths } from '../../data/privacy';
+import { getNotes, notesPaths } from '../../data/notes';
 import { social } from '../../data/social';
 
 interface Props {
@@ -25,8 +26,12 @@ const name = locale === 'es' ? 'Josué Correa' : 'Josue Correa';
 const year = new Date().getFullYear();
 const newTabLabel = locale === 'es' ? 'se abre en otra pestaña' : 'opens in a new tab';
 const basePath = getLocalePath(locale);
-// Three short groups, not a link farm: what I offer, where to find me, and the legal page. Site
-// navigation is left to the sticky header.
+// The notes group lists the two latest notes, then the index. The RSS feed stays out: browsers show it
+// as raw XML, and feed readers find it through the <link rel="alternate"> in the notes pages' head.
+const latestNotes = (await getNotes(locale)).slice(0, 2);
+const showNotes = latestNotes.length > 0;
+// Short groups, not a link farm: what I offer, what I write (once there is a note), where to find me,
+// and the legal page. Site navigation is left to the sticky header.
 const groups: { id: string; title: string; links: FooterLink[] }[] = [
 	{
 		id: 'footer-services',
@@ -36,6 +41,18 @@ const groups: { id: string; title: string; links: FooterLink[] }[] = [
 			href: `${servicesPaths[locale]}#${service.id}`,
 		})),
 	},
+	...(showNotes
+		? [
+				{
+					id: 'footer-notes',
+					title: t.nav.notes,
+					links: [
+						...latestNotes.map((note) => ({ label: note.title, href: note.path })),
+						{ label: t.footer.notesAll, href: notesPaths[locale] },
+					],
+				},
+			]
+		: []),
 	{
 		id: 'footer-social',
 		title: t.footer.socialLabel,
@@ -64,7 +81,10 @@ const linkClass = `group inline-flex min-h-11 items-center gap-2.5 py-2 text-pre
 	<div class="page-shell">
 		<div
 			class:list={[
-				'grid grid-cols-2 gap-x-8 gap-y-10 pb-[clamp(2.5rem,6vw,4rem)] pt-[clamp(2rem,4vw,2.75rem)] lg:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,1fr))] lg:gap-x-12',
+				'grid grid-cols-2 gap-x-8 gap-y-10 pb-[clamp(2.5rem,6vw,4rem)] pt-[clamp(2rem,4vw,2.75rem)] lg:gap-x-12',
+				showNotes
+					? 'lg:grid-cols-[minmax(0,1.5fr)_repeat(4,minmax(0,1fr))]'
+					: 'lg:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,1fr))]',
 				isDrench ? 'border-t border-on-drench/30' : '',
 			]}
 		>
@@ -87,8 +107,12 @@ const linkClass = `group inline-flex min-h-11 items-center gap-2.5 py-2 text-pre
 				</a>
 			</div>
 
+			{/* With an odd number of groups the last one spans the two-column phone grid. */}
 			{groups.map((group) => (
-				<nav aria-labelledby={`${locale}-${group.id}`} class:list={[group.id === 'footer-legal' && 'col-span-2 sm:col-span-1']}>
+				<nav
+					aria-labelledby={`${locale}-${group.id}`}
+					class:list={[!showNotes && group.id === 'footer-legal' && 'col-span-2 sm:col-span-1']}
+				>
 					<h2 id={`${locale}-${group.id}`} class={labelClass}>{group.title}</h2>
 					<ul class="mt-2.5">
 						{group.links.map((link) => (

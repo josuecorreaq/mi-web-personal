@@ -1,0 +1,17 @@
+---
+import NoteArticle from '../../components/notes/NoteArticle.astro';
+import { getNoteStaticPaths, type Note } from '../../data/notes';
+import NoteLayout from '../../layouts/NoteLayout.astro';
+
+export const getStaticPaths = () => getNoteStaticPaths('es');
+
+interface Props {
+	note: Note;
+}
+
+const { note } = Astro.props;
+---
+
+<NoteLayout locale="es" note={note}>
+	<NoteArticle locale="es" note={note} />
+</NoteLayout>

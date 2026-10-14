@@ -1,0 +1,42 @@
+---
+import NotesIndex from '../../components/notes/NotesIndex.astro';
+import { getNotes, getNotesFeedPath, notesPaths } from '../../data/notes';
+import { createNotesIndexSchema } from '../../data/schema';
+import { useTranslations } from '../../i18n/translations';
+import PageLayout from '../../layouts/PageLayout.astro';
+
+const t = useTranslations('es').notes;
+const siteUrl = new URL('/', Astro.site ?? Astro.url);
+const notes = await getNotes('es');
+const otherNotes = await getNotes('en');
+const hasOwnNotes = notes.length > 0;
+const structuredData = createNotesIndexSchema({
+	locale: 'es',
+	siteUrl,
+	pageUrl: new URL(notesPaths.es, siteUrl),
+	title: t.meta.title,
+	description: t.meta.description,
+	label: t.label,
+	notes,
+});
+---
+
+{/* An index with nothing to list stays out of search results and claims no translation. */}
+<PageLayout
+	locale="es"
+	title={t.meta.title}
+	description={t.meta.description}
+	path={notesPaths.es}
+	alternatePath={notesPaths.en}
+	structuredData={structuredData}
+	currentSection="notas"
+	robots={hasOwnNotes ? undefined : 'noindex, follow'}
+	hreflang={hasOwnNotes && otherNotes.length > 0}
+	feed={hasOwnNotes ? { path: getNotesFeedPath('es'), title: t.feedTitle } : undefined}
+>
+	<NotesIndex
+		locale="es"
+		notes={notes}
+		alternateIndexPath={otherNotes.length > 0 ? notesPaths.en : undefined}
+	/>
+</PageLayout>

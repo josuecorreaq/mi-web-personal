@@ -20,6 +20,8 @@ interface Props {
 	alternateUrls?: AlternateUrls;
 	structuredData?: readonly SchemaNode[];
 	ogType?: 'website' | 'article';
+	/** Describes the social image for this page; defaults to the portfolio's. */
+	socialImageAlt?: string;
 }
 
 const {
@@ -32,13 +34,15 @@ const {
 	alternateUrls,
 	structuredData,
 	ogType = 'website',
+	socialImageAlt: pageSocialImageAlt,
 } = Astro.props;
 
 const socialImage = new URL('/og/portafolio-og.png', Astro.site ?? Astro.url);
 const socialImageAlt =
-	locale === 'es'
+	pageSocialImageAlt ??
+	(locale === 'es'
 		? 'Josué Correa Quispe, Desarrollador Backend especializado en Laravel, PHP, MySQL y APIs REST'
-		: 'Josué Correa Quispe, Backend Developer specialized in Laravel, PHP, MySQL and REST APIs';
+		: 'Josué Correa Quispe, Backend Developer specialized in Laravel, PHP, MySQL and REST APIs');
 const siteUrl = new URL('/', Astro.site ?? Astro.url);
 const profileUrl = canonical ?? new URL(getLocalePath(locale), siteUrl);
 const resolvedAlternates = alternateUrls ?? (includeAlternates
@@ -188,7 +192,8 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 		{description && <meta property="og:title" content={title} />}
 		{description && <meta property="og:description" content={description} />}
 		{description && <meta property="og:locale" content={locale === 'es' ? 'es_PE' : 'en_US'} />}
-		{description && <meta property="og:locale:alternate" content={locale === 'es' ? 'en_US' : 'es_PE'} />}
+		{/* Only a page with a translation has an alternate locale to announce. */}
+		{description && resolvedAlternates && <meta property="og:locale:alternate" content={locale === 'es' ? 'en_US' : 'es_PE'} />}
 		{description && canonical && <meta property="og:url" content={canonical} />}
 		{description && <meta property="og:site_name" content="Josué Correa" />}
 		{description && <meta property="og:image" content={socialImage} />}

@@ -1,0 +1,144 @@
+---
+title: 'Monolito modular en Laravel: nueve dominios, 110 tests'
+description: Cómo pasé un backend Laravel organizado por capas técnicas a un monolito modular de nueve dominios, y cómo 110 tests impiden que sus fronteras se borren.
+datePublished: 2026-10-14
+translationKey: modular-monolith
+tags:
+  - Laravel
+  - Arquitectura
+  - Monolito modular
+  - PHPUnit
+project: credit-management-platform
+---
+
+import ModularMonolithFigure from '../../../components/notes/figures/ModularMonolithFigure.astro';
+
+La [Plataforma Integral de Gestión Crediticia](/proyectos/plataforma-gestion-crediticia/) empezó como un monolito Laravel organizado por tipo técnico. Tenía 45 modelos en `app/Models`, 83 archivos en `Services`, 22 en `Utilities` y 14 en `Filters`. Las reglas de cada flujo quedaban repartidas entre esas carpetas, los Form Requests y los controllers, y cualquier cambio tocaba código que no pertenecía a ningún dominio.
+
+En poco más de cinco semanas, ese código pasó a nueve módulos, uno por dominio de negocio. Hoy esas cuatro carpetas no existen.
+
+<ModularMonolithFigure />
+
+## Por qué un monolito modular
+
+El problema era de organización, no de escala. Por eso descarté las dos salidas más comunes:
+
+- **Microservicios.** Separan físicamente y escalan cada pieza por su cuenta, pero piden despliegues independientes, red, contratos remotos y manejo de fallos distribuidos. El sistema no necesitaba nada de eso.
+- **Hexagonal estricta.** Marca límites muy explícitos, pero suma interfaces y repositorios que solo tienen una implementación posible: Eloquent.
+
+El monolito modular se queda con lo útil de cada una: fronteras de dominio claras, un solo despliegue y Eloquent donde corresponde.
+
+## Módulos por dominio, no por capa
+
+Cada módulo es un dominio de negocio y repite las mismas cuatro capas:
+
+```text
+app/Modules/<Dominio>/
+  Domain/          reglas de negocio puras
+  Application/     casos de uso: Actions y Queries
+  Infrastructure/  Eloquent, consultas, adapters
+  Http/            controllers y form requests
+```
+
+Hoy el código cumple la dirección de dependencias:
+
+- `Domain` no importa ninguna otra capa, ni HTTP, la fachada `DB`, `Auth` o Eloquent. Del framework solo toma utilidades como `Collection`.
+- `Application` nunca importa `Http`.
+- `Http` no persiste datos ni importa `Infrastructure`, salvo excepciones inventariadas.
+
+No todo está cerrado: `Infrastructure` todavía importa `Application` en nueve lugares, que quedan por revisar.
+
+Lo que comparten dos o más módulos vive en `Shared`. Tiene dos reglas, y ninguna se cumple al cien por ciento:
+
+- **`Shared` no depende de ningún módulo.** La excepción son los helpers de autorización, que necesitan al usuario autenticado; esos imports figuran en una lista permitida de un test.
+- **Nada entra a `Shared` si lo usa un solo módulo.** De sus 19 clases, 16 la cumplen. Las otras tres las usa un único módulo y son candidatas a volver a él.
+
+Cada dominio es dueño de sus datos. Un módulo puede ser dueño de un maestro de datos, que otro módulo usa para evaluar. El segundo no toca ese maestro: guarda su propia copia de los valores que usó, y cuando necesita dejar constancia en el maestro lo pide a través de una Action pública del dueño.
+
+## Cómo hablan los módulos entre sí
+
+Un módulo no debería entrar a las clases internas ni a las tablas de otro, sino consumir lo que el otro publica en su capa Application. En el código actual, casi cuatro de cada cinco imports entre módulos apuntan a esa capa: sobre todo Queries, seguidas de DTOs, Actions y contratos.
+
+El resto son excepciones conocidas. La principal es el usuario autenticado, un modelo que viaja por todos los módulos sin que ninguno lo consulte directamente. Las demás son algunos bindings de ruta y relaciones Eloquent de la transición. Ninguna aparece sola: las acotan los mismos tests que vigilan las fronteras.
+
+## Fronteras que no dependen de la disciplina
+
+Las reglas de arriba se pueden romper sin querer en cualquier PR. Por eso las vigilan **110 tests de arquitectura**, que leen el código fuente y fallan cuando una frontera se cruza:
+
+- **Dependencias entre módulos.** Los tres módulos del flujo crediticio no pueden importar la infraestructura de otro dueño ni formar ciclos entre ellos. Para el resto, un test fija el inventario exacto de dependencias: 28 aristas. Cualquier dependencia nueva lo hace fallar y obliga a decidirla a propósito.
+- **Tablas.** Una consulta cruda como `DB::table('pagos')` no importa ninguna clase, así que pasa por delante de cualquier guarda que lea imports. Otro test arma el mapa de tabla a dueño con el `getTable()` de cada modelo, y falla si un módulo consulta en crudo una tabla ajena. Su lista de excepciones está vacía, y un test exige que siga así.
+- **Capa Http.** Un controller coordina la petición, el caso de uso y la respuesta. No persiste datos y no usa `app()` como service locator. La excepción principal es el route model binding, porque Laravel necesita el tipo del modelo en la firma. Pero el tipo da identidad, no acceso: el controller puede leer `$modelo->id`, no llamar a `::query()` ni a `->save()`.
+- **Capa Application.** Los colaboradores llegan por el constructor y no se crean con `new` dentro de un método, para que se puedan sustituir en las pruebas.
+
+El inventario de dependencias es la guarda más simple de entender. Esta es una versión simplificada:
+
+```php
+public function test_el_inventario_de_dependencias_no_cambia(): void
+{
+    $aristas = [];
+
+    foreach ($this->archivosPorModulo() as $modulo => $archivos) {
+        foreach ($archivos as $archivo) {
+            foreach ($this->modulosImportados($archivo) as $importado) {
+                if ($importado !== $modulo) {
+                    $aristas["{$modulo} -> {$importado}"] = true;
+                }
+            }
+        }
+    }
+
+    $aristas = array_keys($aristas);
+    sort($aristas);
+
+    $this->assertSame([
+        'ModuloA -> ModuloB',
+        'ModuloA -> ModuloC',
+        // ... una arista por línea, 28 en total
+    ], $aristas);
+}
+```
+
+## Cada guarda llegó con su movimiento
+
+Las guardas no se escribieron todas al principio. Cada una llegó justo después del movimiento que protege:
+
+1. Al vaciar `Services`, `Utilities` y `Filters` en los módulos, entró la guarda de la capa Http, para que la lógica no volviera a los controllers.
+2. Cuando los modelos Eloquent dejaron `app/Models` y pasaron a su módulo dueño, entraron la guarda de propiedad de modelos y el inventario de dependencias.
+3. Al día siguiente entró la guarda de tablas. Las otras guardas leen imports, y una consulta cruda no importa ninguna clase, así que se saltaba las tres.
+
+El frontend no notó ninguno de esos movimientos. Eso lo sostuvo el [test de contrato de rutas](/notas/contrato-de-rutas-laravel/), que fija método, URI, controlador y middleware de cada ruta.
+
+## El grafo no es perfecto, y el test lo dice
+
+Sería cómodo decir que el grafo de dependencias entre módulos no tiene ciclos. No es cierto, y el test no lo afirma. Solo el flujo crediticio es acíclico. Entre los demás quedan acoplamientos de la transición: dos módulos transversales se apuntan mutuamente por las relaciones del usuario.
+
+Un ciclo se aceptó a propósito. Una operación que pertenece a un módulo necesita leer el resultado de otros dos, y esos dos ya dependen del primero. Invertir la dependencia con contratos obligaba a duplicar en el primer módulo los DTO de los otros dos. Como el consumo es solo de la capa Application, el ciclo se quedó, con la explicación escrita en el propio test.
+
+## Una guarda rota también pasa
+
+Un detector que deja de detectar no falla: queda verde y vacío, exactamente igual que un código sin violaciones. Por eso las guardas importantes tienen un segundo test que les pasa ejemplos conocidos y comprueba que los encuentra:
+
+```php
+public function test_el_detector_reconoce_las_consultas_crudas(): void
+{
+    $fuente = <<<'PHP'
+    DB::table('pagos')->get();
+    DB::connection('mysql')->table('facturas')->first();
+    PHP;
+
+    $tablas = $this->tablasReferidas($fuente);
+
+    $this->assertContains('pagos', $tablas);
+    $this->assertContains('facturas', $tablas);
+}
+```
+
+La misma idea se aplica a las listas de excepciones. Una entrada que sobrevive al cambio que la justificaba deja de proteger y empieza a esconder. Por eso un test exige que cada excepción siga conteniendo el patrón que excusa.
+
+## Lo que cuesta
+
+Las guardas tienen un precio. Cada dependencia nueva entre módulos obliga a editar el inventario, y esa fricción es intencional: convierte un import casual en una decisión visible en el diff. Los 110 tests también hay que mantenerlos cuando el código cambia de forma legítima.
+
+Y el trabajo no está terminado. Quedan los acoplamientos de la transición, los nueve imports de `Infrastructure` hacia `Application` y las tres clases de `Shared` que usa un solo módulo. Ninguno está escondido: cada uno figura en un test o en esta nota.
+
+El resto de la plataforma, con sus tres niveles de acceso y su arquitectura por capas, está en el [caso de estudio](/proyectos/plataforma-gestion-crediticia/).

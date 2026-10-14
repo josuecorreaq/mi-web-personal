@@ -1,0 +1,137 @@
+---
+import RotateCcw from '@lucide/astro/icons/rotate-ccw';
+import { figureBar, figureCaption } from '../../../styles/classes';
+import type { Locale } from '../../../i18n/config';
+
+interface Props {
+	locale?: Locale;
+}
+
+const { locale = 'es' } = Astro.props;
+
+const copy = {
+	es: {
+		commit: 'commit de la migración',
+		removed: 'Línea eliminada:',
+		added: 'Línea añadida:',
+		lost: 'El permiso se pierde al reescribir la ruta.',
+		test: 'las rutas conservan su contrato',
+		failure: 'PATCH api/v1/proceso-negocio/{id}: cambió el middleware',
+		replay: 'Ejecutar de nuevo',
+		caption:
+			'Ilustrativo. El commit cambia el namespace del controlador, como se buscaba, y de paso pierde el permiso de la ruta. Los tests funcionales que desactivan la sesión y los permisos siguen en verde; el contrato falla y dice qué ruta cambió.',
+	},
+	en: {
+		commit: 'migration commit',
+		removed: 'Removed line:',
+		added: 'Added line:',
+		lost: 'The permission is lost when the route is rewritten.',
+		test: 'routes keep their contract',
+		failure: 'PATCH api/v1/proceso-negocio/{id}: middleware changed',
+		replay: 'Run again',
+		caption:
+			'Illustrative. The commit changes the controller’s namespace, as intended, and loses the route’s permission along the way. Functional tests that disable the session and permissions stay green; the contract fails and names the route that changed.',
+	},
+}[locale];
+
+type Line = { kind: 'context' | 'removed' | 'added'; text: string; lost?: boolean };
+
+const diff: Line[] = [
+	{ kind: 'removed', text: 'use App\\Http\\Controllers\\ProcesoNegocioController;' },
+	{ kind: 'added', text: 'use App\\Modules\\Proceso\\Http\\Controllers\\ProcesoNegocioController;' },
+	{ kind: 'context', text: '…' },
+	{ kind: 'removed', text: "Route::patch('proceso-negocio/{id}', [ProcesoNegocioController::class, 'update'])" },
+	{ kind: 'removed', text: "    ->middleware('permiso:proceso.editar');", lost: true },
+	{ kind: 'added', text: "Route::patch('proceso-negocio/{id}', [ProcesoNegocioController::class, 'update']);" },
+];
+
+// Build-up timeline in ms (see figure-sequence.ts): the diff is written line by line, the lost
+// permission is marked, then the test runs and fails.
+const diffAt = (index: number) => index * 110;
+const lostAt = diffAt(diff.length) + 200;
+type OutputLine = { at?: number; text?: string; tone?: 'ink' | 'muted'; kind?: 'fail' | 'summary' };
+const output: OutputLine[] = [
+	{ at: lostAt + 600, kind: 'fail' },
+	{ at: lostAt + 760, text: `  ⨯ ${copy.test}`, tone: 'muted' },
+	{ text: ' ' },
+	{ at: lostAt + 980, text: `  ${copy.failure}`, tone: 'ink' },
+	{ at: lostAt + 1080, text: '  Failed asserting that two arrays are identical.', tone: 'muted' },
+	{ text: ' ' },
+	{ at: lostAt + 1240, kind: 'summary' },
+];
+
+const marker = { context: ' ', removed: '-', added: '+' } as const;
+const lineClass = {
+	context: 'text-muted',
+	removed: 'text-muted',
+	added: 'bg-elevated text-ink',
+} as const;
+// Panels scroll sideways on narrow screens instead of wrapping, so the code keeps its shape.
+const panel = 'm-0 overflow-x-auto py-3 font-mono text-[0.8125rem] leading-[1.75] whitespace-pre';
+const square = 'size-2 border border-brand-edge bg-brand';
+---
+
+<figure class="m-0 min-w-0 border border-line" data-route-failure>
+	<div class={figureBar}>
+		<span>routes/api.php</span>
+		<span>{copy.commit}</span>
+	</div>
+	<pre class:list={[panel, 'bg-surface']}><code>{diff.map((line, index) => (<span class:list={['seq-type block px-4', line.lost ? 'text-accent' : lineClass[line.kind]]} data-at={diffAt(index)}>{line.kind === 'removed' && <span class="sr-only">{copy.removed} </span>}{line.kind === 'added' && <span class="sr-only">{copy.added} </span>}<span class="select-none" aria-hidden="true">{marker[line.kind]} </span>{line.lost ? <><del class="no-underline">{line.text}</del><span class:list={['seq-mark ml-3 inline-flex align-middle', square]} data-at={lostAt} aria-hidden="true"></span></> : line.text}</span>))}</code></pre>
+	<p class="seq-type flex items-center gap-2 border-t border-line px-4 py-2.5 font-mono text-[0.78rem] text-muted" data-at={lostAt + 120}>
+		<span class:list={['block shrink-0', square]} aria-hidden="true"></span>
+		{copy.lost}
+	</p>
+
+	<div class:list={[figureBar, 'items-center border-t']}>
+		<span>php artisan test --filter=RouteContractTest</span>
+		<button
+			type="button"
+			class="-my-2 inline-flex min-h-8 shrink-0 touch-manipulation items-center gap-1.5 transition-colors duration-200 hover:text-ink motion-reduce:transition-none"
+			data-route-replay
+			hidden
+		>
+			<RotateCcw class="size-3.5" aria-hidden="true" stroke-width={1.8} />
+			{copy.replay}
+		</button>
+	</div>
+	<pre class={panel}><code>{output.map((line) => (<span class:list={['seq-type block px-4', line.tone === 'ink' ? 'text-ink' : 'text-muted']} data-at={line.at}>{line.kind === 'fail' ? <><span class="seq-mark inline-flex bg-brand px-1.5 font-semibold text-on-brand" data-at={line.at}>FAIL</span> <span class="text-ink">RouteContractTest</span></> : line.kind === 'summary' ? <>  Tests:  <span class="text-ink">1 failed</span></> : line.text}</span>))}</code></pre>
+
+	<figcaption class={figureCaption}>{copy.caption}</figcaption>
+</figure>
+
+<script>
+	import { sequenceFigure } from '../../../scripts/figure-sequence';
+
+	document.querySelectorAll<HTMLElement>('[data-route-failure]').forEach((figure) => {
+		const sequence = sequenceFigure(figure);
+		const replay = figure.querySelector<HTMLButtonElement>('[data-route-replay]');
+
+		// Without motion there is nothing to replay, so the button stays out.
+		if (!sequence || !replay) return;
+		replay.hidden = false;
+		replay.addEventListener('click', sequence.replay);
+	});
+</script>
+
+<style>
+	/* Hidden only while a sequence is pending, so without the script the figure is simply there. Hiding
+	   is instant; only showing transitions, so a replay starts from scratch. */
+	[data-sequence] [data-at]:not([data-shown]) {
+		opacity: 0;
+	}
+
+	/* Lines come in like output in a terminal: a short slide from the left. */
+	[data-sequence] .seq-type:not([data-shown]) {
+		transform: translate3d(-6px, 0, 0);
+	}
+
+	[data-sequence] .seq-mark:not([data-shown]) {
+		transform: scale(0.4);
+	}
+
+	[data-sequence] [data-at][data-shown] {
+		transition:
+			opacity 260ms var(--ease-out-quart),
+			transform 320ms var(--ease-out-quart);
+	}
+</style>
