@@ -1,0 +1,116 @@
+---
+title: 'Contrato de rutas en Laravel: migrar sin romper el frontend'
+description: Cómo congelé las 152 rutas de una API Laravel en un test que fija método, URI, controlador y middleware, para migrar módulos sin romper el frontend.
+datePublished: 2026-10-14
+translationKey: route-contract-test
+tags:
+  - Laravel
+  - PHPUnit
+  - APIs REST
+  - Arquitectura
+project: credit-management-platform
+---
+
+import RouteContractFailureFigure from '../../../components/notes/figures/RouteContractFailureFigure.astro';
+
+En la [Plataforma Integral de Gestión Crediticia](/proyectos/plataforma-gestion-crediticia/) migré por fases un monolito organizado por capas técnicas a un monolito modular. Cada dominio pasó, módulo por módulo, a las capas Http, Application, Domain e Infrastructure. Mover un controlador a su módulo cambia su namespace y la línea que lo registra en `routes/api.php`. El frontend en React no se entera de nada de eso: solo conoce las rutas.
+
+El riesgo de una migración así no es que algo deje de compilar. Es que una ruta cambie en silencio: un verbo distinto, un parámetro renombrado o, lo peor, un middleware de permisos que se queda en el camino al reescribir esa línea.
+
+## Qué fija el contrato
+
+El test de contrato congela **las 152 rutas** de la API. De cada una fija cuatro cosas:
+
+- **Método y URI**: es lo que llama el frontend. Si cambian, el frontend se rompe.
+- **Controlador y acción**: a dónde llega la petición. Moverla a otro controlador tiene que ser una decisión, no un efecto secundario de reorganizar carpetas.
+- **Middleware que protege la ruta**: la sesión JWT, el permiso de la acción y los límites de peticiones. El resto del middleware, como el grupo `api`, queda fuera del contrato.
+
+El middleware es la parte que más importa, porque casi nada más lo vigila. Muchos tests funcionales desactivan la sesión y los permisos para probar solo el comportamiento del endpoint. Si una migración deja una ruta sin `permiso:proceso.editar`, esos tests siguen en verde y la ruta queda abierta a cualquiera con sesión.
+
+## Cómo se ve
+
+Cada fila del contrato es una ruta, y un solo test recorre todas. Esta es una versión simplificada del test real:
+
+```php
+// Versión simplificada; los nombres de rutas y permisos son ilustrativos.
+final class RouteContractTest extends TestCase
+{
+    /** [método, URI, controlador@acción, middleware que protege la ruta] */
+    private static function contract(): array
+    {
+        return [
+            ['GET', 'api/v1/proceso-negocio',
+                ProcesoNegocioController::class.'@index',
+                ['jwt', 'permiso:proceso.listar']],
+
+            ['PATCH', 'api/v1/proceso-negocio/{id}',
+                ProcesoNegocioController::class.'@update',
+                ['jwt', 'permiso:proceso.editar']],
+        ];
+    }
+
+    public function test_las_rutas_conservan_su_contrato(): void
+    {
+        $fallas = [];
+
+        foreach (self::contract() as [$method, $uri, $action, $middleware]) {
+            $route = $this->findRoute($method, $uri);
+
+            if ($route === null) {
+                $fallas[] = "Falta la ruta {$method} {$uri}";
+                continue;
+            }
+
+            if (ltrim($route->getActionName(), '\\') !== $action) {
+                $fallas[] = "{$method} {$uri}: cambió el controlador";
+            }
+
+            if ($this->contractMiddleware($route) !== $middleware) {
+                $fallas[] = "{$method} {$uri}: cambió el middleware";
+            }
+        }
+
+        $this->assertSame([], $fallas, implode("\n", $fallas));
+    }
+
+    // Solo el middleware que protege la ruta entra al contrato.
+    private function contractMiddleware(Route $route): array
+    {
+        return array_values(array_filter(
+            $route->gatherMiddleware(),
+            fn (string $middleware) => $middleware === 'jwt'
+                || str_starts_with($middleware, 'permiso:')
+                || str_starts_with($middleware, 'throttle:'),
+        ));
+    }
+}
+```
+
+`findRoute` busca en `Route::getRoutes()` la ruta con ese método y esa URI. Dos decisiones del diseño:
+
+- **Las fallas se acumulan.** Si una migración rompe cinco rutas, una sola corrida muestra las cinco, en vez de detenerse en la primera.
+- **El middleware se filtra antes de comparar.** `gatherMiddleware()` devuelve también el middleware de grupo. Si el contrato lo incluyera, cualquier ajuste de ese grupo rompería todas las filas sin que ninguna ruta hubiera cambiado de verdad.
+
+Así falla cuando una migración pierde un permiso:
+
+<RouteContractFailureFigure />
+
+## Una red para las rutas que no están en el contrato
+
+El contrato fija las rutas una por una, así que una ruta nueva no está cubierta hasta que alguien agrega su fila. Me pasó: nueve rutas de configuración llegaron después del contrato y quedaron fuera de él hasta que las sumé. Mientras tanto no estaban desprotegidas, porque el mismo archivo tiene una regla general: recorre todas las rutas registradas y falla si alguna bajo `/api/v1`, salvo las públicas (inicio de sesión, renovación de sesión, recuperación de contraseña y cierre de sesión), no exige la sesión JWT. Otra regla falla si aparece una ruta de negocio fuera de `/api/v1`.
+
+La regla general no sabe qué permiso corresponde a cada ruta; solo exige que haya sesión. Por eso las dos se complementan: la regla cubre cualquier ruta desde el día en que aparece, y el contrato fija sus permisos cuando se agrega su fila.
+
+## Qué atrapa y qué no
+
+Atrapa los cambios de forma de la API: una URI renombrada, un verbo distinto, un controlador que se movió sin querer y, sobre todo, un middleware que se perdió.
+
+No revisa lo que devuelve cada endpoint ni las reglas del negocio. Eso lo cubren los tests funcionales. Las fronteras entre módulos las vigilan otros **110 tests de arquitectura**, que fallan si aparece una dependencia no declarada entre módulos o si una consulta cruda toca tablas ajenas.
+
+## Cuándo se actualiza
+
+Cambiar una fila del contrato está permitido, pero tiene que ser a propósito. Cada PR de la migración pasa por una lista que empieza por ahí: rutas públicas iguales, mismo middleware y mismos permisos.
+
+Un ejemplo real: cuando el frontend pasó a mostrar la sesión del usuario en `/inicio`, la API dejó de exponer `/me`. El mismo commit renombró las dos rutas en `routes/api.php`, el método del controlador y las dos filas del contrato. El cambio quedó a la vista en el diff, en un solo lugar. Si el contrato cambia sin que cambie el frontend, algo se rompió.
+
+El resto de la arquitectura de la plataforma, con sus nueve dominios y sus tres niveles de acceso, está en el [caso de estudio](/proyectos/plataforma-gestion-crediticia/).

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Notas técnicas de Josué Correa</title>
+		<link>https://josuecorreaq.com/notas/</link>
+		<description>Notas de backend escritas desde proyectos reales: tests de contrato, arquitectura modular, APIs REST y Laravel, con el código y las decisiones detrás.</description>
+		<language>es-PE</language>
+		<lastBuildDate>Wed, 14 Oct 2026 05:00:00 GMT</lastBuildDate>
+		<atom:link href="https://josuecorreaq.com/notas/rss.xml" rel="self" type="application/rss+xml" />
+		<item>
+			<title>Contrato de rutas en Laravel: migrar sin romper el frontend</title>
+			<link>https://josuecorreaq.com/notas/contrato-de-rutas-laravel/</link>
+			<guid isPermaLink="true">https://josuecorreaq.com/notas/contrato-de-rutas-laravel/</guid>
+			<description>Cómo congelé las 152 rutas de una API Laravel en un test que fija método, URI, controlador y middleware, para migrar módulos sin romper el frontend.</description>
+			<pubDate>Wed, 14 Oct 2026 05:00:00 GMT</pubDate>
+			<category>Laravel</category>
+			<category>PHPUnit</category>
+			<category>APIs REST</category>
+			<category>Arquitectura</category>
+		</item>
+		<item>
+			<title>Monolito modular en Laravel: nueve dominios, 110 tests</title>
+			<link>https://josuecorreaq.com/notas/monolito-modular-laravel/</link>
+			<guid isPermaLink="true">https://josuecorreaq.com/notas/monolito-modular-laravel/</guid>
+			<description>Cómo pasé un backend Laravel organizado por capas técnicas a un monolito modular de nueve dominios, y cómo 110 tests impiden que sus fronteras se borren.</description>
+			<pubDate>Wed, 14 Oct 2026 05:00:00 GMT</pubDate>
+			<category>Laravel</category>
+			<category>Arquitectura</category>
+			<category>Monolito modular</category>
+			<category>PHPUnit</category>
+		</item>
+	</channel>
+</rss>

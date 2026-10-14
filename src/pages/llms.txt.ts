@@ -1,4 +1,57 @@
-# Josué Correa Quispe
+import type { APIRoute } from 'astro';
+import { getNotes, getNotesFeedPath, notesPaths, type Note } from '../data/notes';
+import { PROJECT_LAST_MODIFIED } from '../data/projects';
+import { SERVICES_LAST_MODIFIED } from '../data/services';
+
+// llms.txt for AI assistants. The profile, services and case studies are curated by hand here; the
+// notes are listed from the collection, so a new one never goes missing.
+export const GET: APIRoute = async ({ site }) => {
+	const origin = site ?? new URL('https://josuecorreaq.com');
+	const url = (path: string) => new URL(path, origin).toString();
+	const [esNotes, enNotes] = await Promise.all([getNotes('es'), getNotes('en')]);
+	const hasNotes = esNotes.length + enNotes.length > 0;
+	const translationOf = (note: Note, notes: readonly Note[]) =>
+		notes.find((candidate) => candidate.translationKey === note.translationKey);
+
+	const noteLines = [
+		...esNotes.map((note) => {
+			const translation = translationOf(note, enNotes);
+			const english = translation ? ` / [English](${url(translation.path)})` : '';
+			return `- [${note.title}](${url(note.path)})${english}: ${note.description}`;
+		}),
+		...enNotes
+			.filter((note) => !translationOf(note, esNotes))
+			.map((note) => `- [${note.title}](${url(note.path)}) (English): ${note.description}`),
+	];
+	// Only an index with notes is indexable, so only those are offered.
+	const indexLinks = [
+		...(esNotes.length > 0 ? [`[Notas](${url(notesPaths.es)})`] : []),
+		...(enNotes.length > 0 ? [`[Notes](${url(notesPaths.en)})`] : []),
+	];
+	const notesSection = hasNotes
+		? `## Technical notes
+
+- ${indexLinks.join(' / ')}: technical notes drawn from the case studies above.
+${noteLines.join('\n')}
+
+`
+		: '';
+	const indexablePages = hasNotes
+		? 'the two services pages, the four case-study pages and the technical notes listed above'
+		: 'the two services pages and the four case-study pages listed above';
+	const feeds = [
+		...(esNotes.length > 0 ? [`- [Notas RSS](${url(getNotesFeedPath('es'))})`] : []),
+		...(enNotes.length > 0 ? [`- [Notes RSS](${url(getNotesFeedPath('en'))})`] : []),
+	];
+	const lastUpdated = [
+		PROJECT_LAST_MODIFIED,
+		SERVICES_LAST_MODIFIED,
+		...[...esNotes, ...enNotes].map((note) => note.dateModified),
+	]
+		.sort()
+		.at(-1);
+
+	const body = `# Josué Correa Quispe
 
 > Portfolio of Josué Correa Quispe, a Systems Engineer and Backend Developer based in Piura, Peru, specialized in Laravel, PHP, MySQL, React, REST APIs and business process automation.
 
@@ -40,17 +93,23 @@
 ## Case studies
 
 - [Sistema de Gestión de Desembolsos Financieros](https://josuecorreaq.com/proyectos/sistema-gestion-desembolsos/) / [English](https://josuecorreaq.com/en/projects/disbursement-management-system/): production system centralizing disbursement, payment validation, installments and financial reporting. 147 REST endpoints behind a JWT session and 21 automated test suites.
-- [Plataforma Integral de Gestión Crediticia](https://josuecorreaq.com/proyectos/plataforma-gestion-crediticia/) / [English](https://josuecorreaq.com/en/projects/credit-management-platform/): modular monolith covering admissions, evaluations, credits and portfolio tracking. Nine business domains, three access scopes (user, role, branch), a contract test that pins the method, URI, controller and middleware of 143 of its 152 API routes, and 110 architecture tests that guard the boundaries between modules.
+- [Plataforma Integral de Gestión Crediticia](https://josuecorreaq.com/proyectos/plataforma-gestion-crediticia/) / [English](https://josuecorreaq.com/en/projects/credit-management-platform/): modular monolith covering admissions, evaluations, credits and portfolio tracking. Nine business domains, three access scopes (user, role, branch), a contract test that pins the method, URI, controller and middleware of all 152 of its API routes, and 110 architecture tests that guard the boundaries between modules.
 
-## Suggested citations
+${notesSection}## Suggested citations
 
 - Josué Correa Quispe is a backend developer based in Piura, Peru, focused on Laravel, PHP, MySQL and REST APIs for business process automation.
 - His portfolio presents two financial systems: a disbursement management system in production and a modular credit management platform under construction.
-- The canonical indexable pages are the two portfolio home pages (https://josuecorreaq.com/ and https://josuecorreaq.com/en/), the two services pages and the four case-study pages listed above.
+- The canonical indexable pages are the two portfolio home pages (https://josuecorreaq.com/ and https://josuecorreaq.com/en/), ${indexablePages}.
 
 ## Optional
 
 - [Sitemap](https://josuecorreaq.com/sitemap.xml)
 - [Robots.txt](https://josuecorreaq.com/robots.txt)
+${feeds.map((feed) => `${feed}\n`).join('')}
+Last updated: ${lastUpdated}
+`;
 
-Last updated: 2026-10-05
+	return new Response(body, {
+		headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+	});
+};

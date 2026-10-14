@@ -1,5 +1,6 @@
 import { social, socialProfileUrls } from './social';
 import { PROJECT_LAST_MODIFIED } from './projects';
+import type { Note } from './notes';
 import type { Locale } from '../i18n/config';
 
 export type SchemaNode = Record<string, unknown>;
@@ -45,7 +46,7 @@ const degreeName = {
 } as const;
 
 // Google reads datePublished/dateModified as DateTime and flags bare dates, so they carry Lima's offset.
-const toSchemaDateTime = (date: string): string => `${date}T00:00:00-05:00`;
+export const toSchemaDateTime = (date: string): string => `${date}T00:00:00-05:00`;
 
 const createPersonNode = (locale: Locale, siteUrl: URL, profileImage: URL): SchemaNode => ({
 	'@type': 'Person',
@@ -161,6 +162,7 @@ export const createProjectSchema = ({
 	const websiteId = new URL('/#website', siteUrl).toString();
 	const articleId = new URL(`${pageUrl.pathname}#case-study`, siteUrl).toString();
 	const pageId = new URL(`${pageUrl.pathname}#webpage`, siteUrl).toString();
+	const breadcrumbId = new URL(`${pageUrl.pathname}#breadcrumbs`, siteUrl).toString();
 
 	return [
 		createPersonNode(locale, siteUrl, new URL('/images/profile.webp', siteUrl)),
@@ -173,6 +175,7 @@ export const createProjectSchema = ({
 			description,
 			inLanguage: locale,
 			isPartOf: { '@id': websiteId },
+			breadcrumb: { '@id': breadcrumbId },
 			mainEntity: { '@id': articleId },
 			primaryImageOfPage: {
 				'@type': 'ImageObject',
@@ -199,7 +202,7 @@ export const createProjectSchema = ({
 		},
 		{
 			'@type': 'BreadcrumbList',
-			'@id': new URL(`${pageUrl.pathname}#breadcrumbs`, siteUrl).toString(),
+			'@id': breadcrumbId,
 			itemListElement: [
 				{
 					'@type': 'ListItem',
@@ -358,6 +361,190 @@ export const createPrivacySchema = ({
 					'@type': 'ListItem',
 					position: 2,
 					name: label,
+					item: pageUrl.toString(),
+				},
+			],
+		},
+	];
+};
+
+interface NotesIndexSchemaOptions {
+	locale: Locale;
+	siteUrl: URL;
+	pageUrl: URL;
+	title: string;
+	description: string;
+	label: string;
+	notes: readonly Note[];
+}
+
+const homeCrumb = (locale: Locale, siteUrl: URL): SchemaNode => ({
+	'@type': 'ListItem',
+	position: 1,
+	name: locale === 'es' ? 'Inicio' : 'Home',
+	item: new URL(locale === 'es' ? '/' : '/en/', siteUrl).toString(),
+});
+
+export const createNotesIndexSchema = ({
+	locale,
+	siteUrl,
+	pageUrl,
+	title,
+	description,
+	label,
+	notes,
+}: NotesIndexSchemaOptions): SchemaNode[] => {
+	const personId = new URL('/#person', siteUrl).toString();
+	const websiteId = new URL('/#website', siteUrl).toString();
+	const pageId = new URL(`${pageUrl.pathname}#webpage`, siteUrl).toString();
+	const blogId = new URL(`${pageUrl.pathname}#blog`, siteUrl).toString();
+	const breadcrumbId = new URL(`${pageUrl.pathname}#breadcrumbs`, siteUrl).toString();
+
+	return [
+		createPersonNode(locale, siteUrl, new URL('/images/profile.webp', siteUrl)),
+		createWebsiteNode(siteUrl),
+		{
+			'@type': 'CollectionPage',
+			'@id': pageId,
+			url: pageUrl.toString(),
+			name: title,
+			description,
+			inLanguage: locale,
+			isPartOf: { '@id': websiteId },
+			about: { '@id': personId },
+			breadcrumb: { '@id': breadcrumbId },
+			mainEntity: { '@id': blogId },
+		},
+		{
+			'@type': 'Blog',
+			'@id': blogId,
+			url: pageUrl.toString(),
+			name: label,
+			description,
+			inLanguage: locale,
+			author: { '@id': personId },
+			publisher: { '@id': personId },
+			blogPost: notes.map((note) => {
+				const noteUrl = new URL(note.path, siteUrl);
+
+				return {
+					'@type': 'BlogPosting',
+					'@id': new URL(`${noteUrl.pathname}#note`, siteUrl).toString(),
+					headline: note.title,
+					url: noteUrl.toString(),
+					datePublished: toSchemaDateTime(note.datePublished),
+					dateModified: toSchemaDateTime(note.dateModified),
+					author: { '@id': personId },
+				};
+			}),
+		},
+		{
+			'@type': 'BreadcrumbList',
+			'@id': breadcrumbId,
+			itemListElement: [
+				homeCrumb(locale, siteUrl),
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: label,
+					item: pageUrl.toString(),
+				},
+			],
+		},
+	];
+};
+
+interface NoteSchemaOptions {
+	locale: Locale;
+	siteUrl: URL;
+	pageUrl: URL;
+	title: string;
+	note: Note;
+	/** The notes index: its path and its name in the breadcrumbs. */
+	indexPath: string;
+	indexLabel: string;
+	/** The case study the note comes from. */
+	projectPath?: string;
+	socialImage: URL;
+	socialImageAlt: string;
+}
+
+export const createNoteSchema = ({
+	locale,
+	siteUrl,
+	pageUrl,
+	title,
+	note,
+	indexPath,
+	indexLabel,
+	projectPath,
+	socialImage,
+	socialImageAlt,
+}: NoteSchemaOptions): SchemaNode[] => {
+	const personId = new URL('/#person', siteUrl).toString();
+	const websiteId = new URL('/#website', siteUrl).toString();
+	const pageId = new URL(`${pageUrl.pathname}#webpage`, siteUrl).toString();
+	const noteId = new URL(`${pageUrl.pathname}#note`, siteUrl).toString();
+	const breadcrumbId = new URL(`${pageUrl.pathname}#breadcrumbs`, siteUrl).toString();
+	const indexUrl = new URL(indexPath, siteUrl);
+
+	return [
+		createPersonNode(locale, siteUrl, new URL('/images/profile.webp', siteUrl)),
+		createWebsiteNode(siteUrl),
+		{
+			'@type': 'WebPage',
+			'@id': pageId,
+			url: pageUrl.toString(),
+			name: title,
+			description: note.description,
+			inLanguage: locale,
+			isPartOf: { '@id': websiteId },
+			breadcrumb: { '@id': breadcrumbId },
+			mainEntity: { '@id': noteId },
+			primaryImageOfPage: {
+				'@type': 'ImageObject',
+				url: socialImage.toString(),
+				width: 1200,
+				height: 630,
+				caption: socialImageAlt,
+			},
+		},
+		{
+			'@type': 'BlogPosting',
+			'@id': noteId,
+			headline: note.title,
+			description: note.description,
+			url: pageUrl.toString(),
+			inLanguage: locale,
+			datePublished: toSchemaDateTime(note.datePublished),
+			dateModified: toSchemaDateTime(note.dateModified),
+			author: { '@id': personId },
+			publisher: { '@id': personId },
+			mainEntityOfPage: { '@id': pageId },
+			isPartOf: { '@id': new URL(`${indexUrl.pathname}#blog`, siteUrl).toString() },
+			...(note.tags.length > 0 && { keywords: note.tags }),
+			// The case study the note is drawn from, by the @id its own page gives it.
+			...(projectPath && {
+				isBasedOn: { '@id': new URL(`${projectPath}#case-study`, siteUrl).toString() },
+			}),
+			wordCount: note.wordCount,
+			image: socialImage.toString(),
+		},
+		{
+			'@type': 'BreadcrumbList',
+			'@id': breadcrumbId,
+			itemListElement: [
+				homeCrumb(locale, siteUrl),
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: indexLabel,
+					item: indexUrl.toString(),
+				},
+				{
+					'@type': 'ListItem',
+					position: 3,
+					name: note.title,
 					item: pageUrl.toString(),
 				},
 			],

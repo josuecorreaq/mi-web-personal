@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Technical notes by Josue Correa</title>
+		<link>https://josuecorreaq.com/en/notes/</link>
+		<description>Backend notes drawn from real projects: contract tests, modular architecture, REST APIs and Laravel, with the code and the decisions behind them.</description>
+		<language>en-US</language>
+		<atom:link href="https://josuecorreaq.com/en/notes/rss.xml" rel="self" type="application/rss+xml" />
+	</channel>
+</rss>

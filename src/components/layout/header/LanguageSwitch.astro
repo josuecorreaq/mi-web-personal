@@ -6,10 +6,13 @@ import { useTranslations } from '../../../i18n/translations';
 interface Props {
 	locale: Locale;
 	alternatePath?: string;
+	/** Overrides "this page in the other language" when the link goes somewhere else. */
+	label?: string;
 }
 
-const { locale, alternatePath } = Astro.props;
+const { locale, alternatePath, label } = Astro.props;
 const t = useTranslations(locale);
+const ariaLabel = label ?? t.nav.languageLabel;
 const alternateLocale = locale === 'es' ? 'en' : 'es';
 const languages = ['es', 'en'] as const;
 ---
@@ -21,8 +24,8 @@ const languages = ['es', 'en'] as const;
 	data-current={locale}
 	lang={alternateLocale}
 	hreflang={alternateLocale}
-	aria-label={t.nav.languageLabel}
-	data-tooltip={t.nav.languageLabel}
+	aria-label={ariaLabel}
+	data-tooltip={ariaLabel}
 >
 	<span class="language-switch-thumb" aria-hidden="true"></span>
 	{languages.map((language) => (

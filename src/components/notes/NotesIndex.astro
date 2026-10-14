@@ -1,0 +1,58 @@
+---
+import ActionLink from '../common/ActionLink.astro';
+import LinkRow from '../common/LinkRow.astro';
+import { formatNoteDate, type Note } from '../../data/notes';
+import type { Locale } from '../../i18n/config';
+import { useTranslations } from '../../i18n/translations';
+import { detailRow } from '../../styles/classes';
+
+interface Props {
+	locale: Locale;
+	notes: readonly Note[];
+	/** The other language's index, offered while this one has nothing to list. */
+	alternateIndexPath?: string;
+}
+
+const { locale, notes, alternateIndexPath } = Astro.props;
+const t = useTranslations(locale).notes;
+---
+
+<header class="page-shell pb-section pt-[clamp(1.5rem,4vw,3rem)]">
+	<h1 class="ml-(--optical-inset) max-w-[16em] text-balance type-page-title" data-animate-text="words">
+		{t.title}
+	</h1>
+	<p
+		class="mt-[clamp(0.75rem,2vw,1.25rem)] max-w-[32em] text-pretty type-lead text-muted"
+		data-animate-reveal="up"
+		data-animate-reveal-delay="200"
+	>
+		{t.lead}
+	</p>
+</header>
+
+<section class="page-shell border-t border-line py-section" aria-label={t.label}>
+	{notes.length > 0 ? (
+		<ul class="border-t border-line">
+			{notes.map((note) => (
+				<li>
+					<LinkRow
+						href={note.path}
+						eyebrow={`${formatNoteDate(locale, note.datePublished)} · ${note.readingMinutes} ${t.minutesRead}`}
+						title={note.title}
+						description={note.description}
+						class="border-b border-line"
+					/>
+				</li>
+			))}
+		</ul>
+	) : (
+		<div class="flex flex-wrap items-center justify-between gap-x-16 gap-y-5">
+			<p class={detailRow.prose}>{t.empty}</p>
+			{alternateIndexPath && (
+				<ActionLink href={alternateIndexPath} variant="text" hreflang={locale === 'es' ? 'en' : 'es'}>
+					{t.emptyAlternate}
+				</ActionLink>
+			)}
+		</div>
+	)}
+</section>

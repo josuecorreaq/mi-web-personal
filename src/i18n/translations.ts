@@ -12,6 +12,7 @@ const translations = {
 			projects: 'Proyectos',
 			approach: 'Enfoque',
 			trajectory: 'Trayectoria',
+			notes: 'Notas',
 			contact: 'Contacto',
 			cv: 'CV',
 			cvLabel: 'Ver CV',
@@ -127,7 +128,7 @@ const translations = {
 					period: 'Enero de 2026 a la actualidad',
 					bullets: [
 						'Desarrollo una plataforma integral de gestión crediticia con Laravel, React y MySQL, cubriendo admisiones, evaluaciones, créditos y seguimiento de cartera.',
-						'Diseñé la arquitectura como monolito modular: nueve dominios con frontera pública propia y dependencias en una sola dirección, migrando cada módulo a las capas Http, Application, Domain e Infrastructure.',
+						'Diseñé la arquitectura como monolito modular: nueve dominios que migran por fases a las capas Http, Application, Domain e Infrastructure, con fronteras vigiladas por tests de arquitectura.',
 						'Implementé autorización por usuario, rol y sede, con evaluación diferenciada según el tipo de cliente.',
 						'Sostengo la migración progresiva con un test de contrato que congela las rutas públicas de la API, de modo que reestructurar un módulo no rompe al frontend.',
 					],
@@ -255,19 +256,19 @@ const translations = {
 					coreLayer: 2,
 					objective: 'Cubrir el ciclo crediticio completo, de la admisión y la evaluación hasta los créditos y el seguimiento de cartera, sobre una base modular que crece por fases.',
 					context: 'Nueve dominios de negocio con reglas propias, evaluación diferenciada por tipo de cliente y accesos delimitados por usuario, rol y sede.',
-					solution: 'Monolito modular: cada dominio es un módulo con frontera pública propia y dependencias en una sola dirección; las capas internas se completan módulo a módulo.',
+					solution: 'Monolito modular: cada dominio es un módulo con sus propias capas, que se completan módulo a módulo, y cada dependencia entre módulos queda declarada en un test.',
 					role: 'Desarrollo full stack',
-					decision: 'La capa Domain no depende del framework, y ningún módulo entra a las tablas ni a las clases internas de otro: solo consume sus Actions y Queries públicas.',
+					decision: 'La capa Domain no conoce HTTP, base de datos, Auth ni Eloquent. Entre módulos, la vía de entrada es la capa Application de cada uno, con sus Queries, Actions y DTOs públicos; las excepciones, como el usuario autenticado, están acotadas por tests.',
 					metrics: [
 						{ value: '9', label: 'Dominios de negocio modulares' },
 						{ value: '110', label: 'Tests que vigilan las fronteras entre módulos' },
 						{ value: '3', label: 'Niveles de acceso: usuario, rol y sede' },
 					],
 					evidence: [
-						'143 de las 152 rutas de la API congeladas en un test de contrato que fija método, URI, controlador y middleware de cada una.',
-						'110 tests de arquitectura: ningún módulo importa la infraestructura de otro ni toca sus tablas con consultas crudas, y el grafo de dependencias entre módulos no tiene ciclos.',
+						'Las 152 rutas de la API congeladas en un test de contrato que fija método, URI, controlador y middleware de cada una.',
+						'110 tests de arquitectura: los módulos del flujo crediticio no forman ciclos ni importan la infraestructura de otro módulo, ninguna consulta cruda toca tablas ajenas, y toda dependencia nueva entre módulos tiene que declararse.',
 						'Autorización en tres niveles: sesión JWT, permiso granular por acción y alcance por sede.',
-						'Capa Domain sin HTTP, DB, Auth ni Eloquent; entre módulos solo hay Actions y Queries públicas.',
+						'Capa Domain sin HTTP, DB, Auth ni Eloquent; la capa Http no persiste datos ni resuelve servicios a mano.',
 					],
 					samples: [
 						{
@@ -289,7 +290,7 @@ const translations = {
 						{
 							label: 'Extracto de los tests de arquitectura',
 							caption:
-								'Las fronteras entre módulos no dependen de la disciplina: 110 tests fallan si un módulo importa la infraestructura de otro o toca sus tablas.',
+								'Las fronteras entre módulos no dependen de la disciplina: 110 tests fallan si aparece una dependencia no declarada entre módulos o si una consulta cruda toca tablas ajenas.',
 							rows: [
 								'// ModuleDependencyBoundaryTest.php',
 								'test_credit_flow_module_dependency_graph_is_acyclic',
@@ -310,14 +311,14 @@ const translations = {
 						layers: [
 							{
 								name: 'Http',
-								detail: 'controllers, requests, resources',
-								rule: 'Valida la entrada con requests, responde con resources y delega en un caso de uso, sin reglas de negocio profundas.',
+								detail: 'controllers y requests',
+								rule: 'Valida la entrada con requests y delega en un caso de uso, sin persistir datos ni resolver servicios a mano.',
 								dependsOn: [1],
 							},
 							{
 								name: 'Application',
-								detail: 'casos de uso y transacciones',
-								rule: 'Ejecuta cada caso de uso dentro de su transacción y persiste a través de Infrastructure. Otros módulos solo entran por sus Actions y Queries públicas.',
+								detail: 'casos de uso: Actions y Queries',
+								rule: 'Coordina cada caso de uso y persiste a través de Infrastructure. Es la vía de entrada para otros módulos, con sus Queries, Actions y DTOs públicos.',
 								dependsOn: [2, 3],
 							},
 							{
@@ -493,6 +494,31 @@ const translations = {
 			legalTitle: 'Legal',
 			privacy: 'Política de privacidad',
 			socialLabel: 'Redes',
+			notesAll: 'Todas las notas',
+		},
+		notes: {
+			meta: {
+				title: 'Notas técnicas sobre Laravel, APIs y arquitectura | Josué Correa',
+				description:
+					'Notas de backend escritas desde proyectos reales: tests de contrato, arquitectura modular, APIs REST y Laravel, con el código y las decisiones detrás.',
+			},
+			label: 'Notas',
+			title: 'Notas técnicas',
+			lead: 'Notas de backend escritas desde los sistemas que construyo: el problema, la decisión y cómo se prueba.',
+			empty: 'Todavía no hay notas publicadas.',
+			emptyAlternate: 'Leer las notas en inglés',
+			back: 'Volver a notas',
+			published: 'Publicada',
+			updated: 'Actualizada',
+			minutesRead: 'min de lectura',
+			relatedProject: 'Caso de estudio relacionado',
+			projectNotes: 'Notas sobre este proyecto',
+			feedTitle: 'Notas técnicas de Josué Correa',
+			contact: '¿Tu sistema tiene un problema parecido?',
+			contactCopy: 'Cuéntame el flujo y las reglas que necesitas resolver, y conversemos cómo abordarlo.',
+			contactAction: 'Contáctame',
+			languageIndex: 'Ver las notas en inglés',
+			languageHome: 'Ir al sitio en inglés',
 		},
 		privacy: {
 			meta: {
@@ -667,6 +693,7 @@ const translations = {
 			projects: 'Projects',
 			approach: 'Approach',
 			trajectory: 'Experience',
+			notes: 'Notes',
 			contact: 'Contact',
 			cv: 'CV',
 			cvLabel: 'View CV',
@@ -782,7 +809,7 @@ const translations = {
 					period: 'January 2026 to present',
 					bullets: [
 						'Building an end-to-end credit management platform with Laravel, React and MySQL, covering admissions, evaluations, credits and portfolio tracking.',
-						'Designed the architecture as a modular monolith: nine domains with their own public boundary and dependencies running one way, migrating each module to the Http, Application, Domain and Infrastructure layers.',
+						'Designed the architecture as a modular monolith: nine domains migrating in phases to the Http, Application, Domain and Infrastructure layers, with boundaries guarded by architecture tests.',
 						'Implemented authorization by user, role and branch, with evaluation that differs by client type.',
 						'Sustain the phased migration with a contract test that freezes the public API routes, so restructuring a module never breaks the frontend.',
 					],
@@ -910,19 +937,19 @@ const translations = {
 					coreLayer: 2,
 					objective: 'Cover the full credit lifecycle, from admission and evaluation to credits and portfolio tracking, on a modular base that grows in phases.',
 					context: 'Nine business domains with their own rules, evaluation that differs by client type, and access scoped by user, role and branch.',
-					solution: 'A modular monolith: each domain is a module with its own public boundary and dependencies running one way; the internal layers land module by module.',
+					solution: 'A modular monolith: each domain is a module with its own layers, completed module by module, and every dependency between modules is declared in a test.',
 					role: 'Full-stack development',
-					decision: 'The Domain layer does not depend on the framework, and no module reaches into another module’s tables or internal classes: it only consumes its public Actions and Queries.',
+					decision: 'The Domain layer knows nothing about HTTP, the database, Auth or Eloquent. Between modules, the way in is each module’s Application layer, with its public Queries, Actions and DTOs; the exceptions, such as the authenticated user, are bounded by tests.',
 					metrics: [
 						{ value: '9', label: 'Modular business domains' },
 						{ value: '110', label: 'Tests guarding the boundaries between modules' },
 						{ value: '3', label: 'Access scopes: user, role and branch' },
 					],
 					evidence: [
-						'143 of the 152 API routes frozen in a contract test that pins the method, URI, controller and middleware of each one.',
-						'110 architecture tests: no module imports another one’s infrastructure or touches its tables with raw queries, and the dependency graph between modules has no cycles.',
+						'All 152 API routes frozen in a contract test that pins the method, URI, controller and middleware of each one.',
+						'110 architecture tests: the credit-flow modules form no cycles and import no other module’s infrastructure, no raw query touches another module’s tables, and every new dependency between modules has to be declared.',
 						'Authorization at three levels: JWT session, granular per-action permission and branch scope.',
-						'Domain layer free of HTTP, DB, Auth and Eloquent; modules talk only through public Actions and Queries.',
+						'Domain layer free of HTTP, DB, Auth and Eloquent; the Http layer neither persists data nor resolves services by hand.',
 					],
 					samples: [
 						{
@@ -944,7 +971,7 @@ const translations = {
 						{
 							label: 'Architecture test excerpt',
 							caption:
-								'Module boundaries do not rely on discipline: 110 tests fail if a module imports another one’s infrastructure or touches its tables.',
+								'Module boundaries do not rely on discipline: 110 tests fail if an undeclared dependency between modules appears or a raw query touches another module’s tables.',
 							rows: [
 								'// ModuleDependencyBoundaryTest.php',
 								'test_credit_flow_module_dependency_graph_is_acyclic',
@@ -965,14 +992,14 @@ const translations = {
 						layers: [
 							{
 								name: 'Http',
-								detail: 'controllers, requests, resources',
-								rule: 'Validates input with requests, responds with resources and delegates to a use case, with no deep business rules.',
+								detail: 'controllers and requests',
+								rule: 'Validates input with requests and delegates to a use case, without persisting data or resolving services by hand.',
 								dependsOn: [1],
 							},
 							{
 								name: 'Application',
-								detail: 'use cases and transactions',
-								rule: 'Runs each use case inside its transaction and persists through Infrastructure. Other modules only come in through its public Actions and Queries.',
+								detail: 'use cases: Actions and Queries',
+								rule: 'Coordinates each use case and persists through Infrastructure. It is the way in for other modules, with its public Queries, Actions and DTOs.',
 								dependsOn: [2, 3],
 							},
 							{
@@ -1147,6 +1174,31 @@ const translations = {
 			legalTitle: 'Legal',
 			privacy: 'Privacy policy',
 			socialLabel: 'Social',
+			notesAll: 'All notes',
+		},
+		notes: {
+			meta: {
+				title: 'Technical notes on Laravel, APIs and architecture | Josue Correa',
+				description:
+					'Backend notes drawn from real projects: contract tests, modular architecture, REST APIs and Laravel, with the code and the decisions behind them.',
+			},
+			label: 'Notes',
+			title: 'Technical notes',
+			lead: 'Backend notes drawn from the systems I build: the problem, the decision, and how it is tested.',
+			empty: 'No notes published in English yet.',
+			emptyAlternate: 'Read the notes in Spanish',
+			back: 'Back to notes',
+			published: 'Published',
+			updated: 'Updated',
+			minutesRead: 'min read',
+			relatedProject: 'Related case study',
+			projectNotes: 'Notes on this project',
+			feedTitle: 'Technical notes by Josue Correa',
+			contact: 'Does your system have a similar problem?',
+			contactCopy: 'Tell me about the workflow and the rules you need to solve, and let’s discuss how to approach it.',
+			contactAction: 'Get in touch',
+			languageIndex: 'Ver las notas en español',
+			languageHome: 'Ir al sitio en español',
 		},
 		privacy: {
 			meta: {

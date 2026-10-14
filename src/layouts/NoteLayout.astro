@@ -1,0 +1,63 @@
+---
+import PageLayout from './PageLayout.astro';
+import { getNoteTranslation, getNotesFeedPath, hasNotes, notesPaths, type Note } from '../data/notes';
+import { getProjectById } from '../data/projects';
+import { createNoteSchema, toSchemaDateTime } from '../data/schema';
+import { getLocalePath, type Locale } from '../i18n/config';
+import { useTranslations } from '../i18n/translations';
+
+interface Props {
+	locale: Locale;
+	note: Note;
+}
+
+const { locale, note } = Astro.props;
+const t = useTranslations(locale).notes;
+const otherLocale = locale === 'es' ? 'en' : 'es';
+const siteUrl = new URL('/', Astro.site ?? Astro.url);
+const translation = await getNoteTranslation(note);
+// Untranslated notes still switch language: to the other index if it lists anything, else home.
+const otherHasNotes = await hasNotes(otherLocale);
+const alternatePath =
+	translation?.path ?? (otherHasNotes ? notesPaths[otherLocale] : getLocalePath(otherLocale));
+// The switch's usual label promises this page translated, so an untranslated note says where it goes.
+const languageLabel = translation ? undefined : otherHasNotes ? t.languageIndex : t.languageHome;
+const project = note.project ? getProjectById(locale, note.project) : undefined;
+const title = `${note.title} | ${locale === 'es' ? 'Josué Correa' : 'Josue Correa'}`;
+const socialImage = new URL('/og/portafolio-og.png', siteUrl);
+const socialImageAlt = locale === 'es'
+	? `Nota técnica de Josué Correa Quispe: ${note.title}`
+	: `Technical note by Josué Correa Quispe: ${note.title}`;
+const structuredData = createNoteSchema({
+	locale,
+	siteUrl,
+	pageUrl: new URL(note.path, siteUrl),
+	title,
+	note,
+	indexPath: notesPaths[locale],
+	indexLabel: t.label,
+	projectPath: project?.path,
+	socialImage,
+	socialImageAlt,
+});
+---
+
+<PageLayout
+	locale={locale}
+	title={title}
+	description={note.description}
+	path={note.path}
+	alternatePath={alternatePath}
+	structuredData={structuredData}
+	currentSection="notas"
+	ogType="article"
+	hreflang={translation !== undefined}
+	feed={{ path: getNotesFeedPath(locale), title: t.feedTitle }}
+	socialImageAlt={socialImageAlt}
+	languageLabel={languageLabel}
+>
+	<meta slot="head" property="article:published_time" content={toSchemaDateTime(note.datePublished)} />
+	<meta slot="head" property="article:modified_time" content={toSchemaDateTime(note.dateModified)} />
+	{note.tags.map((tag) => <meta slot="head" property="article:tag" content={tag} />)}
+	<slot />
+</PageLayout>

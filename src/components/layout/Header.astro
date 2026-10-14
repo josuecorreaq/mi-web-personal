@@ -2,6 +2,7 @@
 import type { Locale } from '../../i18n/config';
 import { getLocalePath } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
+import { hasNotes, notesPaths } from '../../data/notes';
 import ThemeToggle from '../common/ThemeToggle.astro';
 import BrandMark from './header/BrandMark.astro';
 import CvButton from './header/CvButton.astro';
@@ -14,16 +15,17 @@ interface Props {
 	locale: Locale;
 	isLanding?: boolean;
 	alternatePath?: string;
+	languageLabel?: string;
 	currentSection?: string;
 }
 
-const { locale, isLanding = true, alternatePath, currentSection } = Astro.props;
+const { locale, isLanding = true, alternatePath, languageLabel, currentSection } = Astro.props;
 const t = useTranslations(locale);
 const basePath = getLocalePath(locale);
 const sectionHref = (targetId: string) =>
 	isLanding ? `#${targetId}` : `${basePath}#${targetId}`;
 const scrollTarget = (targetId: string) => isLanding ? targetId : undefined;
-const navItems: NavItem[] = [
+const sectionItems: NavItem[] = [
 	{ id: 'proyectos', label: t.nav.projects },
 	{ id: 'enfoque', label: t.nav.approach },
 	{ id: 'servicios', label: t.nav.services },
@@ -35,6 +37,15 @@ const navItems: NavItem[] = [
 	scrollTarget: scrollTarget(item.id),
 	current: !isLanding && item.id === currentSection,
 }));
+// The notes are a page of their own, not a landing section, so they link straight to it and only
+// show up once this language has one. Contact stays last.
+const navItems: NavItem[] = (await hasNotes(locale))
+	? [
+			...sectionItems.slice(0, -1),
+			{ id: 'notas', label: t.nav.notes, href: notesPaths[locale], current: currentSection === 'notas' },
+			...sectionItems.slice(-1),
+		]
+	: sectionItems;
 ---
 
 <header
@@ -53,7 +64,7 @@ const navItems: NavItem[] = [
 
 		<div class="col-start-2 flex items-center gap-1.5 justify-self-end sm:gap-2 lg:col-start-3">
 			<div class="flex h-11 items-stretch border border-line">
-				<LanguageSwitch locale={locale} alternatePath={alternatePath} />
+				<LanguageSwitch locale={locale} alternatePath={alternatePath} label={languageLabel} />
 				<span class="w-px bg-line" aria-hidden="true"></span>
 				<ThemeToggle locale={locale} />
 			</div>
