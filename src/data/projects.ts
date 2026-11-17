@@ -30,6 +30,8 @@ interface ProjectTranslation {
 	readonly metrics: readonly {
 		readonly value: string;
 		readonly label: string;
+		/** The project's strongest evidence; the home marks it in the accent color. */
+		readonly highlight?: boolean;
 	}[];
 	readonly evidence: readonly string[];
 	readonly samples?: readonly {

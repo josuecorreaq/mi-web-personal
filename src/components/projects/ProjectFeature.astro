@@ -16,12 +16,19 @@ interface Props {
 const { project, labels, divided = false } = Astro.props;
 // The architecture diagram and the decision behind it live on the project page only.
 // Phones read top to bottom (summary, metrics, link); from lg the metrics take the right column, centered on the text.
+// The whole row opens the project: the link's ::after covers the article, and a surface fades in behind it
+// on hover or keyboard focus. The surface bleeds into the page gutter so the text keeps its alignment.
 ---
 
 <article
 	id={project.slug}
 	class:list={[
-		'grid items-start gap-x-18 gap-y-7 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]',
+		'group/project relative isolate grid items-start gap-x-18 gap-y-7 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:px-8',
+		// Rows are spaced like the other sections (a rule between items, none above the first or below
+		// the last). The band is exactly as wide as the rule and reaches 1.25rem past the content, which
+		// stays clear of the rule above it; on desktop the row's padding keeps the text off its edge.
+		'before:absolute before:inset-x-0 before:-inset-y-5 before:-z-10 before:bg-surface before:opacity-0 before:transition-opacity before:duration-200 before:ease-out-quart',
+		'hover:before:opacity-100 has-focus-visible:before:opacity-100 motion-reduce:before:transition-none',
 		divided && 'border-t border-line pt-block',
 	]}
 >
@@ -43,9 +50,14 @@ const { project, labels, divided = false } = Astro.props;
 
 	<dl class="border-t border-line lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-center">
 		{project.metrics.map((metric) => (
-			<div class="flex items-center gap-5 border-b border-line py-3 sm:items-baseline">
+			<div class="flex items-center gap-5 border-b border-line py-3.5 sm:items-baseline">
 				<dt class="order-2 min-w-0 text-pretty text-[0.9375rem] leading-snug text-muted">{metric.label}</dt>
-				<dd class="order-1 w-24 shrink-0 font-display text-[1.625rem] font-heading leading-tight tabular-nums">
+				<dd
+					class:list={[
+						'order-1 w-[6.5rem] shrink-0 whitespace-nowrap font-display text-[clamp(2rem,3.6vw,2.75rem)] font-heading leading-none tracking-[-0.03em] tabular-nums sm:w-32',
+						metric.highlight && 'text-accent',
+					]}
+				>
 					{metric.value}
 				</dd>
 			</div>
@@ -55,7 +67,7 @@ const { project, labels, divided = false } = Astro.props;
 	<ActionLink
 		href={project.path}
 		variant="text"
-		class="justify-self-start lg:col-start-1 lg:row-start-2"
+		class="justify-self-start after:absolute after:inset-0 group-hover/project:text-accent lg:col-start-1 lg:row-start-2"
 		aria-label={`${labels.viewProject}: ${project.name}`}
 	>
 		{labels.viewProject}

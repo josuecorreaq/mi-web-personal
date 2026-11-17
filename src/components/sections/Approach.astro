@@ -1,25 +1,39 @@
 ---
+import ActionLink from '../common/ActionLink.astro';
 import type { Locale } from '../../i18n/config';
 import { useTranslations } from '../../i18n/translations';
+import { getProjects } from '../../data/projects';
+import { figureBar } from '../../styles/classes';
 
 interface Props {
 	locale: Locale;
 }
 
 const { locale } = Astro.props;
-const t = useTranslations(locale).approach;
+const translations = useTranslations(locale);
+const t = translations.approach;
 const labelClass = 'font-mono text-[0.8125rem] font-normal text-muted';
+// "How I build it" is drawn on the credit platform's real layers, each next to the principle it enforces.
+// It replaces a plain list, so the section is no taller on phones.
+const project = getProjects(locale).find((item) => item.id === 'credit-management-platform');
+const layers = project?.architecture.layers ?? [];
+const coreLayer = project?.coreLayer ?? -1;
+const rows = layers.map((layer, index) => ({
+	name: layer.name,
+	isCore: index === coreLayer,
+	principle: t.principles[index],
+}));
 ---
 
 <section id="enfoque" class="page-shell border-t border-line py-section">
 	<h2
-		class="max-w-[19em] text-balance font-display text-[clamp(1.75rem,3.8vw,3.25rem)] font-heading leading-[1.12] tracking-[-0.025em]"
+		class="max-w-[17em] text-balance font-display text-[clamp(2.125rem,5.2vw,4.5rem)] font-heading leading-[1.06] tracking-[-0.03em]"
 		data-animate-reveal="up"
 	>
 		{t.titleLead} <span class="text-muted">{t.titleRest}</span>
 	</h2>
 
-	<div class="mt-block flex flex-wrap gap-x-18 gap-y-block">
+	<div class="mt-block flex flex-wrap items-center gap-x-18 gap-y-block">
 		<div class="min-w-0 flex-[1_1_23rem]">
 			<h3 class={labelClass}>{t.changesLabel}</h3>
 			<ul class="mt-4 border-b border-line">
@@ -32,16 +46,43 @@ const labelClass = 'font-mono text-[0.8125rem] font-normal text-muted';
 			</ul>
 		</div>
 
-		<div class="min-w-0 flex-[1_1_23rem]">
-			<h3 class={labelClass}>{t.principlesLabel}</h3>
-			<ul class="mt-4 border-b border-line">
-				{t.principles.map((principle, index) => (
-					<li class="border-t border-line py-5" data-animate-reveal="up" data-animate-reveal-delay={index * 80}>
-						<p class="font-medium">{principle.title}</p>
-						<p class="mt-1 text-pretty text-muted">{principle.description}</p>
-					</li>
-				))}
-			</ul>
-		</div>
+		{project && (
+			<figure class="@container m-0 min-w-0 flex-[1_1_23rem] border border-line">
+				<div class={figureBar}>
+					<h3 class="font-normal">{t.principlesLabel}</h3>
+					<span>{rows.length} {translations.projects.labels.layers}</span>
+				</div>
+				<ol class="grid gap-2 p-[clamp(1rem,2.4vw,1.5rem)]">
+					{rows.map((row, index) => (
+						<li
+							class="grid grid-cols-[8.75rem_minmax(0,1fr)] items-center gap-x-4 @md:grid-cols-[10rem_minmax(0,1fr)] @md:gap-x-5"
+							data-animate-reveal="up"
+							data-animate-reveal-delay={120 + index * 110}
+						>
+							<span
+								class:list={[
+									'flex min-h-11 items-center border px-3.5 py-2 font-mono text-[0.84rem]',
+									row.isCore ? 'border-brand bg-brand font-semibold text-on-brand' : 'border-line text-muted',
+								]}
+							>
+								{row.name}
+							</span>
+							{row.principle && (
+								<p class="text-pretty text-[0.9375rem] font-medium leading-snug">{row.principle}</p>
+							)}
+						</li>
+					))}
+				</ol>
+				<figcaption
+					class="border-t border-line px-4 py-1"
+					data-animate-reveal="up"
+					data-animate-reveal-delay={120 + rows.length * 110}
+				>
+					<ActionLink href={`${project.path}#project-architecture`} variant="text" aria-label={`${t.diagramLink}: ${project.name}`}>
+						{t.diagramLink}
+					</ActionLink>
+				</figcaption>
+			</figure>
+		)}
 	</div>
 </section>
