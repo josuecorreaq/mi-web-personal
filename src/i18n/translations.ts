@@ -52,20 +52,14 @@ const translations = {
 				},
 			],
 			principlesLabel: 'Cómo lo construyo',
+			// One principle per architecture layer, in layer order (Http, Application, Domain, Infrastructure).
 			principles: [
-				{
-					title: 'Separación por dominios',
-					description: 'Cada área del negocio en su módulo, con fronteras claras.',
-				},
-				{
-					title: 'Acceso controlado en el servidor',
-					description: 'Permisos validados en el servidor, nunca en la interfaz.',
-				},
-				{
-					title: 'Cambios verificados',
-					description: 'Rutas cubiertas por pruebas: cambiar no rompe lo que ya funciona.',
-				},
+				'Acceso controlado en el servidor',
+				'Cambios verificados por tests',
+				'Separación por dominios',
+				'Persistencia fuera del dominio',
 			],
+			diagramLink: 'Ver la arquitectura completa',
 		},
 		experience: {
 			title: 'Trayectoria',
@@ -208,7 +202,7 @@ const translations = {
 					role: 'Desarrollador web',
 					decision: 'Separación de responsabilidades entre API, reglas de negocio, interfaz y persistencia para reducir acoplamiento y facilitar mantenimiento.',
 					metrics: [
-						{ value: '−50 %', label: 'Pasos manuales en validación de pagos' },
+						{ value: '−50 %', label: 'Pasos manuales en validación de pagos', highlight: true },
 						{ value: '147', label: 'Endpoints REST en producción' },
 						{ value: '21', label: 'Suites de pruebas automatizadas' },
 					],
@@ -261,7 +255,7 @@ const translations = {
 					decision: 'La capa Domain no conoce HTTP, base de datos, Auth ni Eloquent. Entre módulos, la vía de entrada es la capa Application de cada uno, con sus Queries, Actions y DTOs públicos; las excepciones, como el usuario autenticado, están acotadas por tests.',
 					metrics: [
 						{ value: '9', label: 'Dominios de negocio modulares' },
-						{ value: '110', label: 'Tests que vigilan las fronteras entre módulos' },
+						{ value: '110', label: 'Tests que vigilan las fronteras entre módulos', highlight: true },
 						{ value: '3', label: 'Niveles de acceso: usuario, rol y sede' },
 					],
 					evidence: [
@@ -734,19 +728,12 @@ const translations = {
 			],
 			principlesLabel: 'How I build it',
 			principles: [
-				{
-					title: 'Separation by domain',
-					description: 'Each business area in its own module, with clear boundaries.',
-				},
-				{
-					title: 'Access enforced on the server',
-					description: 'Permissions checked on the server, never in the interface.',
-				},
-				{
-					title: 'Verified changes',
-					description: 'Routes under test: changes don’t break what works.',
-				},
+				'Access enforced on the server',
+				'Changes verified by tests',
+				'Separation by domain',
+				'Persistence kept out of the domain',
 			],
+			diagramLink: 'See the full architecture',
 		},
 		experience: {
 			title: 'Experience',
@@ -889,7 +876,7 @@ const translations = {
 					role: 'Web Developer',
 					decision: 'Separated the API, business rules, interface and persistence responsibilities to reduce coupling and simplify maintenance.',
 					metrics: [
-						{ value: '−50%', label: 'Manual steps in payment validation' },
+						{ value: '−50%', label: 'Manual steps in payment validation', highlight: true },
 						{ value: '147', label: 'REST endpoints in production' },
 						{ value: '21', label: 'Automated test suites' },
 					],
@@ -942,7 +929,7 @@ const translations = {
 					decision: 'The Domain layer knows nothing about HTTP, the database, Auth or Eloquent. Between modules, the way in is each module’s Application layer, with its public Queries, Actions and DTOs; the exceptions, such as the authenticated user, are bounded by tests.',
 					metrics: [
 						{ value: '9', label: 'Modular business domains' },
-						{ value: '110', label: 'Tests guarding the boundaries between modules' },
+						{ value: '110', label: 'Tests guarding the boundaries between modules', highlight: true },
 						{ value: '3', label: 'Access scopes: user, role and branch' },
 					],
 					evidence: [

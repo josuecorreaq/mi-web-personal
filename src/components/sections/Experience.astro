@@ -28,13 +28,13 @@ const t = useTranslations(locale).experience;
 				<div class="flex-[0_1_20rem]">
 					<p
 						class:list={[
-							'font-display text-[clamp(3.25rem,7vw,6rem)] font-heading leading-[0.9] tracking-[-0.04em] tabular-nums',
+							'font-display text-[clamp(1.875rem,3vw,2.5rem)] font-heading leading-none tracking-[-0.03em] tabular-nums',
 							!item.current && 'text-muted',
 						]}
 					>
 						{item.year}
 					</p>
-					<p class="mt-4 flex flex-wrap items-center gap-x-3.5 gap-y-1.5 font-mono text-[0.8125rem] text-muted">
+					<p class="mt-4 flex flex-col items-start gap-y-1.5 font-mono text-[0.8125rem] text-muted">
 						<span>{item.range}</span>
 						{item.current && (
 							<span class="inline-flex items-center gap-2 text-ink">
